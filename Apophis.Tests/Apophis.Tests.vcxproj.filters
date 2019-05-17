@@ -28,5 +28,8 @@
     <ClCompile Include="TransferFunction\ReluTests.cpp">
       <Filter>Tests\TransferFunction</Filter>
     </ClCompile>
+    <ClCompile Include="ExampleSetTests.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

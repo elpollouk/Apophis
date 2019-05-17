@@ -1,76 +1,15 @@
 #include "pch.h"
+#include "apophis/apophis.h"
+#include "apophis/ExampleSet.h"
 #include "Network.h"
 
-#define RELU
+using namespace Apophis;
 
-typedef float real;
-typedef std::vector<real> Vector;
-typedef const Vector& VectorRef;
+#define RELU
 
 static std::default_random_engine generator(1234);
 static std::uniform_real_distribution<real> distribution(0.f, 1.f);
 static auto RandomWeight = std::bind(distribution, generator);
-
-class Example
-{
-public:
-	Example(const real* input, int inputSize, const real* output, int outputSize) :
-		Input(input, input + inputSize),
-		Output(output, output + outputSize)
-	{
-
-	}
-
-	const Vector Input;
-	const Vector Output;
-};
-
-class ExampleSet
-{
-public:
-	ExampleSet(int inputSize, int outputSize) :
-		InputSize(inputSize),
-		OutputSize(outputSize)
-	{
-
-	}
-
-	void AddExample(Example&& example)
-	{
-		assert(example.Input.size() == InputSize);
-		assert(example.Output.size() == OutputSize);
-
-		m_Examples.emplace_back(example);
-		m_Distribution = std::uniform_int_distribution<size_t>(0, m_Examples.size() - 1);
-	}
-
-	const Example& Sample()
-	{
-		return m_Examples[m_Distribution(generator)];
-	}
-
-	std::vector<Example>::const_iterator begin() const
-	{
-		return m_Examples.begin();
-	}
-
-	std::vector<Example>::const_iterator end() const
-	{
-		return m_Examples.end();
-	}
-
-	size_t size() const
-	{
-		return m_Examples.size();
-	}
-
-	const int InputSize;
-	const int OutputSize;
-
-private:
-	std::uniform_int_distribution<size_t> m_Distribution;
-	std::vector<Example> m_Examples;
-};
 
 namespace Network
 {
@@ -115,7 +54,7 @@ public:
 	}
 
 
-	real Calculate(VectorRef input)
+	real Calculate(ConstVectorRef input)
 	{
 		assert(input.size() == Weights.size() - 1);
 
@@ -147,7 +86,7 @@ public:
 		Outputs.resize(size, 0.f);
 	}
 
-	VectorRef Calculate(VectorRef inputs)
+	ConstVectorRef Calculate(ConstVectorRef inputs)
 	{
 		for (auto i = 0; i < Size; i++)
 			Outputs[i] = Nodes[i]->Calculate(inputs);
@@ -161,7 +100,7 @@ public:
 	Vector Outputs;
 };
 
-real Error(VectorRef target, VectorRef actual)
+real Error(ConstVectorRef target, ConstVectorRef actual)
 {
 	assert(target.size() == actual.size());
 
@@ -177,7 +116,7 @@ real Error(VectorRef target, VectorRef actual)
 	return error;
 }
 
-void CalculateOutputBackPropError(VectorRef targets, Layer* layer)
+void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
 {
 	assert(targets.size() == layer->Outputs.size());
 
@@ -198,7 +137,7 @@ void CalculateHiddenBackPropError(Layer* targetLayer, Layer* forwardLayer)
 	}
 }
 
-void ApplyDeltas(Layer* targetLayer, VectorRef priorLayerOutput, real learningRate, real momentum)
+void ApplyDeltas(Layer* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
 {
 	for (auto i = 0; i < targetLayer->Size; i++)
 	{
@@ -235,7 +174,7 @@ public:
 		OutputSize = numNodes;
 	}
 
-	VectorRef Calculate(VectorRef input)
+	ConstVectorRef Calculate(ConstVectorRef input)
 	{
 		assert(input.size() == InputSize);
 
@@ -247,7 +186,7 @@ public:
 		return *pInput;
 	}
 
-	void Train(VectorRef input, VectorRef target, real learningRate, real momentum)
+	void Train(ConstVectorRef input, ConstVectorRef target, real learningRate, real momentum)
 	{
 		assert(input.size() == InputSize);
 		assert(target.size() == m_Layers.back()->Size);
@@ -315,7 +254,7 @@ void Run()
 		printf("\nRun %d:\n", i + 1);
 
 		Network network(trainingSet.InputSize);
-		network.AddLayer(2);
+		network.AddLayer(3);
 		network.AddLayer(1);
 
 		auto trainingCount = 0;

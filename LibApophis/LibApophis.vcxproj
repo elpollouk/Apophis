@@ -159,12 +159,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\apophis\apophis.h" />
+    <ClInclude Include="include\apophis\ExampleSet.h" />
     <ClInclude Include="src\ITransferFunction.h" />
+    <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\targetver.h" />
     <ClInclude Include="src\TransferFunction\Relu.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ExampleSet.cpp" />
+    <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

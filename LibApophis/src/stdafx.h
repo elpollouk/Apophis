@@ -9,7 +9,10 @@
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
-#include <vector>
+#include <assert.h>
+
+#include "apophis/apophis.h"
+#include "Random.h"
 #include "ITransferFunction.h"
 
 

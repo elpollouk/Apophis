@@ -26,9 +26,24 @@
     <ClInclude Include="src\TransferFunction\Relu.h">
       <Filter>Source Files\TransferFunction</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\apophis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\ExampleSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ExampleSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
