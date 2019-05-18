@@ -15,12 +15,12 @@ namespace Apophis { namespace TransferFunction {
 
 		}
 
-		virtual real operator()(real value) const
+		virtual real operator()(real value) const override
 		{
 			return value > 0.f ? value : m_LeakGradient * value;
 		}
 
-		virtual real Derivative(real value) const
+		virtual real Derivative(real value) const override
 		{
 			return value > 0.f ? 1.f : m_LeakGradient;
 		}

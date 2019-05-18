@@ -18,6 +18,12 @@
     <Filter Include="Source Files\TransferFunction">
       <UniqueIdentifier>{0566a683-347b-47a8-ba05-38f12b6c1aaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Training">
+      <UniqueIdentifier>{24149488-17d6-464b-86a3-9c412b0c18c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Data">
+      <UniqueIdentifier>{6eb299b3-4010-4758-9a9b-bfb9e8862dfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\stdafx.h">
@@ -49,6 +55,27 @@
     </ClInclude>
     <ClInclude Include="include\apophis\TransferFunction\ITransferFunction.h">
       <Filter>Header Files\TransferFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Component\Network.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Component\BackPropNetwork.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Training\LossFunctions.h">
+      <Filter>Header Files\Training</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Training\Evaluator.h">
+      <Filter>Header Files\Training</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Data\Metrics.h">
+      <Filter>Header Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Training\Trainer.h">
+      <Filter>Header Files\Training</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Training\StoppingConditions.h">
+      <Filter>Header Files\Training</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

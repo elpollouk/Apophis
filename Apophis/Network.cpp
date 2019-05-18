@@ -1,159 +1,17 @@
 #include "pch.h"
-#include "apophis/apophis.h"
-#include "apophis/ExampleSet.h"
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
-#include "apophis/Component/Node.h"
-#include "apophis/Component/Layer.h"
+#include "apophis/Component/BackPropNetwork.h"
+#include "apophis/Training/Trainer.h"
 #include "Network.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;
 using namespace Apophis::TransferFunction;
+using namespace Apophis::Training;
 
 namespace Network
 {
-
-real Error(ConstVectorRef target, ConstVectorRef actual)
-{
-	assert(target.size() == actual.size());
-
-	auto error = 0.f;
-
-	for (auto i = 0u; i < target.size(); i++)
-	{
-		auto v = target[i] - actual[i];
-		v *= v;
-		error += v;
-	}
-	error *= 0.5;
-
-	return error;
-}
-
-void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
-{
-	assert(targets.size() == layer->Output.size());
-
-	for (auto i = 0u; i < layer->NumOutputs; i++)
-	{
-		auto& node = layer->Nodes[i];
-		node->BackPropError = (targets[i] - layer->Output[i]) * node->Transfer->Derivative(node->Activation);
-	}
-}
-
-void CalculateHiddenBackPropError(Layer* targetLayer, const Layer* forwardLayer)
-{
-	for (auto i = 0u; i < targetLayer->NumOutputs; i++)
-	{
-		auto& targetNode = targetLayer->Nodes[i];
-		targetNode->BackPropError = 0.f;
-		for (auto j = 0u; j < forwardLayer->NumOutputs; j++)
-			targetNode->BackPropError += forwardLayer->Nodes[j]->BackPropError * forwardLayer->Nodes[j]->Weights[i];
-
-		targetNode->BackPropError *= targetNode->Transfer->Derivative(targetLayer->Nodes[i]->Activation);
-	}
-}
-
-void ApplyDeltas(Layer* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
-{
-	for (auto i = 0u; i < targetLayer->NumOutputs; i++)
-	{
-		auto learningDelta = learningRate * targetLayer->Nodes[i]->BackPropError;
-		for (auto j = 0u; j < targetLayer->NumInputs; j++)
-		{
-			auto weightChange = learningDelta * priorLayerOutput[j];
-			weightChange += (momentum * targetLayer->Nodes[i]->PreviousWeightChanges[j]);
-			targetLayer->Nodes[i]->Weights[j] += weightChange;
-			targetLayer->Nodes[i]->PreviousWeightChanges[j] = weightChange;
-		}
-
-		// Update bias
-		auto weightChange = learningDelta;
-		weightChange += (momentum * targetLayer->Nodes[i]->PreviousWeightChanges[targetLayer->NumInputs]);
-		targetLayer->Nodes[i]->Weights[targetLayer->NumInputs] += weightChange;
-		targetLayer->Nodes[i]->PreviousWeightChanges[targetLayer->NumInputs] = weightChange;
-	}
-}
-
-class Network
-{
-public:
-	Network(int inputSize) :
-		InputSize(inputSize),
-		OutputSize(inputSize)
-	{
-
-	}
-
-	template<class TransferFunction>
-	void AddLayer(int numNodes)
-	{
-		AddLayer(numNodes, TransferFunction::Default());
-	}
-
-	void AddLayer(int numNodes, const TransferFunction::ITransferFunction* transfer)
-	{
-		m_Layers.emplace_back(std::make_unique<Layer>(OutputSize, numNodes, transfer));
-		OutputSize = numNodes;
-	}
-
-	ConstVectorRef Calculate(ConstVectorRef input)
-	{
-		assert(input.size() == InputSize);
-
-		auto pInput = &input;
-		for (auto& layer : m_Layers)
-			pInput = &layer->Calculate(*pInput);
-
-		assert((*pInput)[0] != -NAN);
-		return *pInput;
-	}
-
-	void Train(ConstVectorRef input, ConstVectorRef target, real learningRate, real momentum)
-	{
-		assert(input.size() == InputSize);
-		assert(target.size() == m_Layers.back()->NumOutputs);
-
-		auto actual = Calculate(input);
-
-		auto i = m_Layers.size() - 1;
-		auto pForwardLayer = m_Layers[i--].get();
-		CalculateOutputBackPropError(target, pForwardLayer);
-		do
-		{
-			auto pTargetLayer = m_Layers[i].get();
-			CalculateHiddenBackPropError(pTargetLayer, pForwardLayer);
-			pForwardLayer = pTargetLayer;
-		}
-		while (i--);
-
-		auto pInput = &input;
-		for (auto& layer : m_Layers)
-		{
-			ApplyDeltas(layer.get(), *pInput, learningRate, momentum);
-			pInput = &layer->Output;
-		}
-	}
-
-	real Evaluate(const ExampleSet& examples)
-	{
-		auto error = 0.f;
-
-		for (const Example& example : examples)
-			error += Error(example.Output, Calculate(example.Input));
-
-		error /= examples.size();
-
-		return error;
-	}
-
-	int InputSize;
-	int OutputSize;
-
-private:
-	std::vector<std::unique_ptr<Layer>> m_Layers;
-};
 
 Example CreateExample(real i0, real i1, real o0)
 {
@@ -164,7 +22,8 @@ Example CreateExample(real i0, real i1, real o0)
 
 void Run()
 {
-	const auto TRAINING_ITERATIONS = 1000000u;
+	const auto TRAINING_ITERATIONS = 1000000;
+	const auto TRAINING_ERROR = 0.00001f;
 	const auto LEARNING_RATE = 0.05f;
 	const auto MOMENTUM = 0.5f;
 
@@ -178,27 +37,23 @@ void Run()
 	{
 		printf("\nRun %d:\n", i + 1);
 
-		Network network(trainingSet.InputSize);
+		BackPropNetwork network(trainingSet.InputSize, LEARNING_RATE, MOMENTUM);
 		network.AddLayer<Relu>(3);
 		network.AddLayer<Relu>(1);
 
-		auto trainingCount = 0u;
-		do
-		{
-			for (auto i = 0; i < 100; i++)
-			{
-				auto& example = trainingSet.Sample();
-				network.Train(example.Input, example.Output, LEARNING_RATE, MOMENTUM);
-				trainingCount++;
-			}
-		}
-		while (network.Evaluate(trainingSet) > 0.00001f && trainingCount < TRAINING_ITERATIONS);
+		Evaluator evaluator(&network, Loss::Error);
+		StoppingCondition::AnyStoppingCondition stoppingConditions;
+		stoppingConditions.Add<StoppingCondition::MetricLessThan<real>>(Data::METRIC_TRAINING_ERROR, TRAINING_ERROR);
+		stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(TRAINING_ITERATIONS);
 
-		printf("Training Count = %d\n", trainingCount);
+		Trainer trainer(&network, &evaluator);
+		trainer.Run(trainingSet, stoppingConditions);
+
+		printf("Training Count = %d\n", trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS));
 		for (const auto& example : trainingSet)
 		{
 			auto output = network.Calculate(example.Input);
-			printf("%f, %f = %f, Error = %f\n", example.Input[0], example.Input[1], output[0], Error(example.Output, output));
+			printf("%f, %f = %f, Error = %f\n", example.Input[0], example.Input[1], output[0], Training::Loss::Error(example.Output, output));
 		}
 	}
 }

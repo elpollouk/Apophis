@@ -15,6 +15,12 @@
     <Filter Include="Tests\Component">
       <UniqueIdentifier>{9b452d69-72af-4f5c-82e0-9a4cdfba16d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests\Data">
+      <UniqueIdentifier>{99fc11e3-e364-455e-b26d-0cec5fb16d1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Training">
+      <UniqueIdentifier>{f4950393-27ff-4aed-a7e0-1ee5064fd8f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -42,6 +48,12 @@
     </ClCompile>
     <ClCompile Include="Component\LayerTests.cpp">
       <Filter>Tests\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\MetricsTests.cpp">
+      <Filter>Tests\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Training\StoppingConditionTests.cpp">
+      <Filter>Tests\Training</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
