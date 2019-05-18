@@ -2,39 +2,14 @@
 #include "apophis/apophis.h"
 #include "apophis/ExampleSet.h"
 #include "apophis/Component/Factory.h"
+#include "apophis/Component/Layer.h"
 #include "Network.h"
 
 using namespace Apophis;
+using namespace Component;
 
 namespace Network
 {
-
-class Layer
-{
-public:
-	Layer(int size, int numInputs) :
-		Size(size),
-		NumInputs(numInputs)
-	{
-		for (auto i = 0; i < size; i++)
-			Nodes.emplace_back(CreateNode<ReluNode>(numInputs));
-
-		Outputs.resize(size, 0.f);
-	}
-
-	ConstVectorRef Calculate(ConstVectorRef inputs)
-	{
-		for (auto i = 0; i < Size; i++)
-			Outputs[i] = Nodes[i]->Calculate(inputs);
-
-		return Outputs;
-	}
-
-	const int Size;
-	const int NumInputs;
-	std::vector<std::unique_ptr<ReluNode>> Nodes;
-	Vector Outputs;
-};
 
 real Error(ConstVectorRef target, ConstVectorRef actual)
 {
@@ -52,18 +27,18 @@ real Error(ConstVectorRef target, ConstVectorRef actual)
 	return error;
 }
 
-void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
+void CalculateOutputBackPropError(ConstVectorRef targets, Layer<ReluNode>* layer)
 {
-	assert(targets.size() == layer->Outputs.size());
+	assert(targets.size() == layer->Output.size());
 
 	for (auto i = 0; i < layer->Size; i++)
 	{
 		auto node = layer->Nodes[i].get();
-		node->BackPropError = (targets[i] - layer->Outputs[i]) * node->Transfer.Derivative(node->Activation);
+		node->BackPropError = (targets[i] - layer->Output[i]) * node->Transfer.Derivative(node->Activation);
 	}
 }
 
-void CalculateHiddenBackPropError(Layer* targetLayer, Layer* forwardLayer)
+void CalculateHiddenBackPropError(Layer<ReluNode>* targetLayer, Layer<ReluNode>* forwardLayer)
 {
 	for (auto i = 0; i < targetLayer->Size; i++)
 	{
@@ -77,7 +52,7 @@ void CalculateHiddenBackPropError(Layer* targetLayer, Layer* forwardLayer)
 	}
 }
 
-void ApplyDeltas(Layer* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
+void ApplyDeltas(Layer<ReluNode>* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
 {
 	for (auto i = 0; i < targetLayer->Size; i++)
 	{
@@ -110,7 +85,7 @@ public:
 
 	void AddLayer(int numNodes)
 	{
-		m_Layers.emplace_back(std::make_unique<Layer>(numNodes, OutputSize));
+		m_Layers.emplace_back(std::make_unique<Layer<ReluNode>>(numNodes, OutputSize));
 		OutputSize = numNodes;
 	}
 
@@ -148,7 +123,7 @@ public:
 		for (auto& layer : m_Layers)
 		{
 			ApplyDeltas(layer.get(), *pInput, learningRate, momentum);
-			pInput = &layer->Outputs;
+			pInput = &layer->Output;
 		}
 	}
 
@@ -168,7 +143,7 @@ public:
 	int OutputSize;
 
 private:
-	std::vector<std::unique_ptr<Layer>> m_Layers;
+	std::vector<std::unique_ptr<Layer<ReluNode>>> m_Layers;
 };
 
 Example CreateExample(real i0, real i1, real o0)
