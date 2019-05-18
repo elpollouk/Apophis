@@ -9,8 +9,11 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\TransferFunction">
-      <UniqueIdentifier>{c8be4d39-6fc5-49a1-ad43-321096d2519e}</UniqueIdentifier>
+    <Filter Include="Header Files\Component">
+      <UniqueIdentifier>{893c4992-29d0-4f8f-b2ee-437ecf422eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TransferFunction">
+      <UniqueIdentifier>{50784135-5a1a-47c4-b3a9-c69581f674de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -20,12 +23,6 @@
     <ClInclude Include="src\targetver.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ITransferFunction.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TransferFunction\Relu.h">
-      <Filter>Source Files\TransferFunction</Filter>
-    </ClInclude>
     <ClInclude Include="include\apophis\apophis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,6 +31,18 @@
     </ClInclude>
     <ClInclude Include="src\Random.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Component\Node.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\TransferFunction\Relu.h">
+      <Filter>Header Files\TransferFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\TransferFunction\Sigmoid.h">
+      <Filter>Header Files\TransferFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Component\Factory.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,9 @@
     <Filter Include="Tests\TransferFunction">
       <UniqueIdentifier>{f2be1ab8-d0a8-4e98-8fa4-1d1599372185}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests\Component">
+      <UniqueIdentifier>{9b452d69-72af-4f5c-82e0-9a4cdfba16d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -30,6 +33,9 @@
     </ClCompile>
     <ClCompile Include="ExampleSetTests.cpp">
       <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\NodeTests.cpp">
+      <Filter>Tests\Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

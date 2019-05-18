@@ -1,77 +1,13 @@
 #include "pch.h"
 #include "apophis/apophis.h"
 #include "apophis/ExampleSet.h"
+#include "apophis/Component/Factory.h"
 #include "Network.h"
 
 using namespace Apophis;
 
-#define RELU
-
-static std::default_random_engine generator(1234);
-static std::uniform_real_distribution<real> distribution(0.f, 1.f);
-static auto RandomWeight = std::bind(distribution, generator);
-
 namespace Network
 {
-#if defined(RELU)
-real Transfer(real activation)
-{
-	return activation > 0 ? activation : 0.01f * activation;
-}
-
-real TransferDerivitive(real activation)
-{
-	return activation > 0 ? 1.f : 0.01f;
-}
-#else
-real Transfer(real activation)
-{
-	return 1 / (1 + expf(-activation));
-}
-
-real TransferDerivitive(real activation)
-{
-	activation = Transfer(activation);
-	return activation * (1 - activation);
-}
-#endif
-
-class Node
-{
-public:
-	Node(int numInputs) :
-		NumInputs(numInputs),
-		BackPropError(0.f),
-		Activation(0.f)
-	{
-		// Add one for the bias
-		numInputs++;
-
-		Weights.resize(numInputs);
-		for (auto i = 0; i < numInputs; i++)
-			Weights[i] = RandomWeight();
-		PreviousWeightChanges.resize(numInputs, 0.f);
-	}
-
-
-	real Calculate(ConstVectorRef input)
-	{
-		assert(input.size() == Weights.size() - 1);
-
-		Activation = Weights[NumInputs];
-
-		for (auto i = 0; i < NumInputs; i++)
-			Activation += input[i] * Weights[i];
-
-		return Transfer(Activation);
-	}
-
-	const int NumInputs;
-	real Activation;
-	real BackPropError;
-	Vector Weights;
-	Vector PreviousWeightChanges;
-};
 
 class Layer
 {
@@ -81,7 +17,7 @@ public:
 		NumInputs(numInputs)
 	{
 		for (auto i = 0; i < size; i++)
-			Nodes.emplace_back(std::make_unique<Node>(numInputs));
+			Nodes.emplace_back(CreateNode<ReluNode>(numInputs));
 
 		Outputs.resize(size, 0.f);
 	}
@@ -96,7 +32,7 @@ public:
 
 	const int Size;
 	const int NumInputs;
-	std::vector<std::unique_ptr<Node>> Nodes;
+	std::vector<std::unique_ptr<ReluNode>> Nodes;
 	Vector Outputs;
 };
 
@@ -121,19 +57,23 @@ void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
 	assert(targets.size() == layer->Outputs.size());
 
 	for (auto i = 0; i < layer->Size; i++)
-		layer->Nodes[i]->BackPropError = (targets[i] - layer->Outputs[i]) * TransferDerivitive(layer->Nodes[i]->Activation);
+	{
+		auto node = layer->Nodes[i].get();
+		node->BackPropError = (targets[i] - layer->Outputs[i]) * node->Transfer.Derivative(node->Activation);
+	}
 }
 
 void CalculateHiddenBackPropError(Layer* targetLayer, Layer* forwardLayer)
 {
 	for (auto i = 0; i < targetLayer->Size; i++)
 	{
-		targetLayer->Nodes[i]->BackPropError = 0.f;
+		auto targetNode = targetLayer->Nodes[i].get();
+		targetNode->BackPropError = 0.f;
 		for (auto k = 0; k < forwardLayer->Size; k++)
 		{
-			targetLayer->Nodes[i]->BackPropError += forwardLayer->Nodes[k]->BackPropError * forwardLayer->Nodes[k]->Weights[i];
+			targetNode->BackPropError += forwardLayer->Nodes[k]->BackPropError * forwardLayer->Nodes[k]->Weights[i];
 		}
-		targetLayer->Nodes[i]->BackPropError *= TransferDerivitive(targetLayer->Nodes[i]->Activation);
+		targetNode->BackPropError *= targetNode->Transfer.Derivative(targetLayer->Nodes[i]->Activation);
 	}
 }
 

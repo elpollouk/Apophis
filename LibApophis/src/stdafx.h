@@ -13,7 +13,6 @@
 
 #include "apophis/apophis.h"
 #include "Random.h"
-#include "ITransferFunction.h"
 
 
 // reference additional headers your program requires here
