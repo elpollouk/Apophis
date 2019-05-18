@@ -16,10 +16,25 @@ namespace Apophis {
 
 			DType Derivative(DType value) const
 			{
-				value = this->operator()(value);
+				value = operator()(value);
 				return value * (1 - value);
 			}
 		};
 
+		template<>
+		class Sigmoid<double>
+		{
+		public:
+			double operator()(double value) const
+			{
+				return 1 / (1 + exp(-value));
+			}
+
+			double Derivative(double value) const
+			{
+				value = operator()(value);
+				return value * (1 - value);
+			}
+		};
 	}
 }

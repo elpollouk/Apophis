@@ -9,11 +9,11 @@ namespace Apophis { namespace Component {
 	class Node
 	{
 	public:
-		Node(size_t numInputs, TransferFunction&& transferFunction) :
+		Node(size_t numInputs, TransferFunction&& transfer) :
 			NumInputs(numInputs),
 			Activation(0),
 			BackPropError(0),
-			Transfer(transferFunction)
+			Transfer(transfer)
 		{
 			// Add one for the bias
 			numInputs++;
