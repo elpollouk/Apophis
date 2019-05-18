@@ -19,7 +19,7 @@ void ExampleSet::AddExample(Example&& example)
 	m_Distribution = std::uniform_int_distribution<size_t>(0, m_Examples.size() - 1);
 }
 
-const Example& ExampleSet::Sample()
+const Example& ExampleSet::Sample() const
 {
 	return m_Examples[m_Distribution(GetRandomGenerator())];
 }

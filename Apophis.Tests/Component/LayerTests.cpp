@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/Component/Layer.h"
+#include "apophis/Component/Network.h"
 #include "apophis/TransferFunction/Relu.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -14,7 +15,8 @@ namespace ApophisTests { namespace Component
 	public:
 		TEST_METHOD(Layer_Construct)
 		{
-			auto layer = Layer(3, 2, Relu::Default());
+			Network network(0);
+			auto layer = Layer(3, 2, Relu::Default(), &network);
 
 			Assert::AreEqual(2, (int)layer.NumOutputs);
 			Assert::AreEqual(2, (int)layer.Nodes.size());
@@ -27,7 +29,8 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(Layer_Calculate)
 		{
-			auto layer = Layer(3, 2, Relu::Default());
+			Network network(0);
+			auto layer = Layer(3, 2, Relu::Default(), &network);
 
 			auto value = 1.f;
 			for (auto& node : layer.Nodes)

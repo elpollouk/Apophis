@@ -18,7 +18,7 @@ namespace Apophis { namespace Training {
 
 		Data::Metrics& GetMetrics() { return m_Metrics; }
 
-		void Run(ExampleSet& trainingSet, const StoppingCondition::IStoppingCondition& stoppingCondition)
+		void Run(const ExampleSet& trainingSet, const StoppingCondition::IStoppingCondition& stoppingCondition)
 		{
 			auto trainingCount = 0;
 			do

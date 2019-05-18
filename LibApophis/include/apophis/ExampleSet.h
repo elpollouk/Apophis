@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Apophis.h"
+#include "apophis.h"
 #include <random>
 
 namespace Apophis {
@@ -26,7 +26,7 @@ namespace Apophis {
 
 		void AddExample(Example&& example);
 
-		const Example& Sample();
+		const Example& Sample() const;
 
 		std::vector<Example>::const_iterator begin() const
 		{

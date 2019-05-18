@@ -178,6 +178,7 @@
     <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Component\Layer.cpp" />
     <ClCompile Include="src\ExampleSet.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\stdafx.cpp">

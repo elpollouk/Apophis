@@ -6,6 +6,7 @@ namespace Apophis { namespace Component {
 
 	class Network
 	{
+	friend class Layer;
 	public:
 		Network(size_t inputSize) :
 			InputSize(inputSize),
@@ -15,14 +16,14 @@ namespace Apophis { namespace Component {
 		}
 
 		template<class TransferFunction>
-		void AddLayer(int numNodes)
+		void AddLayer(size_t numNodes)
 		{
 			AddLayer(numNodes, TransferFunction::Default());
 		}
 
-		void AddLayer(int numNodes, const TransferFunction::ITransferFunction* transfer)
+		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer)
 		{
-			m_Layers.emplace_back(std::make_unique<Layer>(OutputSize, numNodes, transfer));
+			m_Layers.emplace_back(CreateLayer(numNodes, transfer));
 			OutputSize = numNodes;
 		}
 
@@ -41,6 +42,16 @@ namespace Apophis { namespace Component {
 		size_t OutputSize;
 
 	protected:
+		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer)
+		{
+			return std::make_unique<Layer>(OutputSize, numNodes, transfer, this);
+		}
+
+		virtual std::unique_ptr<Node> CreateNode(size_t numInputs, const TransferFunction::ITransferFunction* transfer)
+		{
+			return std::make_unique<Node>(numInputs, transfer);
+		}
+
 		std::vector<std::unique_ptr<Layer>> m_Layers;
 	};
 

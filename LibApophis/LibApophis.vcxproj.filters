@@ -24,6 +24,9 @@
     <Filter Include="Header Files\Data">
       <UniqueIdentifier>{6eb299b3-4010-4758-9a9b-bfb9e8862dfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{25151005-aa5c-4e25-980b-d34aab1f28d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\stdafx.h">
@@ -90,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="src\TransferFunction\DefaultFunctions.cpp">
       <Filter>Source Files\TransferFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Layer.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
