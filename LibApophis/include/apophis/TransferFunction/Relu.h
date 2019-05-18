@@ -6,6 +6,8 @@ namespace Apophis { namespace TransferFunction {
 
 	class Relu : public ITransferFunction
 	{
+		DEFAULT_TRANSFER
+
 	public:
 		Relu(real leakGradient = 0.01) :
 			m_LeakGradient(leakGradient)

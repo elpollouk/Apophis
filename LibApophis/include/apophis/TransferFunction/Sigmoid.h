@@ -7,6 +7,8 @@ namespace Apophis {	namespace TransferFunction {
 
 	class Sigmoid : public ITransferFunction
 	{
+		DEFAULT_TRANSFER
+
 	public:
 		virtual real operator()(real value) const
 		{

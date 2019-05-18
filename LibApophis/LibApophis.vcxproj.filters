@@ -15,6 +15,9 @@
     <Filter Include="Header Files\TransferFunction">
       <UniqueIdentifier>{50784135-5a1a-47c4-b3a9-c69581f674de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TransferFunction">
+      <UniqueIdentifier>{0566a683-347b-47a8-ba05-38f12b6c1aaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\stdafx.h">
@@ -57,6 +60,9 @@
     </ClCompile>
     <ClCompile Include="src\Random.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TransferFunction\DefaultFunctions.cpp">
+      <Filter>Source Files\TransferFunction</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

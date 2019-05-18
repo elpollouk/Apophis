@@ -8,7 +8,8 @@
 #include "Network.h"
 
 using namespace Apophis;
-using namespace Component;
+using namespace Apophis::Component;
+using namespace Apophis::TransferFunction;
 
 namespace Network
 {
@@ -85,6 +86,12 @@ public:
 
 	}
 
+	template<class TransferFunction>
+	void AddLayer(int numNodes)
+	{
+		AddLayer(numNodes, TransferFunction::Default());
+	}
+
 	void AddLayer(int numNodes, const TransferFunction::ITransferFunction* transfer)
 	{
 		m_Layers.emplace_back(std::make_unique<Layer>(numNodes, OutputSize, transfer));
@@ -157,9 +164,9 @@ Example CreateExample(real i0, real i1, real o0)
 
 void Run()
 {
+	const auto TRAINING_ITERATIONS = 1000000u;
 	const auto LEARNING_RATE = 0.05f;
 	const auto MOMENTUM = 0.5f;
-	TransferFunction::Relu relu;
 
 	ExampleSet trainingSet(2, 1);
 	trainingSet.AddExample(CreateExample(0.f, 0.f, 0.f));
@@ -172,10 +179,10 @@ void Run()
 		printf("\nRun %d:\n", i + 1);
 
 		Network network(trainingSet.InputSize);
-		network.AddLayer(3, &relu);
-		network.AddLayer(1, &relu);
+		network.AddLayer<Relu>(3);
+		network.AddLayer<Relu>(1);
 
-		auto trainingCount = 0;
+		auto trainingCount = 0u;
 		do
 		{
 			for (auto i = 0; i < 100; i++)
@@ -185,7 +192,7 @@ void Run()
 				trainingCount++;
 			}
 		}
-		while (network.Evaluate(trainingSet) > 0.00001f && trainingCount < 100000);
+		while (network.Evaluate(trainingSet) > 0.00001f && trainingCount < TRAINING_ITERATIONS);
 
 		printf("Training Count = %d\n", trainingCount);
 		for (const auto& example : trainingSet)
