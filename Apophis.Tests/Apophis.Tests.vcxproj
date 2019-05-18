@@ -164,6 +164,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\LayerTests.cpp" />
     <ClCompile Include="Component\NodeTests.cpp" />
     <ClCompile Include="ExampleSetTests.cpp" />
     <ClCompile Include="stdafx.cpp">

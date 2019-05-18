@@ -36,6 +36,7 @@ namespace ApophisTests { namespace Component
 			Vector input = { 11.f, 13.f };
 
 			Assert::AreEqual(105.f, node.Calculate(input));
+			Assert::AreEqual(105.f, node.Activation);
 		}
 
 		TEST_METHOD(ReluNode_Calculate_NegativeWeights)
@@ -48,6 +49,7 @@ namespace ApophisTests { namespace Component
 			Vector input = { 1.f, 1.f };
 
 			Assert::AreEqual(-0.02f, node.Calculate(input));
+			Assert::AreEqual(-2.f, node.Activation);
 		}
 
 		TEST_METHOD(SigmoidNode_Calculate_PositiveWeights)

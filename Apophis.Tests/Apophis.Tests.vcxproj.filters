@@ -40,5 +40,8 @@
     <ClCompile Include="TransferFunction\SigmoidTests.cpp">
       <Filter>Tests\TransferFunction</Filter>
     </ClCompile>
+    <ClCompile Include="Component\LayerTests.cpp">
+      <Filter>Tests\Component</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

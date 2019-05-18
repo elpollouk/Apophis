@@ -18,7 +18,7 @@ namespace Apophis { namespace Component {
 			numInputs++;
 
 			Weights.resize(numInputs);
-			for (auto i = 0; i < numInputs; i++)
+			for (auto i = 0u; i < numInputs; i++)
 				Weights[i] = RandomWeight();
 			PreviousWeightChanges.resize(numInputs, 0.f);
 		}
@@ -29,7 +29,7 @@ namespace Apophis { namespace Component {
 
 			Activation = Weights[NumInputs];
 
-			for (auto i = 0; i < NumInputs; i++)
+			for (auto i = 0u; i < NumInputs; i++)
 				Activation += input[i] * Weights[i];
 
 			return (*Transfer)(Activation);

@@ -10,26 +10,26 @@ namespace Apophis { namespace Component {
 	class Layer
 	{
 	public:
-		Layer(int size, int numInputs, const TransferFunction::ITransferFunction* transfer) :
-			Size(size),
+		Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction* transfer) :
+			NumOutputs(numOutputs),
 			NumInputs(numInputs)
 		{
-			for (auto i = 0; i < size; i++)
+			for (auto i = 0u; i < numOutputs; i++)
 				Nodes.emplace_back(std::make_unique<Node>(numInputs, transfer));
 
-			Output.resize(size, 0.f);
+			Output.resize(numOutputs, 0.f);
 		}
 
 		ConstVectorRef Calculate(ConstVectorRef inputs)
 		{
-			for (auto i = 0; i < Size; i++)
+			for (auto i = 0u; i < NumOutputs; i++)
 				Output[i] = Nodes[i]->Calculate(inputs);
 
 			return Output;
 		}
 
-		const int Size;
-		const int NumInputs;
+		const size_t NumInputs;
+		const size_t NumOutputs;
 		std::vector<std::unique_ptr<Node>> Nodes;
 		Vector Output;
 	};

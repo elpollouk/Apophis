@@ -24,8 +24,9 @@ real Error(ConstVectorRef target, ConstVectorRef actual)
 	{
 		auto v = target[i] - actual[i];
 		v *= v;
-		error += 0.5f * v;
+		error += v;
 	}
+	error *= 0.5;
 
 	return error;
 }
@@ -34,33 +35,32 @@ void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
 {
 	assert(targets.size() == layer->Output.size());
 
-	for (auto i = 0; i < layer->Size; i++)
+	for (auto i = 0u; i < layer->NumOutputs; i++)
 	{
-		auto node = layer->Nodes[i].get();
+		auto& node = layer->Nodes[i];
 		node->BackPropError = (targets[i] - layer->Output[i]) * node->Transfer->Derivative(node->Activation);
 	}
 }
 
-void CalculateHiddenBackPropError(Layer* targetLayer, Layer* forwardLayer)
+void CalculateHiddenBackPropError(Layer* targetLayer, const Layer* forwardLayer)
 {
-	for (auto i = 0; i < targetLayer->Size; i++)
+	for (auto i = 0u; i < targetLayer->NumOutputs; i++)
 	{
-		auto targetNode = targetLayer->Nodes[i].get();
+		auto& targetNode = targetLayer->Nodes[i];
 		targetNode->BackPropError = 0.f;
-		for (auto k = 0; k < forwardLayer->Size; k++)
-		{
-			targetNode->BackPropError += forwardLayer->Nodes[k]->BackPropError * forwardLayer->Nodes[k]->Weights[i];
-		}
+		for (auto j = 0u; j < forwardLayer->NumOutputs; j++)
+			targetNode->BackPropError += forwardLayer->Nodes[j]->BackPropError * forwardLayer->Nodes[j]->Weights[i];
+
 		targetNode->BackPropError *= targetNode->Transfer->Derivative(targetLayer->Nodes[i]->Activation);
 	}
 }
 
 void ApplyDeltas(Layer* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
 {
-	for (auto i = 0; i < targetLayer->Size; i++)
+	for (auto i = 0u; i < targetLayer->NumOutputs; i++)
 	{
 		auto learningDelta = learningRate * targetLayer->Nodes[i]->BackPropError;
-		for (auto j = 0; j < targetLayer->NumInputs; j++)
+		for (auto j = 0u; j < targetLayer->NumInputs; j++)
 		{
 			auto weightChange = learningDelta * priorLayerOutput[j];
 			weightChange += (momentum * targetLayer->Nodes[i]->PreviousWeightChanges[j]);
@@ -94,7 +94,7 @@ public:
 
 	void AddLayer(int numNodes, const TransferFunction::ITransferFunction* transfer)
 	{
-		m_Layers.emplace_back(std::make_unique<Layer>(numNodes, OutputSize, transfer));
+		m_Layers.emplace_back(std::make_unique<Layer>(OutputSize, numNodes, transfer));
 		OutputSize = numNodes;
 	}
 
@@ -113,7 +113,7 @@ public:
 	void Train(ConstVectorRef input, ConstVectorRef target, real learningRate, real momentum)
 	{
 		assert(input.size() == InputSize);
-		assert(target.size() == m_Layers.back()->Size);
+		assert(target.size() == m_Layers.back()->NumOutputs);
 
 		auto actual = Calculate(input);
 
