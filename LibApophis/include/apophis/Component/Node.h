@@ -1,15 +1,14 @@
 #pragma once
 
 #include <assert.h>
-#include "apophis/apophis.h"
+#include "apophis/TransferFunction/ITransferFunction.h"
 
 namespace Apophis { namespace Component {
 
-	template <class DType, class TransferFunction>
 	class Node
 	{
 	public:
-		Node(size_t numInputs, TransferFunction&& transfer) :
+		Node(size_t numInputs, const TransferFunction::ITransferFunction* transfer) :
 			NumInputs(numInputs),
 			Activation(0),
 			BackPropError(0),
@@ -33,7 +32,7 @@ namespace Apophis { namespace Component {
 			for (auto i = 0; i < NumInputs; i++)
 				Activation += input[i] * Weights[i];
 
-			return Transfer(Activation);
+			return (*Transfer)(Activation);
 		}
 
 		const size_t NumInputs;
@@ -41,7 +40,7 @@ namespace Apophis { namespace Component {
 		real BackPropError;
 		Vector Weights;
 		Vector PreviousWeightChanges;
-		const TransferFunction Transfer;
+		const TransferFunction::ITransferFunction* Transfer;
 	};
 
 }}

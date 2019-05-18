@@ -1,40 +1,23 @@
 #pragma once
 
 #include <math.h>
+#include "ITransferFunction.h"
 
-namespace Apophis {
-	namespace TransferFunction {
+namespace Apophis {	namespace TransferFunction {
 
-		template <class DType>
-		class Sigmoid
+	class Sigmoid : public ITransferFunction
+	{
+	public:
+		virtual real operator()(real value) const
 		{
-		public:
-			DType operator()(DType value) const
-			{
-				return 1 / (1 + expf(-value));
-			}
+			return 1.f / (1.f + expf(-value));
+		}
 
-			DType Derivative(DType value) const
-			{
-				value = operator()(value);
-				return value * (1 - value);
-			}
-		};
-
-		template<>
-		class Sigmoid<double>
+		virtual real Derivative(real value) const
 		{
-		public:
-			double operator()(double value) const
-			{
-				return 1 / (1 + exp(-value));
-			}
+			value = operator()(value);
+			return value * (1.f - value);
+		}
+	};
 
-			double Derivative(double value) const
-			{
-				value = operator()(value);
-				return value * (1 - value);
-			}
-		};
-	}
-}
+}}

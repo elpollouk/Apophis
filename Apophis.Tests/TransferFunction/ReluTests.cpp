@@ -12,7 +12,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Transfer_Positive_ZeroLeak)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>();
+			auto function = ::Apophis::TransferFunction::Relu(0.f);
 
 			Assert::AreEqual(1.f, function(1.f));
 			Assert::AreEqual(2.f, function(2.f));
@@ -21,7 +21,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Transfer_Negative_ZeroLeak)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>();
+			auto function = ::Apophis::TransferFunction::Relu(0.f);
 
 			Assert::AreEqual(0.f, function(-1.f));
 			Assert::AreEqual(0.f, function(-2.f));
@@ -30,7 +30,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Transfer_Positive_Leaky)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>(0.01f);
+			auto function = ::Apophis::TransferFunction::Relu();
 
 			Assert::AreEqual(1.f, function(1.f));
 			Assert::AreEqual(2.f, function(2.f));
@@ -39,7 +39,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Transfer_Negative_Leaky_001)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>(0.01f);
+			auto function = ::Apophis::TransferFunction::Relu();
 
 			Assert::AreEqual(-0.01f, function(-1.f));
 			Assert::AreEqual(-0.02f, function(-2.f));
@@ -48,7 +48,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Transfer_Negative_Leaky_01)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>(0.1f);
+			auto function = ::Apophis::TransferFunction::Relu(0.1f);
 
 			Assert::AreEqual(-0.1f, function(-1.f));
 			Assert::AreEqual(-0.2f, function(-2.f));
@@ -57,7 +57,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Derivative_NonLeaky)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>();
+			auto function = ::Apophis::TransferFunction::Relu(0.0f);
 
 			Assert::AreEqual(0.f, function.Derivative(-3.f));
 			Assert::AreEqual(0.f, function.Derivative(-1.5f));
@@ -67,7 +67,7 @@ namespace ApophisTests { namespace TransferFunction
 
 		TEST_METHOD(Derivative_Leaky)
 		{
-			auto function = ::Apophis::TransferFunction::Relu<float>(0.01f);
+			auto function = ::Apophis::TransferFunction::Relu();
 
 			Assert::AreEqual(0.01f, function.Derivative(-3.f));
 			Assert::AreEqual(0.01f, function.Derivative(-1.5f));

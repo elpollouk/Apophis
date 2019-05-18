@@ -41,11 +41,11 @@
     <ClInclude Include="include\apophis\TransferFunction\Sigmoid.h">
       <Filter>Header Files\TransferFunction</Filter>
     </ClInclude>
-    <ClInclude Include="include\apophis\Component\Factory.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="include\apophis\Component\Layer.h">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\TransferFunction\ITransferFunction.h">
+      <Filter>Header Files\TransferFunction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

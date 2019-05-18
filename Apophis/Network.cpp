@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "apophis/apophis.h"
 #include "apophis/ExampleSet.h"
-#include "apophis/Component/Factory.h"
+#include "apophis/TransferFunction/Relu.h"
+#include "apophis/TransferFunction/Sigmoid.h"
+#include "apophis/Component/Node.h"
 #include "apophis/Component/Layer.h"
 #include "Network.h"
 
@@ -27,18 +29,18 @@ real Error(ConstVectorRef target, ConstVectorRef actual)
 	return error;
 }
 
-void CalculateOutputBackPropError(ConstVectorRef targets, Layer<ReluNode>* layer)
+void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
 {
 	assert(targets.size() == layer->Output.size());
 
 	for (auto i = 0; i < layer->Size; i++)
 	{
 		auto node = layer->Nodes[i].get();
-		node->BackPropError = (targets[i] - layer->Output[i]) * node->Transfer.Derivative(node->Activation);
+		node->BackPropError = (targets[i] - layer->Output[i]) * node->Transfer->Derivative(node->Activation);
 	}
 }
 
-void CalculateHiddenBackPropError(Layer<ReluNode>* targetLayer, Layer<ReluNode>* forwardLayer)
+void CalculateHiddenBackPropError(Layer* targetLayer, Layer* forwardLayer)
 {
 	for (auto i = 0; i < targetLayer->Size; i++)
 	{
@@ -48,11 +50,11 @@ void CalculateHiddenBackPropError(Layer<ReluNode>* targetLayer, Layer<ReluNode>*
 		{
 			targetNode->BackPropError += forwardLayer->Nodes[k]->BackPropError * forwardLayer->Nodes[k]->Weights[i];
 		}
-		targetNode->BackPropError *= targetNode->Transfer.Derivative(targetLayer->Nodes[i]->Activation);
+		targetNode->BackPropError *= targetNode->Transfer->Derivative(targetLayer->Nodes[i]->Activation);
 	}
 }
 
-void ApplyDeltas(Layer<ReluNode>* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
+void ApplyDeltas(Layer* targetLayer, ConstVectorRef priorLayerOutput, real learningRate, real momentum)
 {
 	for (auto i = 0; i < targetLayer->Size; i++)
 	{
@@ -83,9 +85,9 @@ public:
 
 	}
 
-	void AddLayer(int numNodes)
+	void AddLayer(int numNodes, const TransferFunction::ITransferFunction* transfer)
 	{
-		m_Layers.emplace_back(std::make_unique<Layer<ReluNode>>(numNodes, OutputSize));
+		m_Layers.emplace_back(std::make_unique<Layer>(numNodes, OutputSize, transfer));
 		OutputSize = numNodes;
 	}
 
@@ -143,7 +145,7 @@ public:
 	int OutputSize;
 
 private:
-	std::vector<std::unique_ptr<Layer<ReluNode>>> m_Layers;
+	std::vector<std::unique_ptr<Layer>> m_Layers;
 };
 
 Example CreateExample(real i0, real i1, real o0)
@@ -157,6 +159,7 @@ void Run()
 {
 	const auto LEARNING_RATE = 0.05f;
 	const auto MOMENTUM = 0.5f;
+	TransferFunction::Relu relu;
 
 	ExampleSet trainingSet(2, 1);
 	trainingSet.AddExample(CreateExample(0.f, 0.f, 0.f));
@@ -169,8 +172,8 @@ void Run()
 		printf("\nRun %d:\n", i + 1);
 
 		Network network(trainingSet.InputSize);
-		network.AddLayer(3);
-		network.AddLayer(1);
+		network.AddLayer(3, &relu);
+		network.AddLayer(1, &relu);
 
 		auto trainingCount = 0;
 		do

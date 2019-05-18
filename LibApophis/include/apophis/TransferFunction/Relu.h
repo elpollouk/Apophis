@@ -1,29 +1,30 @@
 #pragma once
 
+#include "ITransferFunction.h"
+
 namespace Apophis { namespace TransferFunction {
 
-	template <class DType>
-	class Relu
+	class Relu : public ITransferFunction
 	{
 	public:
-		Relu(DType leakGradient = {}) :
+		Relu(real leakGradient = 0.01) :
 			m_LeakGradient(leakGradient)
 		{
 
 		}
 
-		DType operator()(DType value) const
+		virtual real operator()(real value) const
 		{
-			return value > 0 ? value : m_LeakGradient * value;
+			return value > 0.f ? value : m_LeakGradient * value;
 		}
 
-		DType Derivative(DType value) const
+		virtual real Derivative(real value) const
 		{
-			return value > 0 ? 1 : m_LeakGradient;
+			return value > 0.f ? 1.f : m_LeakGradient;
 		}
 
 	private:
-		DType m_LeakGradient;
+		real m_LeakGradient;
 	};
 
 }}

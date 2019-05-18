@@ -160,10 +160,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\apophis\apophis.h" />
-    <ClInclude Include="include\apophis\Component\Factory.h" />
     <ClInclude Include="include\apophis\Component\Layer.h" />
     <ClInclude Include="include\apophis\Component\Node.h" />
     <ClInclude Include="include\apophis\ExampleSet.h" />
+    <ClInclude Include="include\apophis\TransferFunction\ITransferFunction.h" />
     <ClInclude Include="include\apophis\TransferFunction\Relu.h" />
     <ClInclude Include="include\apophis\TransferFunction\Sigmoid.h" />
     <ClInclude Include="src\Random.h" />
