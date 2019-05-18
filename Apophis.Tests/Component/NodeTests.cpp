@@ -44,5 +44,31 @@ namespace ApophisTests { namespace Component
 
 			Assert::AreEqual(-0.02f, node->Calculate(input));
 		}
+
+		TEST_METHOD(SigmoidNode_Calculate_PositiveWeights)
+		{
+			auto node = CreateNode<SigmoidNode>(3);
+			node->Weights[0] = .1f;
+			node->Weights[1] = .2f;
+			node->Weights[2] = .3f;
+			node->Weights[3] = .4f;
+
+			Vector input = { 1.f, 2.f, 3.f };
+
+			AssertAreClose(0.858149f, node->Calculate(input));
+		}
+
+		TEST_METHOD(SigmoidNode_Calculate_NegativeWeights)
+		{
+			auto node = CreateNode<SigmoidNode>(3);
+			node->Weights[0] = .1f;
+			node->Weights[1] = -.2f;
+			node->Weights[2] = -.3f;
+			node->Weights[3] = -.4f;
+
+			Vector input = { 1.f, 2.f, 3.f };
+
+			AssertAreClose(0.167982f, node->Calculate(input));
+		}
 	};
 }}

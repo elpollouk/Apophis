@@ -37,5 +37,8 @@
     <ClCompile Include="Component\NodeTests.cpp">
       <Filter>Tests\Component</Filter>
     </ClCompile>
+    <ClCompile Include="TransferFunction\SigmoidTests.cpp">
+      <Filter>Tests\TransferFunction</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
