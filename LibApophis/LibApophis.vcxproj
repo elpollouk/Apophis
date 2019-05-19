@@ -160,12 +160,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\apophis\apophis.h" />
-    <ClInclude Include="include\apophis\Component\BackPropNetwork.h" />
     <ClInclude Include="include\apophis\Component\Layer.h" />
     <ClInclude Include="include\apophis\Component\Network.h" />
     <ClInclude Include="include\apophis\Component\Node.h" />
     <ClInclude Include="include\apophis\Data\Metrics.h" />
     <ClInclude Include="include\apophis\ExampleSet.h" />
+    <ClInclude Include="include\apophis\Training\BackPropNetwork.h" />
     <ClInclude Include="include\apophis\Training\Evaluator.h" />
     <ClInclude Include="include\apophis\Training\LossFunctions.h" />
     <ClInclude Include="include\apophis\Training\StoppingConditions.h" />

@@ -65,9 +65,6 @@
     <ClInclude Include="include\apophis\Component\Network.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\apophis\Component\BackPropNetwork.h">
-      <Filter>Header Files\Component</Filter>
-    </ClInclude>
     <ClInclude Include="include\apophis\Training\LossFunctions.h">
       <Filter>Header Files\Training</Filter>
     </ClInclude>
@@ -81,6 +78,9 @@
       <Filter>Header Files\Training</Filter>
     </ClInclude>
     <ClInclude Include="include\apophis\Training\StoppingConditions.h">
+      <Filter>Header Files\Training</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Training\BackPropNetwork.h">
       <Filter>Header Files\Training</Filter>
     </ClInclude>
   </ItemGroup>

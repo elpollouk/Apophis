@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "apophis/Component/BackPropNetwork.h"
+#include "apophis/Training/BackPropNetwork.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;
-//using namespace Apophis::Training;
+using namespace Apophis::Training;
 
 static void CalculateOutputBackPropError(ConstVectorRef targets, Layer* layer)
 {
@@ -51,7 +51,7 @@ static void UpdateWeights(Layer* targetLayer, ConstVectorRef priorLayerOutput, r
 }
 
 
-BackPropNetwork::BackPropNetwork(int inputSize, real learningRate, real momentum) :
+BackPropNetwork::BackPropNetwork(size_t inputSize, real learningRate, real momentum) :
 	ITrainableNetwork(inputSize),
 	m_LearningRate(learningRate),
 	m_Momentum(momentum)

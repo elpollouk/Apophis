@@ -2,12 +2,12 @@
 
 #include "apophis/Component/Network.h"
 
-namespace Apophis {	namespace Component {
+namespace Apophis {	namespace Training {
 
-	class BackPropNetwork : public ITrainableNetwork
+	class BackPropNetwork : public Component::ITrainableNetwork
 	{
 	public:
-		BackPropNetwork(int inputSize, real learningRate, real momentum);
+		BackPropNetwork(size_t inputSize, real learningRate, real momentum);
 
 		virtual void Train(ConstVectorRef input, ConstVectorRef target) override;
 

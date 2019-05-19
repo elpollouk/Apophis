@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
-#include "apophis/Component/BackPropNetwork.h"
+#include "apophis/Training/BackPropNetwork.h"
 #include "apophis/Training/Trainer.h"
 #include "apophis/Training/LossFunctions.h"
 #include "apophis/Training/Evaluator.h"
