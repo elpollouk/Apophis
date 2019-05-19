@@ -28,5 +28,6 @@ real Node::Calculate(ConstVectorRef input)
 	for (auto i = 0u; i < GetNumInputs(); i++)
 		Activation += input[i] * Weights[i];
 
+	assert(!isnan(Activation) && !isinf(Activation));
 	return m_Transfer(Activation);
 }

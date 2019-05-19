@@ -14,6 +14,7 @@ static void CalculateOutputBackPropError(ConstVectorRef targets, BackPropLayer* 
 	{
 		auto node = layer->GetBackPropNode(i);
 		node->BackPropError = (targets[i] - layer->GetOutput(i)) * node->GetTransferFunction().Derivative(node->Activation);
+		assert(!isnan(node->BackPropError) && !isinf(node->BackPropError));
 	}
 }
 
@@ -44,6 +45,7 @@ static void UpdateWeights(BackPropLayer* targetLayer, ConstVectorRef priorLayerO
 			weightChange += (momentum * node->PreviousWeightChanges[j]);
 			node->Weights[j] += weightChange;
 			node->PreviousWeightChanges[j] = weightChange;
+			assert(!isnan(node->Weights[j]) && !isinf(node->Weights[j]));
 		}
 
 		// Update bias
