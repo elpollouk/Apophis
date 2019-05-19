@@ -10,13 +10,6 @@ using namespace Apophis::Training;
 namespace Network
 {
 
-Example CreateExample(real i0, real i1, real o0)
-{
-	real input[] = { i0, i1 };
-	real output[] = { o0 };
-	return Example(input, 2, output, 1);
-}
-
 void Run()
 {
 	const auto TRAINING_ITERATIONS = 1000000;
@@ -25,10 +18,10 @@ void Run()
 	const auto MOMENTUM = 0.5f;
 
 	ExampleSet trainingSet(2, 1);
-	trainingSet.AddExample(CreateExample(0.f, 0.f, 0.f));
-	trainingSet.AddExample(CreateExample(1.f, 0.f, 1.f));
-	trainingSet.AddExample(CreateExample(0.f, 1.f, 1.f));
-	trainingSet.AddExample(CreateExample(1.f, 1.f, 0.f));
+	trainingSet.AddExample({ 0.f, 0.f }, { 0.f });
+	trainingSet.AddExample({ 1.f, 0.f }, { 1.f });
+	trainingSet.AddExample({ 0.f, 1.f }, { 1.f });
+	trainingSet.AddExample({ 1.f, 1.f }, { 0.f });
 
 	for (auto i = 0; i < 10; i++)
 	{

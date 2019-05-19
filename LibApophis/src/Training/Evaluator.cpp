@@ -10,11 +10,14 @@ Evaluator::Evaluator(Component::Network& network, LossFunction loss) :
 	m_Network(network),
 	m_Loss(loss)
 {
-
+	assert(loss != nullptr);
 }
 
 real Evaluator::operator()(const ExampleSet& examples)
 {
+	assert(examples.InputSize == m_Network.GetInputSize());
+	assert(examples.OutputSize == m_Network.GetOutputSize());
+
 	auto error = 0.f;
 
 	for (const Example& example : examples)

@@ -19,6 +19,8 @@ static void CalculateOutputBackPropError(ConstVectorRef targets, BackPropLayer* 
 
 static void CalculateHiddenBackPropError(BackPropLayer* targetLayer, BackPropLayer* forwardLayer)
 {
+	assert(targetLayer->GetNumOutputs() == forwardLayer->GetNumInputs());
+
 	for (auto i = 0u; i < targetLayer->GetNumOutputs(); i++)
 	{
 		auto targetNode = targetLayer->GetBackPropNode(i);

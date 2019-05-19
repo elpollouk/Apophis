@@ -14,9 +14,7 @@ namespace ApophisTests {
 
 		TEST_METHOD(Example_Construct)
 		{
-			real input[] = { 1.f, 2.f, 3.4f };
-			real output[] = { 5.67f };
-			auto example = Example(input, 3, output, 1);
+			auto example = Example({ 1.f, 2.f, 3.4f }, { 5.67f });
 
 			Assert::AreEqual(3u, (unsigned int)example.Input.size());
 			Assert::AreEqual(1.f, example.Input[0]);
@@ -27,18 +25,11 @@ namespace ApophisTests {
 			Assert::AreEqual(5.67f, example.Output[0]);
 		}
 
-		static void AddExample(ExampleSet& exampleSet, real i0, real i1, real i2, real o0, real o1)
-		{
-			real input[] = { i0, i1, i2 };
-			real output[] = { o0, o1 };
-			exampleSet.AddExample(Example(input, 3, output, 2));
-		}
-
 		static void Populate(ExampleSet& exampleSet)
 		{
-			AddExample(exampleSet, 0.f, 1.f, 2.f, 3.f, 0.f);
-			AddExample(exampleSet, 4.f, 5.f, 6.f, 7.f, 1.f);
-			AddExample(exampleSet, 8.f, 9.f, 10.f, 11.f, 2.f);
+			exampleSet.AddExample(Example({ 0.f, 1.f, 2.f }, { 3.f, 0.f }));
+			exampleSet.AddExample(Example({ 4.f, 5.f, 6.f }, { 7.f, 1.f }));
+			exampleSet.AddExample(Example({ 8.f, 9.f, 10.f }, { 11.f, 2.f }));
 		}
 
 		TEST_METHOD(ExampleSet_Construct)

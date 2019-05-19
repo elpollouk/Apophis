@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "apophis/Training/Trainer.h"
 #include "apophis/Component/Network.h"
-#include "apophis/Component/Layer.h"
-#include "apophis/Component/Node.h"
 #include "apophis/ExampleSet.h"
 #include "apophis/Training/StoppingConditions.h"
 #include "apophis/Training/Evaluator.h"

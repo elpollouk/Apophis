@@ -17,6 +17,8 @@ Layer::Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITrans
 
 ConstVectorRef Layer::Calculate(ConstVectorRef inputs)
 {
+	assert(inputs.size() == GetNumInputs());
+
 	for (auto i = 0u; i < GetNumOutputs(); i++)
 		m_Output[i] = Nodes[i]->Calculate(inputs);
 

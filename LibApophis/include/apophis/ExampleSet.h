@@ -8,9 +8,9 @@ namespace Apophis {
 	class Example
 	{
 	public:
-		Example(const real* input, int inputSize, const real* output, int outputSize) :
-			Input(input, input + inputSize),
-			Output(output, output + outputSize)
+		Example(std::initializer_list<real> input, std::initializer_list<real> output) :
+			Input(input),
+			Output(output)
 		{
 
 		}
@@ -25,6 +25,10 @@ namespace Apophis {
 		ExampleSet(int inputSize, int outputSize);
 
 		void AddExample(Example&& example);
+		void AddExample(std::initializer_list<real> input, std::initializer_list<real> output)
+		{
+			AddExample(Example(input, output));
+		}
 
 		const Example& Sample() const;
 

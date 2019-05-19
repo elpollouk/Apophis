@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "apophis/Training/LossFunctions.h"
+#include "apophis/apophistypes.h"
 
 using namespace Apophis;
 
