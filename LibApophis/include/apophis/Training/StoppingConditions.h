@@ -39,7 +39,12 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 		template<class Condition, class... Types>
 		void Add(Types&&... args)
 		{
-			m_Conditions.emplace_back(std::make_unique<Condition>(std::forward<Types>(args)...));
+			Add(std::make_unique<Condition>(std::forward<Types>(args)...));
+		}
+
+		void Add(std::unique_ptr<IStoppingCondition>&& condition)
+		{
+			m_Conditions.emplace_back(std::move(condition));
 		}
 
 		virtual bool Check(Data::Metrics& metrics) const override;
