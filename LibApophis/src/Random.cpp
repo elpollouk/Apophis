@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "apophis/apophis.h"
+#include "apophis/apophistypes.h"
 
 static std::default_random_engine s_generator;
 static std::uniform_real_distribution<Apophis::real> s_zero_to_one(0.f, 1.f);

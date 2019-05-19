@@ -1,6 +1,6 @@
 #pragma once
 
-#include "apophis/apophis.h"
+#include "apophis/apophistypes.h"
 
 #define DEFAULT_TRANSFER public: static const ITransferFunction& Default();
 

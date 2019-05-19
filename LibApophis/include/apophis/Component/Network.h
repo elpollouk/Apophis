@@ -1,5 +1,6 @@
 #pragma once
 
+#include "apophis/apophistypes.h"
 #include "apophis/Component/Layer.h"
 
 namespace Apophis { namespace Component {
@@ -30,14 +31,6 @@ namespace Apophis { namespace Component {
 		size_t m_InputSize;
 		size_t m_OutputSize;
 		std::vector<std::unique_ptr<Layer>> m_Layers;
-	};
-
-	class ITrainableNetwork : public Network
-	{
-	public:
-		ITrainableNetwork(size_t inputSize) : Network(inputSize) {}
-
-		virtual void Train(ConstVectorRef input, ConstVectorRef target) = 0;
 	};
 
 }}

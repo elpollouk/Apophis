@@ -6,7 +6,7 @@
 using namespace Apophis;
 using namespace Apophis::Training;
 
-Evaluator::Evaluator(Component::Network& network, Loss::PFNLoss loss) :
+Evaluator::Evaluator(Component::Network& network, LossFunction loss) :
 	m_Network(network),
 	m_Loss(loss)
 {

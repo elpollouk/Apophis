@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/Training/BackPropNetwork.h"
+#include "apophis/TransferFunction/ITransferFunction.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;
@@ -53,7 +54,7 @@ static void UpdateWeights(BackPropLayer* targetLayer, ConstVectorRef priorLayerO
 
 
 BackPropNetwork::BackPropNetwork(size_t inputSize, real learningRate, real momentum) :
-	ITrainableNetwork(inputSize),
+	Network(inputSize),
 	m_LearningRate(learningRate),
 	m_Momentum(momentum)
 {

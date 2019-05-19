@@ -1,6 +1,6 @@
 #pragma once
 
-#include "apophis/TransferFunction/ITransferFunction.h"
+#include "apophis/apophistypes.h"
 
 namespace Apophis { namespace Component {
 

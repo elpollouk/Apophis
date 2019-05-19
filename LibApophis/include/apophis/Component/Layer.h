@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <assert.h>
+#include "apophis/apophistypes.h"
 #include "apophis/Component/Node.h"
 
 namespace Apophis { namespace Component {

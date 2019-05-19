@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "apophis/Training/Trainer.h"
 #include "apophis/Component/Network.h"
+#include "apophis/Component/Layer.h"
+#include "apophis/Component/Node.h"
 #include "apophis/ExampleSet.h"
 #include "apophis/Training/StoppingConditions.h"
 #include "apophis/Training/Evaluator.h"
@@ -8,14 +10,14 @@
 using namespace Apophis;
 using namespace Apophis::Training;
 
-Trainer::Trainer(Component::ITrainableNetwork& network, Evaluator& evaluator) :
-	m_Network(network),
+Trainer::Trainer(ITrainable& trainable, Evaluator& evaluator) :
+	m_Trainable(trainable),
 	m_Evaluator(evaluator)
 {
 
 }
 
-void Trainer::Run(const ExampleSet& trainingSet, const StoppingCondition::IStoppingCondition& stoppingCondition)
+void Trainer::Run(const ExampleSet& trainingSet, const IStoppingCondition& stoppingCondition)
 {
 	auto trainingCount = 0;
 	do
@@ -23,7 +25,7 @@ void Trainer::Run(const ExampleSet& trainingSet, const StoppingCondition::IStopp
 		for (auto i = 0; i < 100; i++)
 		{
 			auto& example = trainingSet.Sample();
-			m_Network.Train(example.Input, example.Output);
+			m_Trainable.Train(example.Input, example.Output);
 			trainingCount++;
 		}
 

@@ -1,12 +1,5 @@
 #include "pch.h"
-#include "apophis/TransferFunction/Relu.h"
-#include "apophis/TransferFunction/Sigmoid.h"
-#include "apophis/Training/BackPropNetwork.h"
-#include "apophis/Training/Trainer.h"
-#include "apophis/Training/LossFunctions.h"
-#include "apophis/Training/Evaluator.h"
-#include "apophis/Training/StoppingConditions.h"
-#include "apophis/ExampleSet.h"
+#include "apophis/apophis.h"
 #include "Network.h"
 
 using namespace Apophis;

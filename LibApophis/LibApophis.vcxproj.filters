@@ -83,6 +83,12 @@
     <ClInclude Include="include\apophis\Training\BackPropNetwork.h">
       <Filter>Header Files\Training</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\apophistypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">

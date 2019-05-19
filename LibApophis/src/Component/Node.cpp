@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "apophis/Component/Node.h"
+#include "apophis/TransferFunction/ITransferFunction.h"
+#include "apophis/Random.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;

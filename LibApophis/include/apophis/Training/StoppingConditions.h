@@ -4,8 +4,7 @@
 #include <memory>
 #include "apophis/Data/Metrics.h"
 
-namespace Apophis { namespace Training { namespace StoppingCondition {
-
+namespace Apophis { namespace Training {
 	class IStoppingCondition
 	{
 	public:
@@ -15,6 +14,9 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 
 		virtual bool Check(Data::Metrics& metrics) const = 0;
 	};
+}}
+
+namespace Apophis { namespace Training { namespace StoppingCondition {
 
 	class AnyStoppingCondition : public IStoppingCondition
 	{

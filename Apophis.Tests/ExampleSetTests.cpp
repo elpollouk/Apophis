@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/ExampleSet.h"
+#include "apophis/Random.h"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

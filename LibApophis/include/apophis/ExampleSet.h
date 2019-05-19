@@ -1,6 +1,6 @@
 #pragma once
 
-#include "apophis.h"
+#include "apophis/apophistypes.h"
 #include <random>
 
 namespace Apophis {
@@ -28,20 +28,10 @@ namespace Apophis {
 
 		const Example& Sample() const;
 
-		std::vector<Example>::const_iterator begin() const
-		{
-			return m_Examples.begin();
-		}
-
-		std::vector<Example>::const_iterator end() const
-		{
-			return m_Examples.end();
-		}
-
-		size_t size() const
-		{
-			return m_Examples.size();
-		}
+		std::vector<Example>::const_iterator begin() const { return m_Examples.begin(); }
+		std::vector<Example>::const_iterator end() const { return m_Examples.end(); }
+		size_t size() const { return m_Examples.size(); }
+		Example& operator[](size_t index) { return m_Examples[index]; }
 
 		const int InputSize;
 		const int OutputSize;

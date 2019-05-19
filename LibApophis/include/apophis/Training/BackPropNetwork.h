@@ -1,7 +1,9 @@
 #pragma once
 
 #include "apophis/Component/Network.h"
+#include "apophis/Component/Layer.h"
 #include "apophis/Component/Node.h"
+#include "apophis/Training/Trainer.h"
 
 namespace Apophis {	namespace Training {
 
@@ -22,7 +24,7 @@ namespace Apophis {	namespace Training {
 		BackPropNode* GetBackPropNode(size_t index);
 	};
 
-	class BackPropNetwork : public Component::ITrainableNetwork
+	class BackPropNetwork : public Component::Network, public ITrainable
 	{
 	public:
 		BackPropNetwork(size_t inputSize, real learningRate, real momentum);
