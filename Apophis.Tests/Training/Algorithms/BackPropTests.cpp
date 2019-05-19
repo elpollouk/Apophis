@@ -5,6 +5,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
 using namespace Apophis::TransferFunction;
 using namespace Apophis::Training;
+using namespace Apophis::Training::StoppingCondition;
 
 namespace ApophisTests { namespace Training { namespace Algorithms {
 
@@ -30,8 +31,8 @@ namespace ApophisTests { namespace Training { namespace Algorithms {
 
 			Evaluator evaluator(network, Loss::SquaredError, trainingSet);
 			StoppingCondition::AnyStoppingCondition stoppingConditions;
-			stoppingConditions.Add<StoppingCondition::MetricLessThan<real>>(Data::METRIC_TRAINING_ERROR, TRAINING_ERROR);
-			stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(TRAINING_ITERATIONS);
+			stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
+			stoppingConditions.Add<NumTrainingIterations>(TRAINING_ITERATIONS);
 
 			Trainer trainer(network, evaluator);
 			trainer.Run(trainingSet, stoppingConditions);

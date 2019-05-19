@@ -27,9 +27,9 @@ void Trainer::Run(const ExampleSet& trainingSet, const IStoppingCondition& stopp
 			trainingCount++;
 		}
 
-		auto error = m_Evaluator();
+		auto loss = m_Evaluator();
 
-		m_Metrics.Set(Data::METRIC_TRAINING_ERROR, error);
+		m_Metrics.Set(Data::METRIC_TRAINING_LOSS, loss);
 		m_Metrics.Set(Data::METRIC_TRAINING_ITERATIONS, trainingCount);
 	} while (!stoppingCondition(m_Metrics));
 }

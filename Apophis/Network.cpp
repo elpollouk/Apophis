@@ -6,6 +6,7 @@ using namespace Apophis;
 using namespace Apophis::Component;
 using namespace Apophis::TransferFunction;
 using namespace Apophis::Training;
+using namespace Apophis::Training::StoppingCondition;
 
 namespace Network
 {
@@ -17,7 +18,6 @@ const char* Clasify(ConstVectorRef scores)
 		if (scores[maxIndex] < scores[i])
 			maxIndex = i;
 
-	const char* result;
 	switch (maxIndex)
 	{
 	case 0:
@@ -56,14 +56,14 @@ void Run()
 
 		Evaluator evaluator(network, Loss::SquaredError, testSet);
 		StoppingCondition::AnyStoppingCondition stoppingConditions;
-		stoppingConditions.Add<StoppingCondition::MetricLessThan<real>>(Data::METRIC_TRAINING_ERROR, TRAINING_ERROR);
-		stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(TRAINING_ITERATIONS);
+		stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
+		stoppingConditions.Add<NumTrainingIterations>(TRAINING_ITERATIONS);
 
 		Trainer trainer(network, evaluator);
 		trainer.Run(trainingSet, stoppingConditions);
 
 		printf("Training Count = %d\n", trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS));
-		printf("Error = %f\n", trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_ERROR));
+		printf("Error = %f\n", trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_LOSS));
 
 		for (auto i = 0u; i < testSet.size(); i++)
 		{

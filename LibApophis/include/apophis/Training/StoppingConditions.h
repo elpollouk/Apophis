@@ -2,7 +2,19 @@
 
 #include <vector>
 #include <memory>
+#include "apophis/apophistypes.h"
 #include "apophis/Data/Metrics.h"
+
+#define METRIC_COMPARISON_STOPPOINGCONDITION(name, comparison) template<class DType> \
+class name : public MerticStoppingCondition<DType> \
+{ \
+public: \
+	name(const char* metric, DType target) : MerticStoppingCondition<DType>(metric, target) {} \
+	virtual bool Check(Data::Metrics& metrics) const override \
+	{ \
+		return metrics.Get<DType>(this->m_Metric) comparison this->m_Target; \
+	} \
+};
 
 namespace Apophis { namespace Training {
 	class IStoppingCondition
@@ -18,6 +30,9 @@ namespace Apophis { namespace Training {
 
 namespace Apophis { namespace Training { namespace StoppingCondition {
 
+	//----------------------------------------------------------------------------------------------//
+	// Stop when any registered condition is met
+	//----------------------------------------------------------------------------------------------//
 	class AnyStoppingCondition : public IStoppingCondition
 	{
 	public:
@@ -33,6 +48,9 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 		std::vector<std::unique_ptr<IStoppingCondition>> m_Conditions;
 	};
 
+	//----------------------------------------------------------------------------------------------//
+	// Metric comparison conditions
+	//----------------------------------------------------------------------------------------------//
 	template<class DType>
 	class MerticStoppingCondition : public IStoppingCondition
 	{
@@ -49,28 +67,18 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 		DType m_Target;
 	};
 
-	template<class DType>
-	class MetricLessThan : public MerticStoppingCondition<DType>
+	METRIC_COMPARISON_STOPPOINGCONDITION(MetricLessThan, < );
+	METRIC_COMPARISON_STOPPOINGCONDITION(MetricGreaterThan, > );
+	METRIC_COMPARISON_STOPPOINGCONDITION(MetricLessThanOrEqual, <= );
+	METRIC_COMPARISON_STOPPOINGCONDITION(MetricGreaterThanOrEqual, >= );
+
+	//----------------------------------------------------------------------------------------------//
+	// Explicit metric conditions
+	//----------------------------------------------------------------------------------------------//
+	class LossLessThan : public MetricLessThan<real>
 	{
 	public:
-		MetricLessThan(const char* metric, DType target) : MerticStoppingCondition<DType>(metric, target) {}
-
-		virtual bool Check(Data::Metrics& metrics) const override
-		{
-			return metrics.Get<DType>(this->m_Metric) < this->m_Target;
-		}
-	};
-
-	template<class DType>
-	class MetricGreaterThanOrEqual : public MerticStoppingCondition<DType>
-	{
-	public:
-		MetricGreaterThanOrEqual(const char* metric, DType target) : MerticStoppingCondition<DType>(metric, target) {}
-
-		virtual bool Check(Data::Metrics& metrics) const override
-		{
-			return metrics.Get<DType>(this->m_Metric) >= this->m_Target;
-		}
+		LossLessThan(real loss) : MetricLessThan<real>(Data::METRIC_TRAINING_LOSS, loss) {}
 	};
 
 	class NumTrainingIterations : public MetricGreaterThanOrEqual<long long>
