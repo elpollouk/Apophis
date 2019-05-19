@@ -63,8 +63,10 @@ BackPropNetwork::BackPropNetwork(size_t inputSize, real learningRate, real momen
 
 }
 
-void BackPropNetwork::Train(ConstVectorRef input, ConstVectorRef target)
+void BackPropNetwork::Train(const Example& example)
 {
+	auto& input = example.Input;
+	auto& target = example.Output;
 	assert(input.size() == GetInputSize());
 	assert(target.size() == m_Layers.back()->GetNumOutputs());
 

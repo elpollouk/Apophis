@@ -28,7 +28,7 @@ namespace ApophisTests { namespace Training { namespace Algorithms {
 			network.AddLayer<Relu>(3);
 			network.AddLayer<Relu>(1);
 
-			Evaluator evaluator(network, Loss::SquaredError);
+			Evaluator evaluator(network, Loss::SquaredError, trainingSet);
 			StoppingCondition::AnyStoppingCondition stoppingConditions;
 			stoppingConditions.Add<StoppingCondition::MetricLessThan<real>>(Data::METRIC_TRAINING_ERROR, TRAINING_ERROR);
 			stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(TRAINING_ITERATIONS);

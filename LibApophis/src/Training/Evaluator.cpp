@@ -6,24 +6,24 @@
 using namespace Apophis;
 using namespace Apophis::Training;
 
-Evaluator::Evaluator(Component::Network& network, LossFunction loss) :
+Evaluator::Evaluator(Component::Network& network, LossFunction loss, const ExampleSet& examples) :
 	m_Network(network),
-	m_Loss(loss)
+	m_Loss(loss),
+	m_Examples(examples)
 {
 	assert(loss != nullptr);
+	assert(network.GetInputSize() == examples.InputSize);
+	assert(network.GetOutputSize() == examples.OutputSize);
 }
 
-real Evaluator::operator()(const ExampleSet& examples)
+real Evaluator::operator()()
 {
-	assert(examples.InputSize == m_Network.GetInputSize());
-	assert(examples.OutputSize == m_Network.GetOutputSize());
-
 	auto error = 0.f;
 
-	for (const Example& example : examples)
+	for (const Example& example : m_Examples)
 		error += m_Loss(example.Output, m_Network.Calculate(example.Input));
 
-	error /= examples.size();
+	error /= m_Examples.size();
 
 	return error;
 }

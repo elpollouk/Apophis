@@ -23,11 +23,11 @@ void Trainer::Run(const ExampleSet& trainingSet, const IStoppingCondition& stopp
 		for (auto i = 0; i < 100; i++)
 		{
 			auto& example = trainingSet.Sample();
-			m_Trainable.Train(example.Input, example.Output);
+			m_Trainable.Train(example);
 			trainingCount++;
 		}
 
-		auto error = m_Evaluator(trainingSet);
+		auto error = m_Evaluator();
 
 		m_Metrics.Set(Data::METRIC_TRAINING_ERROR, error);
 		m_Metrics.Set(Data::METRIC_TRAINING_ITERATIONS, trainingCount);

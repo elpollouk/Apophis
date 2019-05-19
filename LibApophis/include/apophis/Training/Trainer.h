@@ -10,7 +10,7 @@ namespace Apophis { namespace Training {
 	public:
 		virtual ~ITrainable() {}
 
-		virtual void Train(ConstVectorRef input, ConstVectorRef target) = 0;
+		virtual void Train(const Example& example) = 0;
 	};
 
 	class Trainer

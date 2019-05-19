@@ -29,7 +29,7 @@ namespace Apophis {	namespace Training {
 	public:
 		BackPropNetwork(size_t inputSize, real learningRate, real momentum);
 
-		virtual void Train(ConstVectorRef input, ConstVectorRef target) override;
+		virtual void Train(const Example& example) override;
 
 	protected:
 		virtual std::unique_ptr<Component::Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer) override;
