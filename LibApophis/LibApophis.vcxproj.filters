@@ -27,6 +27,9 @@
     <Filter Include="Source Files\Component">
       <UniqueIdentifier>{25151005-aa5c-4e25-980b-d34aab1f28d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Training">
+      <UniqueIdentifier>{80c2f65a-cb12-4215-9d9d-db2d9d1f21d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\stdafx.h">
@@ -96,6 +99,15 @@
     </ClCompile>
     <ClCompile Include="src\Component\Layer.cpp">
       <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Network.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component\Node.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Training\LossFunctions.cpp">
+      <Filter>Source Files\Training</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

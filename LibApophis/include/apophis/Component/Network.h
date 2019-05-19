@@ -8,12 +8,10 @@ namespace Apophis { namespace Component {
 	{
 	friend class Layer;
 	public:
-		Network(size_t inputSize) :
-			InputSize(inputSize),
-			OutputSize(inputSize)
-		{
+		Network(size_t inputSize);
 
-		}
+		size_t GetInputSize() const { return m_InputSize; }
+		size_t GetOutputSize() const { return m_OutputSize; }
 
 		template<class TransferFunction>
 		void AddLayer(size_t numNodes)
@@ -21,37 +19,15 @@ namespace Apophis { namespace Component {
 			AddLayer(numNodes, TransferFunction::Default());
 		}
 
-		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer)
-		{
-			m_Layers.emplace_back(CreateLayer(numNodes, transfer));
-			OutputSize = numNodes;
-		}
-
-		ConstVectorRef Calculate(ConstVectorRef input)
-		{
-			assert(input.size() == InputSize);
-
-			auto pInput = &input;
-			for (auto& layer : m_Layers)
-				pInput = &layer->Calculate(*pInput);
-
-			return *pInput;
-		}
-
-		const size_t InputSize;
-		size_t OutputSize;
+		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer);
+		ConstVectorRef Calculate(ConstVectorRef input);
 
 	protected:
-		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer)
-		{
-			return std::make_unique<Layer>(OutputSize, numNodes, transfer, this);
-		}
+		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer);
+		virtual std::unique_ptr<Node> CreateNode(size_t numInputs, const TransferFunction::ITransferFunction* transfer);
 
-		virtual std::unique_ptr<Node> CreateNode(size_t numInputs, const TransferFunction::ITransferFunction* transfer)
-		{
-			return std::make_unique<Node>(numInputs, transfer);
-		}
-
+		size_t m_InputSize;
+		size_t m_OutputSize;
 		std::vector<std::unique_ptr<Layer>> m_Layers;
 	};
 
@@ -62,4 +38,5 @@ namespace Apophis { namespace Component {
 
 		virtual void Train(ConstVectorRef input, ConstVectorRef target) = 0;
 	};
+
 }}

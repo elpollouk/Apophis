@@ -18,7 +18,7 @@ namespace Apophis {	namespace Component {
 
 		virtual void Train(ConstVectorRef input, ConstVectorRef target) override
 		{
-			assert(input.size() == InputSize);
+			assert(input.size() == GetInputSize());
 			assert(target.size() == m_Layers.back()->NumOutputs);
 
 			auto actual = Calculate(input);
@@ -49,7 +49,7 @@ namespace Apophis {	namespace Component {
 			for (auto i = 0u; i < layer->NumOutputs; i++)
 			{
 				auto& node = layer->Nodes[i];
-				node->BackPropError = (targets[i] - layer->Output[i]) * node->Transfer->Derivative(node->Activation);
+				node->BackPropError = (targets[i] - layer->Output[i]) * node->GetTransferFunction().Derivative(node->Activation);
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace Apophis {	namespace Component {
 				for (auto j = 0u; j < forwardLayer->NumOutputs; j++)
 					targetNode->BackPropError += forwardLayer->Nodes[j]->BackPropError * forwardLayer->Nodes[j]->Weights[i];
 
-				targetNode->BackPropError *= targetNode->Transfer->Derivative(targetLayer->Nodes[i]->Activation);
+				targetNode->BackPropError *= targetNode->GetTransferFunction().Derivative(targetLayer->Nodes[i]->Activation);
 			}
 		}
 

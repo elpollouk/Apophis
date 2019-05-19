@@ -41,7 +41,7 @@ void Run()
 		network.AddLayer<Relu>(3);
 		network.AddLayer<Relu>(1);
 
-		Evaluator evaluator(&network, Loss::Error);
+		Evaluator evaluator(&network, Loss::SquaredError);
 		StoppingCondition::AnyStoppingCondition stoppingConditions;
 		stoppingConditions.Add<StoppingCondition::MetricLessThan<real>>(Data::METRIC_TRAINING_ERROR, TRAINING_ERROR);
 		stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(TRAINING_ITERATIONS);
@@ -53,7 +53,7 @@ void Run()
 		for (const auto& example : trainingSet)
 		{
 			auto output = network.Calculate(example.Input);
-			printf("%f, %f = %f, Error = %f\n", example.Input[0], example.Input[1], output[0], Training::Loss::Error(example.Output, output));
+			printf("%f, %f = %f, Error = %f\n", example.Input[0], example.Input[1], output[0], Training::Loss::SquaredError(example.Output, output));
 		}
 	}
 }
