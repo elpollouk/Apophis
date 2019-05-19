@@ -21,9 +21,7 @@ namespace ApophisTests { namespace Component
 
 			Assert::AreEqual(4, (int)node.GetNumInputs());
 			Assert::AreEqual(0.f, node.Activation);
-			Assert::AreEqual(0.f, node.BackPropError);
 			Assert::AreEqual(5, (int)node.Weights.size());
-			Assert::AreEqual(5, (int)node.PreviousWeightChanges.size());
 		}
 
 		TEST_METHOD(ReluNode_Calculate_PositiveWeights)

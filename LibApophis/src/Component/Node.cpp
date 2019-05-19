@@ -7,7 +7,6 @@ using namespace Apophis::Component;
 Node::Node(size_t numInputs, const TransferFunction::ITransferFunction& transfer) :
 	m_NumInputs(numInputs),
 	Activation(0),
-	BackPropError(0),
 	m_Transfer(transfer)
 {
 	// Add one for the bias
@@ -16,7 +15,6 @@ Node::Node(size_t numInputs, const TransferFunction::ITransferFunction& transfer
 	Weights.resize(numInputs);
 	for (auto i = 0u; i < numInputs; i++)
 		Weights[i] = RandomWeight();
-	PreviousWeightChanges.resize(numInputs, 0.f);
 }
 
 real Node::Calculate(ConstVectorRef input)

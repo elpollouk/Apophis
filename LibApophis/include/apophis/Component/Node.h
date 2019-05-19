@@ -8,6 +8,7 @@ namespace Apophis { namespace Component {
 	{
 	public:
 		Node(size_t numInputs, const TransferFunction::ITransferFunction& transfer);
+		virtual ~Node() {}
 
 		size_t GetNumInputs() const { return m_NumInputs; }
 		const TransferFunction::ITransferFunction& GetTransferFunction() const { return m_Transfer; }
@@ -15,9 +16,7 @@ namespace Apophis { namespace Component {
 		real Calculate(ConstVectorRef input);
 
 		real Activation;
-		real BackPropError;
 		Vector Weights;
-		Vector PreviousWeightChanges;
 
 	protected:
 		size_t m_NumInputs;

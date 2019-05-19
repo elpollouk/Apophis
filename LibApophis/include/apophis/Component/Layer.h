@@ -13,6 +13,7 @@ namespace Apophis { namespace Component {
 	{
 	public:
 		Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction& transfer, Network& network);
+		virtual ~Layer() {}
 
 		size_t GetNumInputs() const { return m_NumInputs; }
 		size_t GetNumOutputs() const { return m_NumOutputs; }

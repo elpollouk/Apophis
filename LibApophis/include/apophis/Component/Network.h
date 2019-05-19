@@ -9,6 +9,7 @@ namespace Apophis { namespace Component {
 	friend class Layer;
 	public:
 		Network(size_t inputSize);
+		virtual ~Network() {}
 
 		size_t GetInputSize() const { return m_InputSize; }
 		size_t GetOutputSize() const { return m_OutputSize; }
