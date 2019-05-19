@@ -3,6 +3,10 @@
 #include "apophis/TransferFunction/Sigmoid.h"
 #include "apophis/Component/BackPropNetwork.h"
 #include "apophis/Training/Trainer.h"
+#include "apophis/Training/LossFunctions.h"
+#include "apophis/Training/Evaluator.h"
+#include "apophis/Training/StoppingConditions.h"
+#include "apophis/ExampleSet.h"
 #include "Network.h"
 
 using namespace Apophis;
@@ -41,12 +45,12 @@ void Run()
 		network.AddLayer<Relu>(3);
 		network.AddLayer<Relu>(1);
 
-		Evaluator evaluator(&network, Loss::SquaredError);
+		Evaluator evaluator(network, Loss::SquaredError);
 		StoppingCondition::AnyStoppingCondition stoppingConditions;
 		stoppingConditions.Add<StoppingCondition::MetricLessThan<real>>(Data::METRIC_TRAINING_ERROR, TRAINING_ERROR);
 		stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(TRAINING_ITERATIONS);
 
-		Trainer trainer(&network, &evaluator);
+		Trainer trainer(network, evaluator);
 		trainer.Run(trainingSet, stoppingConditions);
 
 		printf("Training Count = %d\n", trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS));

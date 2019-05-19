@@ -19,12 +19,12 @@ namespace Apophis { namespace Component {
 			AddLayer(numNodes, TransferFunction::Default());
 		}
 
-		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer);
+		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
 		ConstVectorRef Calculate(ConstVectorRef input);
 
 	protected:
-		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction* transfer);
-		virtual std::unique_ptr<Node> CreateNode(size_t numInputs, const TransferFunction::ITransferFunction* transfer);
+		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
+		virtual std::unique_ptr<Node> CreateNode(size_t numInputs, const TransferFunction::ITransferFunction& transfer);
 
 		size_t m_InputSize;
 		size_t m_OutputSize;

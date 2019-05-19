@@ -12,17 +12,21 @@ namespace Apophis { namespace Component {
 	class Layer
 	{
 	public:
-		Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction* transfer, Network* network);
+		Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction& transfer, Network& network);
+
+		size_t GetNumInputs() const { return m_NumInputs; }
+		size_t GetNumOutputs() const { return m_NumOutputs; }
+		ConstVectorRef GetOutput() const { return m_Output; }
+		real GetOutput(size_t index) const { return m_Output[index]; }
 
 		ConstVectorRef Calculate(ConstVectorRef inputs);
 
-		const size_t NumInputs;
-		const size_t NumOutputs;
 		std::vector<std::unique_ptr<Node>> Nodes;
-		Vector Output;
 
 	private:
-		Network* m_pNetwork;
+		size_t m_NumInputs;
+		size_t m_NumOutputs;
+		Vector m_Output;
 	};
 
 }}

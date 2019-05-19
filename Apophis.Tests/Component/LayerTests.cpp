@@ -16,13 +16,13 @@ namespace ApophisTests { namespace Component
 		TEST_METHOD(Layer_Construct)
 		{
 			Network network(0);
-			auto layer = Layer(3, 2, Relu::Default(), &network);
+			auto layer = Layer(3, 2, Relu::Default(), network);
 
-			Assert::AreEqual(2, (int)layer.NumOutputs);
+			Assert::AreEqual(2, (int)layer.GetNumOutputs());
 			Assert::AreEqual(2, (int)layer.Nodes.size());
-			Assert::AreEqual(2, (int)layer.Output.size());
+			Assert::AreEqual(2, (int)layer.GetOutput().size());
 
-			Assert::AreEqual(3, (int)layer.NumInputs);
+			Assert::AreEqual(3, (int)layer.GetNumInputs());
 			Assert::AreEqual(4, (int)layer.Nodes[0]->Weights.size());
 			Assert::AreEqual(4, (int)layer.Nodes[1]->Weights.size());
 		}
@@ -30,7 +30,7 @@ namespace ApophisTests { namespace Component
 		TEST_METHOD(Layer_Calculate)
 		{
 			Network network(0);
-			auto layer = Layer(3, 2, Relu::Default(), &network);
+			auto layer = Layer(3, 2, Relu::Default(), network);
 
 			auto value = 1.f;
 			for (auto& node : layer.Nodes)
@@ -46,7 +46,7 @@ namespace ApophisTests { namespace Component
 			auto& output = layer.Calculate(input);
 
 			Assert::AreEqual(2, (int)output.size());
-			Assert::AreEqual((const void*)&layer.Output, (const void*)&output);
+			Assert::AreEqual((const void*)&layer.GetOutput(), (const void*)&output);
 			AssertAreClose(7.4f, output[0]);
 			AssertAreClose(17.4f, output[1]);
 		}

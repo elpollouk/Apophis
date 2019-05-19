@@ -17,9 +17,9 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(ReluNode_Construct)
 		{
-			auto node = Node(4, &m_Relu);
+			auto node = Node(4, m_Relu);
 
-			Assert::AreEqual(4, (int)node.NumInputs);
+			Assert::AreEqual(4, (int)node.GetNumInputs());
 			Assert::AreEqual(0.f, node.Activation);
 			Assert::AreEqual(0.f, node.BackPropError);
 			Assert::AreEqual(5, (int)node.Weights.size());
@@ -28,7 +28,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(ReluNode_Calculate_PositiveWeights)
 		{
-			auto node = Node(2, &m_Relu);
+			auto node = Node(2, m_Relu);
 			node.Weights[0] = 3.f;
 			node.Weights[1] = 5.f;
 			node.Weights[2] = 7.f;
@@ -41,7 +41,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(ReluNode_Calculate_NegativeWeights)
 		{
-			auto node = Node(2, &m_Relu);
+			auto node = Node(2, m_Relu);
 			node.Weights[0] = -3.f;
 			node.Weights[1] = -5.f;
 			node.Weights[2] = 6.f;
@@ -54,7 +54,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(SigmoidNode_Calculate_PositiveWeights)
 		{
-			auto node = Node(3, &m_Sigmoid);
+			auto node = Node(3, m_Sigmoid);
 			node.Weights[0] = .1f;
 			node.Weights[1] = .2f;
 			node.Weights[2] = .3f;
@@ -67,7 +67,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(SigmoidNode_Calculate_NegativeWeights)
 		{
-			auto node = Node(3, &m_Sigmoid);
+			auto node = Node(3, m_Sigmoid);
 			node.Weights[0] = .1f;
 			node.Weights[1] = -.2f;
 			node.Weights[2] = -.3f;

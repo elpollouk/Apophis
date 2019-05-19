@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "apophis/Training/LossFunctions.h"
-#include <assert.h>
 
 using namespace Apophis;
 

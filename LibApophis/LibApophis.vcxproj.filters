@@ -109,5 +109,17 @@
     <ClCompile Include="src\Training\LossFunctions.cpp">
       <Filter>Source Files\Training</Filter>
     </ClCompile>
+    <ClCompile Include="src\Training\Evaluator.cpp">
+      <Filter>Source Files\Training</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Training\StoppingConditions.cpp">
+      <Filter>Source Files\Training</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Training\Trainer.cpp">
+      <Filter>Source Files\Training</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Training\BackPropNetwork.cpp">
+      <Filter>Source Files\Training</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

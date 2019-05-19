@@ -2,7 +2,7 @@
 
 #include "apophis/apophis.h"
 
-#define DEFAULT_TRANSFER public: static const ITransferFunction* Default();
+#define DEFAULT_TRANSFER public: static const ITransferFunction& Default();
 
 namespace Apophis { namespace TransferFunction {
 

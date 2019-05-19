@@ -11,7 +11,9 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 	public:
 		virtual ~IStoppingCondition() {}
 
-		virtual bool operator()(Data::Metrics& metrics) const = 0;
+		bool operator()(Data::Metrics& metrics) const { return Check(metrics); }
+
+		virtual bool Check(Data::Metrics& metrics) const = 0;
 	};
 
 	class AnyStoppingCondition : public IStoppingCondition
@@ -23,14 +25,7 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 			m_Conditions.emplace_back(std::make_unique<Condition>(std::forward<Types>(args)...));
 		}
 
-		virtual bool operator()(Data::Metrics& metrics) const override
-		{
-			for (auto& condition : m_Conditions)
-				if ((*condition)(metrics))
-					return true;
-
-			return false;
-		}
+		virtual bool Check(Data::Metrics& metrics) const override;
 
 	private:
 		std::vector<std::unique_ptr<IStoppingCondition>> m_Conditions;
@@ -58,7 +53,7 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 	public:
 		MetricLessThan(const char* metric, DType target) : MerticStoppingCondition<DType>(metric, target) {}
 
-		virtual bool operator()(Data::Metrics& metrics) const override
+		virtual bool Check(Data::Metrics& metrics) const override
 		{
 			return metrics.Get<DType>(this->m_Metric) < this->m_Target;
 		}
@@ -70,7 +65,7 @@ namespace Apophis { namespace Training { namespace StoppingCondition {
 	public:
 		MetricGreaterThanOrEqual(const char* metric, DType target) : MerticStoppingCondition<DType>(metric, target) {}
 
-		virtual bool operator()(Data::Metrics& metrics) const override
+		virtual bool Check(Data::Metrics& metrics) const override
 		{
 			return metrics.Get<DType>(this->m_Metric) >= this->m_Target;
 		}

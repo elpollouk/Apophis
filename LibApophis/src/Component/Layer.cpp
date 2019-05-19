@@ -5,21 +5,20 @@
 using namespace Apophis;
 using namespace Apophis::Component;
 
-Layer::Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction* transfer, Network* network) :
-	NumOutputs(numOutputs),
-	NumInputs(numInputs),
-	m_pNetwork(network)
+Layer::Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction& transfer, Network& network) :
+	m_NumOutputs(numOutputs),
+	m_NumInputs(numInputs)
 {
 	for (auto i = 0u; i < numOutputs; i++)
-		Nodes.emplace_back(m_pNetwork->CreateNode(numInputs, transfer));
+		Nodes.emplace_back(network.CreateNode(numInputs, transfer));
 
-	Output.resize(numOutputs, 0.f);
+	m_Output.resize(numOutputs, 0.f);
 }
 
 ConstVectorRef Layer::Calculate(ConstVectorRef inputs)
 {
-	for (auto i = 0u; i < NumOutputs; i++)
-		Output[i] = Nodes[i]->Calculate(inputs);
+	for (auto i = 0u; i < GetNumOutputs(); i++)
+		m_Output[i] = Nodes[i]->Calculate(inputs);
 
-	return Output;
+	return m_Output;
 }

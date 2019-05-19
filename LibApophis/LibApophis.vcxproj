@@ -189,7 +189,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Training\BackPropNetwork.cpp" />
+    <ClCompile Include="src\Training\Evaluator.cpp" />
     <ClCompile Include="src\Training\LossFunctions.cpp" />
+    <ClCompile Include="src\Training\StoppingConditions.cpp" />
+    <ClCompile Include="src\Training\Trainer.cpp" />
     <ClCompile Include="src\TransferFunction\DefaultFunctions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
