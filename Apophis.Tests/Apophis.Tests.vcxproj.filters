@@ -21,6 +21,9 @@
     <Filter Include="Tests\Training">
       <UniqueIdentifier>{f4950393-27ff-4aed-a7e0-1ee5064fd8f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests\Training\Algorithms">
+      <UniqueIdentifier>{bb40e97e-592f-4112-bb37-3c301091dff2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -54,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="Training\StoppingConditionTests.cpp">
       <Filter>Tests\Training</Filter>
+    </ClCompile>
+    <ClCompile Include="Training\Algorithms\BackPropTests.cpp">
+      <Filter>Tests\Training\Algorithms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
