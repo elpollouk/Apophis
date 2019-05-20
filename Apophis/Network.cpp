@@ -55,7 +55,7 @@ void Run()
 		network.AddLayer<Relu>(3);
 
 		Evaluator evaluator(network, Loss::SquaredError, testSet);
-		StoppingCondition::AnyStoppingCondition stoppingConditions;
+		AnyStoppingCondition stoppingConditions;
 		stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
 		stoppingConditions.Add<NumTrainingIterations>(TRAINING_ITERATIONS);
 
