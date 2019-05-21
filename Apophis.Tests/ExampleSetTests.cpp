@@ -6,6 +6,8 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
 
+constexpr const char* TEST_EXAMPLESET = "{\"input_size\":3,\"output_size\":2,\"examples\":[{\"input\":[1.0,2.0,3.0],\"output\":[4.0,5.0]},{\"input\":[6.0,7.0,8.0],\"output\":[9.0,0.0]}]}";
+
 namespace ApophisTests {
 
 	TEST_CLASS(ExampleSetTests)
@@ -119,6 +121,104 @@ namespace ApophisTests {
 				Assert::AreEqual(3.f, example.Output[0]);
 				Assert::AreEqual(0.f, example.Output[1]);
 			}
+		}
+
+		TEST_METHOD(Export)
+		{
+			auto examples = ExampleSet(3, 2);
+			examples.AddExample({ 1.f, 2.f, 3.f }, { 4.f, 5.f });
+			examples.AddExample({ 6.f, 7.f, 8.f }, { 9.f, 0.f });
+
+			auto json = examples.Export();
+			Assert::AreEqual(
+				TEST_EXAMPLESET,
+				json.c_str()
+			);
+		}
+
+		TEST_METHOD(Import)
+		{
+			ExampleSet examples;
+			Assert::IsTrue(examples.Import(TEST_EXAMPLESET));
+
+			Assert::AreEqual(3, examples.InputSize);
+			Assert::AreEqual(2, examples.OutputSize);
+			Assert::AreEqual(1.f, examples[0].Input[0]);
+			Assert::AreEqual(2.f, examples[0].Input[1]);
+			Assert::AreEqual(3.f, examples[0].Input[2]);
+			Assert::AreEqual(4.f, examples[0].Output[0]);
+			Assert::AreEqual(5.f, examples[0].Output[1]);
+			Assert::AreEqual(6.f, examples[1].Input[0]);
+			Assert::AreEqual(7.f, examples[1].Input[1]);
+			Assert::AreEqual(8.f, examples[1].Input[2]);
+			Assert::AreEqual(9.f, examples[1].Output[0]);
+			Assert::AreEqual(0.f, examples[1].Output[1]);
+		}
+
+		TEST_METHOD(Import_NotJSON)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("BAD"));
+		}
+
+		TEST_METHOD(Import_MissingInputSize)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"output_size\":0,\"examples\":[]}"));
+		}
+
+		TEST_METHOD(Import_MissingOuputSize)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":0,\"examples\":[]}"));
+		}
+
+		TEST_METHOD(Import_ExamplesNotArray)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":0,\"output_size\":0,\"examples\":0}"));
+		}
+
+		TEST_METHOD(Import_ExampleNotObject)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[0]}"));
+		}
+
+		TEST_METHOD(Import_ExampleNoInput)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"output\":[1]}]}"));
+		}
+
+		TEST_METHOD(Import_ExampleNoOutput)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1]}]}"));
+		}
+
+		TEST_METHOD(Import_ExampleInputSizeMismatch)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1,2], \"output\":[1]}]}"));
+		}
+
+		TEST_METHOD(Import_ExampleOutputSizeMismatch)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":[]}]}"));
+		}
+
+		TEST_METHOD(Import_ExampleInputNotArray)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":{}, \"output\":[1]}]}"));
+		}
+
+		TEST_METHOD(Import_ExampleOutputNotArray)
+		{
+			ExampleSet examples;
+			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":0}]}"));
 		}
 	};
 }

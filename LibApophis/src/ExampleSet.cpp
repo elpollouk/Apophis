@@ -29,9 +29,10 @@ const Example& ExampleSet::Sample() const
 	return m_Examples[m_Distribution(GetRandomGenerator())];
 }
 
-bool ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector)
+bool ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector, size_t expectedSize)
 {
 	if (jsonVector.GetType() != rapidjson::kArrayType) return false;
+	if (jsonVector.GetArray().Size() != expectedSize) return false;
 
 	outputVector.resize(jsonVector.Size());
 	for (auto i = 0; i < jsonVector.Size(); i++)
@@ -56,8 +57,12 @@ bool ExampleSet::Import(const std::string& data)
 	for (auto i = 0; i < examples.Size(); i++)
 	{
 		Example example;
-		if (!ImportVector(example.Input, examples[i]["input"])) return false;
-		if (!ImportVector(example.Output, examples[i]["output"])) return false;
+		const auto& jExample = examples[i];
+		if (jExample.GetType() != rapidjson::kObjectType) return false;
+		if (!jExample.HasMember("input")) return false;
+		if (!jExample.HasMember("output")) return false;
+		if (!ImportVector(example.Input, jExample["input"], InputSize)) return false;
+		if (!ImportVector(example.Output, jExample["output"], OutputSize)) return false;
 		AddExample(std::move(example));
 	}
 
