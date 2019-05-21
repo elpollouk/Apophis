@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "apophis/apophis.h"
-#include "Iris.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;
@@ -10,6 +9,23 @@ using namespace Apophis::Training::StoppingCondition;
 
 namespace Network
 {
+
+std::string Load(const char * path)
+{
+	FILE* f = nullptr;
+	auto err = fopen_s(&f, path, "rb");
+	assert(err == 0);
+
+	fseek(f, 0, SEEK_END);
+	auto size = ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	std::string buffer((size_t)size, (char)0);
+	fread_s(&buffer[0], size, 1, size, f);
+	fclose(f);
+
+	return buffer;
+}
 
 const char* Clasify(ConstVectorRef scores)
 {
@@ -42,9 +58,9 @@ void Run()
 	const auto MOMENTUM = 0.5f;
 
 	ExampleSet trainingSet(4, 3);
+	trainingSet.Import(Load("Data/Iris/training.json"));
 	ExampleSet testSet(4, 3);
-	Iris::PopulateTrainingSet(trainingSet);
-	Iris::PopulateTestSet(testSet);
+	testSet.Import(Load("Data/Iris/test.json"));
 
 	for (auto i = 0; i < 10; i++)
 	{

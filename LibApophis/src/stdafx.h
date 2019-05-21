@@ -11,8 +11,12 @@
 
 #include <assert.h>
 
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
+
 #include "apophis/apophis.h"
-#include "Random.h"
 
 
 // reference additional headers your program requires here
