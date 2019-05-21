@@ -35,7 +35,7 @@ bool ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector, si
 	if (jsonVector.GetArray().Size() != expectedSize) return false;
 
 	outputVector.resize(jsonVector.Size());
-	for (auto i = 0; i < jsonVector.Size(); i++)
+	for (auto i = 0u; i < jsonVector.Size(); i++)
 		outputVector[i] = (real)jsonVector[i].GetDouble();
 
 	return true;
@@ -43,6 +43,8 @@ bool ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector, si
 
 bool ExampleSet::Import(const std::string& data)
 {
+	m_Examples.clear();
+
 	rapidjson::Document json;
 	if (json.Parse(data.c_str()).HasParseError()) return false;
 
@@ -54,7 +56,7 @@ bool ExampleSet::Import(const std::string& data)
 	if (!json.HasMember("examples")) return false;
 	auto& examples = json["examples"];
 	if (examples.GetType() != rapidjson::kArrayType) return false;
-	for (auto i = 0; i < examples.Size(); i++)
+	for (auto i = 0u; i < examples.Size(); i++)
 	{
 		Example example;
 		const auto& jExample = examples[i];
@@ -71,7 +73,7 @@ bool ExampleSet::Import(const std::string& data)
 
 void ExportVector(rapidjson::Value& outputArray, ConstVectorRef vector, rapidjson::MemoryPoolAllocator<>& allocator)
 {
-	outputArray.Reserve(vector.size(), allocator);
+	outputArray.Reserve((rapidjson::SizeType)vector.size(), allocator);
 	for (auto value : vector)
 		outputArray.PushBack(value, allocator);
 }
