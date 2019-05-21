@@ -2,12 +2,14 @@
 
 #include "apophis/apophistypes.h"
 #include <random>
+#include <string>
 
 namespace Apophis {
 
 	class Example
 	{
 	public:
+		Example() {}
 		Example(std::initializer_list<real> input, std::initializer_list<real> output) :
 			Input(input),
 			Output(output)
@@ -15,13 +17,14 @@ namespace Apophis {
 
 		}
 
-		const Vector Input;
-		const Vector Output;
+		Vector Input;
+		Vector Output;
 	};
 
 	class ExampleSet
 	{
 	public:
+		ExampleSet();
 		ExampleSet(int inputSize, int outputSize);
 
 		void AddExample(Example&& example);
@@ -31,14 +34,16 @@ namespace Apophis {
 		}
 
 		const Example& Sample() const;
+		bool Import(const std::string& data);
+		std::string Export();
 
 		std::vector<Example>::const_iterator begin() const { return m_Examples.begin(); }
 		std::vector<Example>::const_iterator end() const { return m_Examples.end(); }
 		size_t size() const { return m_Examples.size(); }
 		Example& operator[](size_t index) { return m_Examples[index]; }
 
-		const int InputSize;
-		const int OutputSize;
+		int InputSize;
+		int OutputSize;
 
 	private:
 		std::uniform_int_distribution<size_t> m_Distribution;
