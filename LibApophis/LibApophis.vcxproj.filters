@@ -89,6 +89,9 @@
     <ClInclude Include="include\apophis\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\ApophisException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -126,6 +129,9 @@
     </ClCompile>
     <ClCompile Include="src\Training\BackPropNetwork.cpp">
       <Filter>Source Files\Training</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ApophisException.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
