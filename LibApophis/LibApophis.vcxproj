@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\apophis\apophis.h" />
+    <ClInclude Include="include\apophis\ApophisException.h" />
     <ClInclude Include="include\apophis\apophistypes.h" />
     <ClInclude Include="include\apophis\Component\Layer.h" />
     <ClInclude Include="include\apophis\Component\Network.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ApophisException.cpp" />
     <ClCompile Include="src\Component\Layer.cpp" />
     <ClCompile Include="src\Component\Network.cpp" />
     <ClCompile Include="src\Component\Node.cpp" />

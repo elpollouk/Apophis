@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/ExampleSet.h"
+#include "apophis/ApophisException.h"
 #include "apophis/Random.h"
 
 
@@ -139,7 +140,7 @@ namespace ApophisTests {
 		TEST_METHOD(Import)
 		{
 			ExampleSet examples;
-			Assert::IsTrue(examples.Import(TEST_EXAMPLESET));
+			examples.Import(TEST_EXAMPLESET);
 
 			Assert::AreEqual(3, examples.InputSize);
 			Assert::AreEqual(2, examples.OutputSize);
@@ -157,68 +158,90 @@ namespace ApophisTests {
 
 		TEST_METHOD(Import_NotJSON)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("BAD"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("BAD");
+			});
 		}
 
 		TEST_METHOD(Import_MissingInputSize)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"output_size\":0,\"examples\":[]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"output_size\":0,\"examples\":[]}");
+			});
 		}
 
 		TEST_METHOD(Import_MissingOuputSize)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":0,\"examples\":[]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":0,\"examples\":[]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExamplesNotArray)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":0,\"output_size\":0,\"examples\":0}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":0,\"output_size\":0,\"examples\":0}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleNotObject)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[0]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[0]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleNoInput)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"output\":[1]}]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"output\":[1]}]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleNoOutput)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1]}]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1]}]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleInputSizeMismatch)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1,2], \"output\":[1]}]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1,2], \"output\":[1]}]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleOutputSizeMismatch)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":[]}]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":[]}]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleInputNotArray)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":{}, \"output\":[1]}]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":{}, \"output\":[1]}]}");
+			});
 		}
 
 		TEST_METHOD(Import_ExampleOutputNotArray)
 		{
-			ExampleSet examples;
-			Assert::IsFalse(examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":0}]}"));
+			AssertThrows<ApophisException>([]() {
+				ExampleSet examples;
+				examples.Import("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":0}]}");
+			});
 		}
 	};
 }

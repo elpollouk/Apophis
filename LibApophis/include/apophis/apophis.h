@@ -1,6 +1,7 @@
 #pragma once
 
 #include "apophis/apophistypes.h"
+#include "apophis/ApophisException.h"
 #include "apophis/ExampleSet.h"
 #include "apophis/Random.h"
 #include "apophis/Data/Metrics.h"

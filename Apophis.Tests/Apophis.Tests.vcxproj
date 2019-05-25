@@ -164,6 +164,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ApophisExceptionTests.cpp" />
     <ClCompile Include="Component\LayerTests.cpp" />
     <ClCompile Include="Component\NodeTests.cpp" />
     <ClCompile Include="Data\MetricsTests.cpp" />

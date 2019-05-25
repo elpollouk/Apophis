@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/ExampleSet.h"
+#include "apophis/ApophisException.h"
 #include "Random.h"
 
 namespace Apophis {
@@ -29,46 +30,43 @@ const Example& ExampleSet::Sample() const
 	return m_Examples[m_Distribution(GetRandomGenerator())];
 }
 
-bool ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector, size_t expectedSize)
+void ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector, size_t expectedSize)
 {
-	if (jsonVector.GetType() != rapidjson::kArrayType) return false;
-	if (jsonVector.GetArray().Size() != expectedSize) return false;
+	if (jsonVector.GetType() != rapidjson::kArrayType) throw ApophisException("Vector specified as non-array type");
+	if (jsonVector.GetArray().Size() != expectedSize) throw ApophisException("Vector has wrong number of elements, expected %d but contained %d", (int)expectedSize, (int)jsonVector.GetArray().Size());
 
 	outputVector.resize(jsonVector.Size());
 	for (auto i = 0u; i < jsonVector.Size(); i++)
 		outputVector[i] = (real)jsonVector[i].GetDouble();
-
-	return true;
 }
 
-bool ExampleSet::Import(const std::string& data)
+void ExampleSet::Import(const std::string& data)
 {
 	m_Examples.clear();
 
 	rapidjson::Document json;
-	if (json.Parse(data.c_str()).HasParseError()) return false;
+	if (json.Parse(data.c_str()).HasParseError()) throw ApophisException("Failed to parse JSON");
 
-	if (!json.HasMember("input_size")) return false;
+	if (!json.HasMember("input_size")) throw ApophisException("\"input_size\" not specified");
 	InputSize = json["input_size"].GetInt();
-	if (!json.HasMember("output_size")) return false;
+	if (!json.HasMember("output_size")) throw ApophisException("\"output_size\" not specified");
 	OutputSize = json["output_size"].GetInt();
 
-	if (!json.HasMember("examples")) return false;
+	if (!json.HasMember("examples")) throw ApophisException("\"examples\" not specified");
 	auto& examples = json["examples"];
-	if (examples.GetType() != rapidjson::kArrayType) return false;
+	if (examples.GetType() != rapidjson::kArrayType) throw ApophisException("\"examples\" is not an array type");
 	for (auto i = 0u; i < examples.Size(); i++)
 	{
 		Example example;
 		const auto& jExample = examples[i];
-		if (jExample.GetType() != rapidjson::kObjectType) return false;
-		if (!jExample.HasMember("input")) return false;
-		if (!jExample.HasMember("output")) return false;
-		if (!ImportVector(example.Input, jExample["input"], InputSize)) return false;
-		if (!ImportVector(example.Output, jExample["output"], OutputSize)) return false;
+		if (jExample.GetType() != rapidjson::kObjectType) throw ApophisException("Non-object type specified in \"examples\" array");
+		if (!jExample.HasMember("input")) throw ApophisException("\"input\" not specified for example");
+		if (!jExample.HasMember("output")) throw ApophisException("\"output\" not specified for example");
+		ImportVector(example.Input, jExample["input"], InputSize);
+		ImportVector(example.Output, jExample["output"], OutputSize);
 		AddExample(std::move(example));
 	}
 
-	return true;
 }
 
 void ExportVector(rapidjson::Value& outputArray, ConstVectorRef vector, rapidjson::MemoryPoolAllocator<>& allocator)

@@ -23,5 +23,6 @@ namespace Apophis {
 	namespace TransferFunction {
 		class ITransferFunction;
 	}
+	class ApophisException;
 	class ExampleSet;
 }

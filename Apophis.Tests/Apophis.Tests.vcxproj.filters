@@ -61,5 +61,8 @@
     <ClCompile Include="Training\Algorithms\BackPropTests.cpp">
       <Filter>Tests\Training\Algorithms</Filter>
     </ClCompile>
+    <ClCompile Include="ApophisExceptionTests.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
