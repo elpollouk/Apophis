@@ -20,6 +20,9 @@ namespace Apophis {
 		class ITrainable;
 		class Trainer;
 	}
+	namespace Utils {
+		class ExportTarget;
+	}
 	namespace TransferFunction {
 		class ITransferFunction;
 	}

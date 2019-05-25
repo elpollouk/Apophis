@@ -2,6 +2,9 @@
 #include "apophis/ExampleSet.h"
 #include "apophis/ApophisException.h"
 #include "Random.h"
+#include "Utils/ImportExport.h"
+
+using namespace Apophis::Utils;
 
 namespace Apophis {
 
@@ -69,26 +72,26 @@ void ExampleSet::Import(const std::string& data)
 
 }
 
-void ExportVector(rapidjson::Value& outputArray, ConstVectorRef vector, rapidjson::MemoryPoolAllocator<>& allocator)
+void ExportVector(ExportTarget& outputArray, ConstVectorRef vector)
 {
-	outputArray.Reserve((rapidjson::SizeType)vector.size(), allocator);
+	outputArray.Reserve(vector.size());
 	for (auto value : vector)
-		outputArray.PushBack(value, allocator);
+		outputArray.PushBack(value);
 }
 
-void ExportExample(rapidjson::Value& outputArray, const Example& example, rapidjson::MemoryPoolAllocator<>& allocator)
+void ExportExample(ExportTarget& outputArray, const Example& example)
 {
 	rapidjson::Value jsonExample(rapidjson::kObjectType);
 
-	rapidjson::Value input(rapidjson::kArrayType);
-	ExportVector(input, example.Input, allocator);
-	jsonExample.AddMember("input", input, allocator);
+	auto input = outputArray.Create(rapidjson::kArrayType);
+	ExportVector(input, example.Input);
+	jsonExample.AddMember("input", input.Target, input.Allocator);
 
-	rapidjson::Value output(rapidjson::kArrayType);
-	ExportVector(output, example.Output, allocator);
-	jsonExample.AddMember("output", output, allocator);
+	auto output = outputArray.Create(rapidjson::kArrayType);
+	ExportVector(output, example.Output);
+	jsonExample.AddMember("output", output.Target, output.Allocator);
 
-	outputArray.PushBack(jsonExample, allocator);
+	outputArray.PushBack(jsonExample);
 }
 
 std::string ExampleSet::Export()
@@ -100,11 +103,11 @@ std::string ExampleSet::Export()
 	json.AddMember("input_size", InputSize, allocator);
 	json.AddMember("output_size", OutputSize, allocator);
 
-	rapidjson::Value examples(rapidjson::kArrayType);
+	auto examples = ExportTarget(rapidjson::kArrayType, allocator);
 	for (const auto& example : m_Examples)
-		ExportExample(examples, example, allocator);
+		ExportExample(examples, example);
 
-	json.AddMember("examples", examples, allocator);
+	json.AddMember("examples", examples.Target, examples.Allocator);
 
 
 	rapidjson::StringBuffer buffer;

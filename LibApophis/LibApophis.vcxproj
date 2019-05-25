@@ -179,6 +179,7 @@
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\targetver.h" />
+    <ClInclude Include="src\Utils\ImportExport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ApophisException.cpp" />

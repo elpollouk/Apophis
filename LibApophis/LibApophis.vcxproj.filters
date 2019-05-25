@@ -30,6 +30,9 @@
     <Filter Include="Source Files\Training">
       <UniqueIdentifier>{80c2f65a-cb12-4215-9d9d-db2d9d1f21d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{a1131eaf-b4dc-4dec-a7df-761a97376b64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\stdafx.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="include\apophis\ApophisException.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\ImportExport.h">
+      <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 #include "apophis/Component/Node.h"
 #include "apophis/TransferFunction/ITransferFunction.h"
 #include "apophis/Random.h"
+#include "Utils/ImportExport.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;
@@ -30,4 +31,15 @@ real Node::Calculate(ConstVectorRef input)
 
 	assert(!isnan(Activation) && !isinf(Activation));
 	return m_Transfer(Activation);
+}
+
+
+void Node::Export(Utils::ExportTarget& outputObject) const
+{
+	auto jWeights = outputObject.Create(rapidjson::kArrayType);
+	jWeights.Reserve(Weights.size());
+	for (auto weight : Weights)
+		jWeights.PushBack(weight);
+
+	outputObject.AddMember("weights", jWeights);
 }
