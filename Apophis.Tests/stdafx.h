@@ -11,6 +11,7 @@
 #include "CppUnitTest.h"
 
 #include <vector>
+#include <functional>
 #include <stdio.h>
 
 
@@ -27,5 +28,24 @@ template<typename T> static void AssertAreClose(const T& expected, const T& actu
 			swprintf_s(buffer, L"Assert failed. Expected:<%s> Actual:<%s>", sExpected.c_str(), sActual.c_str());
 
 		Assert::Fail(buffer, pLineInfo);
+	}
+}
+
+template<typename T> static T AssertThrows(std::function<void()> test)
+{
+	try
+	{
+		test();
+		Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(L"No exception thrown");
+		return T("No exception thrown");
+	}
+	catch (T& ex)
+	{
+		return ex;
+	}
+	catch (...)
+	{
+		Microsoft::VisualStudio::CppUnitTestFramework::Assert::Fail(L"Wrong exception type thrown");
+		return T("Wrong exception type thrown");
 	}
 }
