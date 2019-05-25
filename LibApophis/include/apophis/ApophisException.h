@@ -2,7 +2,6 @@
 #include <exception>
 #include <string>
 #include <cstdarg>
-#include <cstdio>
 
 namespace Apophis {
 

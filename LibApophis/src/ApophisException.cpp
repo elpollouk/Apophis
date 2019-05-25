@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/ApophisException.h"
+#include <cstdio>
 
 using namespace Apophis;
 
