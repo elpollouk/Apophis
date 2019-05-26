@@ -89,6 +89,7 @@ namespace ApophisTests { namespace Component
 
 			node.Export(outputObject);
 
+			Assert::AreEqual("node", outputObject.Target["type"].GetString());
 			Assert::IsTrue(outputObject.Target.HasMember("weights"));
 			auto& weights = outputObject.Target["weights"].GetArray();
 			Assert::AreEqual(3, (int)weights.Size());

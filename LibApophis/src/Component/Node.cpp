@@ -35,6 +35,8 @@ real Node::Calculate(ConstVectorRef input)
 
 void Node::Export(Utils::ExportTarget& outputObject) const
 {
+	outputObject.AddMember("type", "node");
+
 	auto jWeights = outputObject.Create(rapidjson::kArrayType);
 	jWeights.Reserve(Weights.size());
 	for (auto weight : Weights)

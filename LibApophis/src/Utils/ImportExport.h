@@ -18,9 +18,22 @@ namespace Apophis { namespace Utils {
 			return ExportTarget(type, Allocator);
 		}
 
+		template <typename T>
+		void AddMember(rapidjson::GenericValue<rapidjson::UTF8<>>::StringRefType name, T value)
+		{
+			Target.AddMember(name, value, Allocator);
+		}
+
 		void AddMember(rapidjson::GenericValue<rapidjson::UTF8<>>::StringRefType name, ExportTarget& value)
 		{
 			Target.AddMember(name, value.Target, Allocator);
+		}
+
+		void AddMember(rapidjson::GenericValue<rapidjson::UTF8<>>::StringRefType name, const char* value)
+		{
+			rapidjson::Value v(rapidjson::kStringType);
+			v.SetString(value, Allocator);
+			Target.AddMember(name, v, Allocator);
 		}
 
 		void Reserve(size_t size)
@@ -37,6 +50,11 @@ namespace Apophis { namespace Utils {
 		void PushBack(rapidjson::Value& value)
 		{
 			Target.PushBack(value, Allocator);
+		}
+
+		void PushBack(ExportTarget& value)
+		{
+			Target.PushBack(value.Target, Allocator);
 		}
 
 		rapidjson::Value Target;
