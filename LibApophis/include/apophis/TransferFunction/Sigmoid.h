@@ -10,6 +10,10 @@ namespace Apophis {	namespace TransferFunction {
 		DEFAULT_TRANSFER
 
 	public:
+		static constexpr const char* Name = "sigmoid";
+
+		Sigmoid() : ITransferFunction(Name) {}
+
 		virtual real operator()(real value) const override
 		{
 			return 1.f / (1.f + expf(-value));

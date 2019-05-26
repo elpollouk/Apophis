@@ -33,7 +33,6 @@ real Node::Calculate(ConstVectorRef input)
 	return m_Transfer(Activation);
 }
 
-
 void Node::Export(Utils::ExportTarget& outputObject) const
 {
 	auto jWeights = outputObject.Create(rapidjson::kArrayType);

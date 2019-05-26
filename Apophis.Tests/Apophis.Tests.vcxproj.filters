@@ -64,5 +64,8 @@
     <ClCompile Include="ApophisExceptionTests.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="TransferFunction\ITransferFunctionTests.cpp">
+      <Filter>Tests\TransferFunction</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

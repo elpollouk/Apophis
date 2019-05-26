@@ -9,7 +9,10 @@ namespace Apophis { namespace TransferFunction {
 		DEFAULT_TRANSFER
 
 	public:
+		static constexpr const char* Name = "relu";
+
 		Relu(real leakGradient = 0.01) :
+			ITransferFunction(Name),
 			m_LeakGradient(leakGradient)
 		{
 

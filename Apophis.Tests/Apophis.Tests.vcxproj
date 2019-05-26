@@ -177,6 +177,7 @@
     </ClCompile>
     <ClCompile Include="Training\Algorithms\BackPropTests.cpp" />
     <ClCompile Include="Training\StoppingConditionTests.cpp" />
+    <ClCompile Include="TransferFunction\ITransferFunctionTests.cpp" />
     <ClCompile Include="TransferFunction\ReluTests.cpp" />
     <ClCompile Include="TransferFunction\SigmoidTests.cpp" />
   </ItemGroup>
