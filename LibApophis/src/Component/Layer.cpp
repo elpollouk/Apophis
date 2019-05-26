@@ -29,10 +29,10 @@ ConstVectorRef Layer::Calculate(ConstVectorRef inputs)
 
 void Layer::Export(Utils::ExportTarget& outputObject)
 {
-	outputObject.AddMember("type", "layer");
-	outputObject.AddMember("input_size", GetNumInputs());
-	outputObject.AddMember("output_size", GetNumOutputs());
-	outputObject.AddMember("transfer", Nodes[0]->GetTransferFunction().GetName());
+	outputObject.AddMember(FIELD_TYPE, COMPONENTTYPE_LAYER);
+	outputObject.AddMember(FIELD_INPUTSIZE, GetNumInputs());
+	outputObject.AddMember(FIELD_OUTPUTSIZE, GetNumOutputs());
+	outputObject.AddMember(FIELD_TRANSFER, Nodes[0]->GetTransferFunction().GetName());
 
 	auto nodes = outputObject.Create(rapidjson::kArrayType);
 	nodes.Reserve(Nodes.size());
@@ -42,5 +42,5 @@ void Layer::Export(Utils::ExportTarget& outputObject)
 		node->Export(jNode);
 		nodes.PushBack(jNode);
 	}
-	outputObject.AddMember("nodes", nodes);
+	outputObject.AddMember(FIELD_NODES, nodes);
 }

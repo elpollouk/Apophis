@@ -6,6 +6,7 @@
 
 using namespace Apophis;
 using namespace Apophis::Component;
+using namespace Apophis::Utils;
 
 Node::Node(size_t numInputs, const TransferFunction::ITransferFunction& transfer) :
 	m_NumInputs(numInputs),
@@ -35,12 +36,12 @@ real Node::Calculate(ConstVectorRef input)
 
 void Node::Export(Utils::ExportTarget& outputObject) const
 {
-	outputObject.AddMember("type", "node");
+	outputObject.AddMember(FIELD_TYPE, COMPONENTTYPE_NODE);
 
 	auto jWeights = outputObject.Create(rapidjson::kArrayType);
 	jWeights.Reserve(Weights.size());
 	for (auto weight : Weights)
 		jWeights.PushBack(weight);
 
-	outputObject.AddMember("weights", jWeights);
+	outputObject.AddMember(FIELD_WEIGHTS, jWeights);
 }

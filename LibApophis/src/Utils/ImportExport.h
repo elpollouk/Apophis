@@ -2,6 +2,17 @@
 
 namespace Apophis { namespace Utils {
 
+	// Common field and value constants
+	constexpr const char* FIELD_TYPE = "type";
+	constexpr const char* FIELD_INPUTSIZE = "input_size";
+	constexpr const char* FIELD_OUTPUTSIZE = "output_size";
+	constexpr const char* FIELD_TRANSFER = "transfer";
+	constexpr const char* FIELD_NODES = "nodes";
+	constexpr const char* FIELD_WEIGHTS = "weights";
+
+	constexpr const char* COMPONENTTYPE_LAYER = "layer";
+	constexpr const char* COMPONENTTYPE_NODE = "node";
+
 	// A helper to wrap around RapidJSON types in a way that's safe for public header file forward declarions
 	class ExportTarget
 	{
@@ -19,21 +30,24 @@ namespace Apophis { namespace Utils {
 		}
 
 		template <typename T>
-		void AddMember(rapidjson::GenericValue<rapidjson::UTF8<>>::StringRefType name, T value)
+		void AddMember(const char* name, T value)
 		{
-			Target.AddMember(name, value, Allocator);
+			rapidjson::GenericStringRef<rapidjson::UTF8<>::Ch> jName(name);
+			Target.AddMember(jName, value, Allocator);
 		}
 
-		void AddMember(rapidjson::GenericValue<rapidjson::UTF8<>>::StringRefType name, ExportTarget& value)
+		void AddMember(const char* name, ExportTarget& value)
 		{
-			Target.AddMember(name, value.Target, Allocator);
+			rapidjson::GenericStringRef<rapidjson::UTF8<>::Ch> jName(name);
+			Target.AddMember(jName, value.Target, Allocator);
 		}
 
-		void AddMember(rapidjson::GenericValue<rapidjson::UTF8<>>::StringRefType name, const char* value)
+		void AddMember(const char* name, const char* value)
 		{
+			rapidjson::GenericStringRef<rapidjson::UTF8<>::Ch> jName(name);
 			rapidjson::Value v(rapidjson::kStringType);
 			v.SetString(value, Allocator);
-			Target.AddMember(name, v, Allocator);
+			Target.AddMember(jName, v, Allocator);
 		}
 
 		void Reserve(size_t size)
