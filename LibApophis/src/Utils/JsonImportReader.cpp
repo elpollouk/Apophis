@@ -29,6 +29,26 @@ JsonImportReader::~JsonImportReader()
 		delete m_pValue;
 }
 
+const rapidjson::Value& JsonImportReader::EnsureMember(const char* key)
+{
+	if (!HasMember(key)) throw ApophisException("JSON object does not have member \"%\"", key);
+	return (*m_pValue)[key];
+}
+
+const rapidjson::Value& JsonImportReader::EnsureMember(const char* key, rapidjson::Type type)
+{
+	auto& v = EnsureMember(key);
+	if (v.GetType() != type) throw ApophisException("JSON object member \"%s\" has wrong type", key);
+	return v;
+}
+
+const rapidjson::Value& JsonImportReader::EnsureIndex(int index)
+{
+	assert(m_pValue->GetType() == rapidjson::kArrayType);
+	if (index < 0 || m_pValue->Size() <= index) throw ApophisException("JSON array index %d is out of bounds", index);
+	return m_pValue->GetArray()[index];
+}
+
 bool JsonImportReader::HasMember(const char* key)
 {
 	assert(m_pValue->GetType() == rapidjson::kObjectType);
@@ -37,35 +57,28 @@ bool JsonImportReader::HasMember(const char* key)
 
 long long JsonImportReader::GetInt64(const char* key)
 {
-	assert(m_pValue->GetType() == rapidjson::kObjectType);
-	return GetValue()[key].GetInt64();
+	return EnsureMember(key).GetInt64();
 }
 
 real JsonImportReader::GetReal(const char* key)
 {
-	assert(m_pValue->GetType() == rapidjson::kObjectType);
-	return GetValue()[key].GetFloat();
+	return EnsureMember(key).GetFloat();
 }
 
 const char* JsonImportReader::GetString(const char* key)
 {
-	assert(m_pValue->GetType() == rapidjson::kObjectType);
-	return GetValue()[key].GetString();
+	return EnsureMember(key).GetString();
 }
 
 std::unique_ptr<IImportReader> JsonImportReader::GetArray(const char* key)
 {
-	assert(m_pValue->GetType() == rapidjson::kObjectType);
-	assert(GetValue()[key].GetType() == rapidjson::kArrayType);
-	const auto& value = GetValue()[key];
+	auto& value = EnsureMember(key, rapidjson::kArrayType);
 	return std::make_unique<JsonImportReader>(&value);
 }
 
 std::unique_ptr<IImportReader> JsonImportReader::GetObject(const char* key)
 {
-	assert(m_pValue->GetType() == rapidjson::kObjectType);
-	assert(GetValue()[key].GetType() == rapidjson::kObjectType);
-	const auto& value = GetValue()[key];
+	const auto& value = EnsureMember(key, rapidjson::kObjectType);
 	return std::make_unique<JsonImportReader>(&value);
 }
 
@@ -77,6 +90,5 @@ size_t JsonImportReader::Size()
 
 long long JsonImportReader::GetInt64(int index)
 {
-	assert(m_pValue->GetType() == rapidjson::kArrayType);
-	return m_pValue->GetArray()[index].GetInt64();
+	return EnsureIndex(index).GetInt64();
 }

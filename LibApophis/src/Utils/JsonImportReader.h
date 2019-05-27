@@ -25,6 +25,10 @@ namespace Apophis { namespace Utils {
 		const rapidjson::Value& GetValue() const { return *m_pValue; }
 
 	private:
+		const rapidjson::Value& EnsureMember(const char* key);
+		const rapidjson::Value& EnsureMember(const char* key, rapidjson::Type type);
+		const rapidjson::Value& EnsureIndex(int index);
+
 		bool m_Owner;
 		const rapidjson::Value* m_pValue;
 	};

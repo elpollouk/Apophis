@@ -31,16 +31,40 @@ namespace ApophisTests { namespace Utils {
 			Assert::AreEqual(123, reader.GetInt32("foo"));
 		}
 
+		TEST_METHOD(GetInt64_MissingMember)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{}");
+				reader.GetInt64("foo");
+			});
+		}
+
 		TEST_METHOD(GetReal)
 		{
 			auto reader = JsonImportReader("{\"foo\":56.0}");
 			Assert::AreEqual(56.f, reader.GetReal("foo"));
 		}
 
+		TEST_METHOD(GetReal_MissingMember)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{}");
+				reader.GetReal("foo");
+			});
+		}
+
 		TEST_METHOD(GetString)
 		{
 			auto reader = JsonImportReader("{\"foo\":\"bar\"}");
 			Assert::AreEqual("bar", reader.GetString("foo"));
+		}
+
+		TEST_METHOD(GetString_MissingMember)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{}");
+				reader.GetString("foo");
+			});
 		}
 
 		TEST_METHOD(GetArray)
@@ -54,6 +78,40 @@ namespace ApophisTests { namespace Utils {
 			Assert::AreEqual(11, arr->GetInt32(2));
 		}
 
+		TEST_METHOD(GetArray_MissingMember)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{}");
+				reader.GetArray("foo");
+			});
+		}
+
+		TEST_METHOD(GetArray_WrongType)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{\"foo\":5}");
+				reader.GetArray("foo");
+			});
+		}
+
+		TEST_METHOD(GetArray_InvalidIndex_Over)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{\"foo\":[2]}");
+				auto arr = reader.GetArray("foo");
+				arr->GetInt64(2);
+			});
+		}
+
+		TEST_METHOD(GetArray_InvalidIndex_Under)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{\"foo\":[2]}");
+				auto arr = reader.GetArray("foo");
+				arr->GetInt64(-1);
+			});
+		}
+
 		TEST_METHOD(GetObject)
 		{
 			auto reader = JsonImportReader("{\"foo\":{\"bar\":\"baz\"}}");
@@ -61,6 +119,22 @@ namespace ApophisTests { namespace Utils {
 			Assert::IsNotNull(obj.get());
 			Assert::IsTrue(obj->HasMember("bar"));
 			Assert::AreEqual("baz", obj->GetString("bar"));
+		}
+
+		TEST_METHOD(GetObject_MissingMember)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{}");
+				reader.GetObject("foo");
+			});
+		}
+
+		TEST_METHOD(GetObject_WrongType)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{\"foo\":[]}");
+				reader.GetObject("foo");
+			});
 		}
 	};
 
