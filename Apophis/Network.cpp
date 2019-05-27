@@ -29,7 +29,9 @@ std::string Load(const char * path)
 
 void Export(const Apophis::Component::Network& network)
 {
-	auto json = network.Export();
+	auto writer = Utils::IExportWriter::CreateJsonExportWriter();
+	network.Export(*writer);
+	auto json = writer->GetData();
 	FILE* f = nullptr;
 	auto err = fopen_s(&f, "iris.net.json", "wb");
 	assert(err == 0);
@@ -98,7 +100,7 @@ void Run()
 			printf("%02u: %s\n", i, Clasify(output));
 		}
 
-		Export(network);
+		//Export(network);
 	}
 }
 

@@ -2,7 +2,7 @@
 #include "apophis/Component/Layer.h"
 #include "apophis/Component/Network.h"
 #include "apophis/TransferFunction/Relu.h"
-#include "Utils/ImportExport.h"
+#include "Utils/JsonExportWriter.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -59,8 +59,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(Export)
 		{
-			auto& allocator = rapidjson::MemoryPoolAllocator<>();
-			auto outputObject = Utils::ExportTarget(rapidjson::kObjectType, allocator);
+			auto outputObject = Utils::JsonExportWriter();
 
 			Network network(0);
 			auto layer = Layer(3, 2, Relu::Default(), network);
@@ -68,13 +67,13 @@ namespace ApophisTests { namespace Component
 
 			layer.Export(outputObject);
 
-			Assert::AreEqual("layer", outputObject.Target["type"].GetString());
-			Assert::AreEqual(3, outputObject.Target["input_size"].GetInt());
-			Assert::AreEqual(2, outputObject.Target["output_size"].GetInt());
-			Assert::AreEqual(Relu::Name, outputObject.Target["transfer"].GetString());
+			Assert::AreEqual("layer", outputObject.GetValue()["type"].GetString());
+			Assert::AreEqual(3, outputObject.GetValue()["input_size"].GetInt());
+			Assert::AreEqual(2, outputObject.GetValue()["output_size"].GetInt());
+			Assert::AreEqual(Relu::Name, outputObject.GetValue()["transfer"].GetString());
 
-			Assert::IsTrue(outputObject.Target.HasMember("nodes"));
-			auto& nodes = outputObject.Target["nodes"].GetArray();
+			Assert::IsTrue(outputObject.GetValue().HasMember("nodes"));
+			auto& nodes = outputObject.GetValue()["nodes"].GetArray();
 			Assert::AreEqual(2, (int)nodes.Size());
 
 			auto& weights0 = nodes[0].GetObject()["weights"].GetArray();

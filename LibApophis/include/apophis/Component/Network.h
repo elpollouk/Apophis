@@ -25,8 +25,7 @@ namespace Apophis { namespace Component {
 		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
 		ConstVectorRef Calculate(ConstVectorRef input);
 
-		void Export(Utils::ExportTarget& output) const;
-		std::string Export() const;
+		void Export(Utils::IExportWriter& writer) const;
 
 	protected:
 		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "apophis/Component/Layer.h"
 #include "apophis/Component/Network.h"
+#include "apophis/Utils/IExportWriter.h"
 #include "Utils/ImportExport.h"
 
 using namespace Apophis;
@@ -27,20 +28,17 @@ ConstVectorRef Layer::Calculate(ConstVectorRef inputs)
 	return m_Output;
 }
 
-void Layer::Export(Utils::ExportTarget& outputObject)
+void Layer::Export(Utils::IExportWriter& writer)
 {
-	outputObject.AddMember(FIELD_TYPE, COMPONENTTYPE_LAYER);
-	outputObject.AddMember(FIELD_INPUTSIZE, GetNumInputs());
-	outputObject.AddMember(FIELD_OUTPUTSIZE, GetNumOutputs());
-	outputObject.AddMember(FIELD_TRANSFER, Nodes[0]->GetTransferFunction().GetName());
+	writer.Set(FIELD_TYPE, COMPONENTTYPE_LAYER);
+	writer.Set(FIELD_INPUTSIZE, GetNumInputs());
+	writer.Set(FIELD_OUTPUTSIZE, GetNumOutputs());
+	writer.Set(FIELD_TRANSFER, Nodes[0]->GetTransferFunction().GetName());
 
-	auto nodes = outputObject.Create(rapidjson::kArrayType);
-	nodes.Reserve(Nodes.size());
+	auto nodes = writer.SetArray(FIELD_NODES, Nodes.size());
 	for (const auto& node : Nodes)
 	{
-		auto jNode = nodes.Create(rapidjson::kObjectType);
-		node->Export(jNode);
-		nodes.PushBack(jNode);
+		auto outNode = nodes->PushBackObject();
+		node->Export(*outNode);
 	}
-	outputObject.AddMember(FIELD_NODES, nodes);
 }

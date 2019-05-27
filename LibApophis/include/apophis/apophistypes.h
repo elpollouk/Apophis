@@ -21,7 +21,6 @@ namespace Apophis {
 		class Trainer;
 	}
 	namespace Utils {
-		class ExportTarget;
 		class IExportWriter;
 	}
 	namespace TransferFunction {

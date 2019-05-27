@@ -2,7 +2,7 @@
 #include "apophis/Component/Node.h"
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
-#include "Utils/ImportExport.h"
+#include "Utils/JsonExportWriter.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -79,8 +79,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(Export)
 		{
-			auto& allocator = rapidjson::MemoryPoolAllocator<>();
-			auto outputObject = Utils::ExportTarget(rapidjson::kObjectType, allocator);
+			auto outputObject = Utils::JsonExportWriter();
 
 			auto node = Node(2, m_Relu);
 			node.Weights[0] = 3.f;
@@ -89,9 +88,9 @@ namespace ApophisTests { namespace Component
 
 			node.Export(outputObject);
 
-			Assert::AreEqual("node", outputObject.Target["type"].GetString());
-			Assert::IsTrue(outputObject.Target.HasMember("weights"));
-			auto& weights = outputObject.Target["weights"].GetArray();
+			Assert::AreEqual("node", outputObject.GetValue()["type"].GetString());
+			Assert::IsTrue(outputObject.GetValue().HasMember("weights"));
+			auto& weights = outputObject.GetValue()["weights"].GetArray();
 			Assert::AreEqual(3, (int)weights.Size());
 			Assert::AreEqual(3.f, weights[0].GetFloat());
 			Assert::AreEqual(5.f, weights[1].GetFloat());

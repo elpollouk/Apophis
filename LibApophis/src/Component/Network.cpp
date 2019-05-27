@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/Component/Network.h"
+#include "apophis/Utils/IExportWriter.h"
 #include "Utils/ImportExport.h"
 
 using namespace Apophis;
@@ -41,32 +42,16 @@ std::unique_ptr<Node> Network::CreateNode(size_t numInputs, const TransferFuncti
 	return std::make_unique<Node>(numInputs, transfer);
 }
 
-void Network::Export(Utils::ExportTarget& output) const
+void Network::Export(Utils::IExportWriter& writer) const
 {
-	output.AddMember(FIELD_TYPE, COMPONENTTYPE_NETWORK);
-	output.AddMember(FIELD_INPUTSIZE, GetInputSize());
-	output.AddMember(FIELD_OUTPUTSIZE, GetOutputSize());
-	auto layers = output.Create(rapidjson::kArrayType);
-	layers.Reserve(GetLayers().size());
+	writer.Set(FIELD_TYPE, COMPONENTTYPE_NETWORK);
+	writer.Set(FIELD_INPUTSIZE, GetInputSize());
+	writer.Set(FIELD_OUTPUTSIZE, GetOutputSize());
+
+	auto layers = writer.SetArray(FIELD_LAYERS, GetLayers().size());
 	for (auto& layer : GetLayers())
 	{
-		auto jLayer = layers.Create(rapidjson::kObjectType);
-		layer->Export(jLayer);
-		layers.PushBack(jLayer);
+		auto outLayer = layers->PushBackObject();
+		layer->Export(*outLayer);
 	}
-	output.AddMember(FIELD_LAYERS, layers);
-}
-
-std::string Network::Export() const
-{
-	rapidjson::MemoryPoolAllocator<> allocator;
-	ExportTarget output(rapidjson::kObjectType, allocator);
-
-	Export(output);
-
-	rapidjson::StringBuffer buffer;
-	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-	output.Target.Accept(writer);
-
-	return std::string(buffer.GetString(), buffer.GetSize());
 }

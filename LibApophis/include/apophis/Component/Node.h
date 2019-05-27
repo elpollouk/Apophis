@@ -18,7 +18,7 @@ namespace Apophis { namespace Component {
 		real Activation;
 		Vector Weights;
 
-		virtual void Export(Utils::ExportTarget& outputObject) const;
+		virtual void Export(Utils::IExportWriter& writer) const;
 
 	protected:
 		size_t m_NumInputs;

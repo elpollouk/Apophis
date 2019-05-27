@@ -2,6 +2,7 @@
 #include "apophis/Component/Network.h"
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
+#include "Utils/JsonExportWriter.h"
 #include "Utils/ImportExport.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -43,7 +44,7 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual(2, (int)network.GetLayers().size());
 		}
 
-		float GetWeight(const rapidjson::GenericValue<rapidjson::UTF8<>>::Array& layers, unsigned int layer, unsigned int node, unsigned int weight)
+		float GetWeight(const rapidjson::GenericValue<rapidjson::UTF8<>>::ConstArray& layers, unsigned int layer, unsigned int node, unsigned int weight)
 		{
 			auto _layer = layers[layer].GetObject();
 			auto _nodes = _layer[FIELD_NODES].GetArray();
@@ -54,8 +55,7 @@ namespace ApophisTests { namespace Component
 
 		TEST_METHOD(Export)
 		{
-			auto& allocator = rapidjson::MemoryPoolAllocator<>();
-			auto outputObject = Utils::ExportTarget(rapidjson::kObjectType, allocator);
+			auto outputObject = Utils::JsonExportWriter();
 
 			Network network(3);
 			network.AddLayer<Relu>(2);
@@ -64,11 +64,11 @@ namespace ApophisTests { namespace Component
 
 			network.Export(outputObject);
 
-			Assert::AreEqual("network", outputObject.Target["type"].GetString());
-			Assert::AreEqual(3, outputObject.Target["input_size"].GetInt());
-			Assert::AreEqual(1, outputObject.Target["output_size"].GetInt());
-			Assert::IsTrue(outputObject.Target.HasMember("layers"));
-			auto& layers = outputObject.Target["layers"].GetArray();
+			Assert::AreEqual("network", outputObject.GetValue()["type"].GetString());
+			Assert::AreEqual(3, outputObject.GetValue()["input_size"].GetInt());
+			Assert::AreEqual(1, outputObject.GetValue()["output_size"].GetInt());
+			Assert::IsTrue(outputObject.GetValue().HasMember("layers"));
+			auto& layers = outputObject.GetValue()["layers"].GetArray();
 			Assert::AreEqual(2, (int)layers.Size());
 
 			Assert::AreEqual(Relu::Name, layers[0].GetObject()[FIELD_TRANSFER].GetString());
