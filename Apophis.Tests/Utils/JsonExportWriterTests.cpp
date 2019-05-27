@@ -5,6 +5,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis::Utils;
 
 namespace ApophisTests { namespace Utils {
+
 	TEST_CLASS(JsonExportWriterTests)
 	{
 	public:
@@ -114,4 +115,5 @@ namespace ApophisTests { namespace Utils {
 			Assert::AreEqual("{\"foo\":{\"a\":12.0,\"b\":\"three\",\"c\":4},\"d\":[{\"e\":\"test\"}]}", writer.GetData().c_str());
 		}
 	};
+
 }}

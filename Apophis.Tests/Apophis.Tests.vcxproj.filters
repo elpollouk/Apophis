@@ -76,5 +76,8 @@
     <ClCompile Include="Utils\JsonExportWriterTests.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Data\JsonImportReaderTests.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
