@@ -34,7 +34,7 @@ namespace Apophis {
 		}
 
 		const Example& Sample() const;
-		void Import(const std::string& data);
+		void Import(Utils::IImportReader& data);
 		void Export(Utils::IExportWriter& output);
 
 		std::vector<Example>::const_iterator begin() const { return m_Examples.begin(); }

@@ -10,7 +10,7 @@ using namespace Apophis::Training::StoppingCondition;
 namespace Network
 {
 
-std::string Load(const char * path)
+std::unique_ptr<Utils::IImportReader> Load(const char * path)
 {
 	FILE* f = nullptr;
 	auto err = fopen_s(&f, path, "rb");
@@ -24,7 +24,7 @@ std::string Load(const char * path)
 	fread_s(&buffer[0], size, 1, size, f);
 	fclose(f);
 
-	return buffer;
+	return Utils::IImportReader::CreateJsonImportReader(buffer);
 }
 
 void Export(const Apophis::Component::Network& network)
@@ -71,9 +71,9 @@ void Run()
 	const auto MOMENTUM = 0.5f;
 
 	ExampleSet trainingSet(4, 3);
-	trainingSet.Import(Load("Data/Iris/training.json"));
+	trainingSet.Import(*Load("Data/Iris/training.json"));
 	ExampleSet testSet(4, 3);
-	testSet.Import(Load("Data/Iris/test.json"));
+	testSet.Import(*Load("Data/Iris/test.json"));
 
 	for (auto i = 0; i < 10; i++)
 	{
