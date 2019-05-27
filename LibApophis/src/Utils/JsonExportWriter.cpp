@@ -29,7 +29,8 @@ JsonExportWriter::JsonExportWriter(rapidjson::Value* value, std::shared_ptr<rapi
 
 JsonExportWriter::~JsonExportWriter()
 {
-	if (m_OwnsValue) delete m_pValue;
+	if (m_OwnsValue)
+		delete m_pValue;
 }
 
 void JsonExportWriter::Set(const char* key, real value)
