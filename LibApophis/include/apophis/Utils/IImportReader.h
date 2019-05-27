@@ -9,6 +9,9 @@ namespace Apophis { namespace Utils {
 	class IImportReader
 	{
 	public:
+		static std::unique_ptr<IImportReader> CreateJsonImportReader(std::string json);
+
+	public:
 		virtual ~IImportReader() {}
 
 		virtual bool HasMember(const char* key) = 0;
@@ -20,6 +23,10 @@ namespace Apophis { namespace Utils {
 
 		virtual size_t Size() = 0;
 		virtual long long GetInt64(int index) = 0;
+		virtual real GetReal(int index) = 0;
+		virtual const char* GetString(int index) = 0;
+		virtual std::unique_ptr<IImportReader> GetObject(int index) = 0;
+		virtual std::unique_ptr<IImportReader> GetArray(int index) = 0;
 
 		// Helpers for common types
 		int GetInt32(const char* key) { return (int)GetInt64(key); }

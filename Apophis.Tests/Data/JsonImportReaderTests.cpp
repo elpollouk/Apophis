@@ -69,13 +69,13 @@ namespace ApophisTests { namespace Utils {
 
 		TEST_METHOD(GetArray)
 		{
-			auto reader = JsonImportReader("{\"foo\":[5,7,11]}");
+			auto reader = JsonImportReader("{\"foo\":[5,7.0,\"11\"]}");
 			auto arr = reader.GetArray("foo");
 			Assert::IsNotNull(arr.get());
 			Assert::AreEqual(3, (int)arr->Size());
 			Assert::AreEqual(5, arr->GetInt32(0));
-			Assert::AreEqual(7, arr->GetInt32(1));
-			Assert::AreEqual(11, arr->GetInt32(2));
+			Assert::AreEqual(7.f, arr->GetReal(1));
+			Assert::AreEqual("11", arr->GetString(2));
 		}
 
 		TEST_METHOD(GetArray_MissingMember)
@@ -134,6 +134,38 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{\"foo\":[]}");
 				reader.GetObject("foo");
+			});
+		}
+
+		TEST_METHOD(GetObjectFromArray)
+		{
+			auto reader = JsonImportReader("{\"foo\":[{\"bar\":\"baz\"}]}");
+			auto obj = reader.GetArray("foo")->GetObject(0);
+			Assert::AreEqual("baz", obj->GetString("bar"));
+		}
+
+		TEST_METHOD(GetObjectFromArray_WrongType)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{\"foo\":[0]}");
+				auto arr = reader.GetArray("foo");
+				arr->GetObject(0);
+			});
+		}
+
+		TEST_METHOD(GetArrayFromArray)
+		{
+			auto reader = JsonImportReader("{\"foo\":[[\"bar\"]]}");
+			auto arr = reader.GetArray("foo")->GetArray(0);
+			Assert::AreEqual("bar", arr->GetString(0));
+		}
+
+		TEST_METHOD(GetArrayFromArray_WrongType)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = JsonImportReader("{\"foo\":[0]}");
+				auto arr = reader.GetArray("foo");
+				arr->GetArray(0);
 			});
 		}
 	};
