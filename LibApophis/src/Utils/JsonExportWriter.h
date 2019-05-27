@@ -4,8 +4,6 @@
 
 namespace Apophis { namespace Utils {
 
-	class JsonExportWriterImpl;
-
 	class JsonExportWriter : public IExportWriter
 	{
 	public:

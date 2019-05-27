@@ -6,6 +6,11 @@ using namespace Apophis::Utils;
 
 #define GSR(s) rapidjson::GenericStringRef<rapidjson::UTF8<>::Ch>(s)
 
+std::unique_ptr<IExportWriter> IExportWriter::CreateJsonExportWriter()
+{
+	return std::make_unique<JsonExportWriter>();
+}
+
 JsonExportWriter::JsonExportWriter() :
 	m_OwnsValue(true),
 	m_pValue(new rapidjson::Value(rapidjson::kObjectType)),

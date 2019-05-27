@@ -2,6 +2,7 @@
 #include "apophis/ExampleSet.h"
 #include "apophis/ApophisException.h"
 #include "apophis/Random.h"
+#include "apophis/Utils/IExportWriter.h"
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -39,8 +40,8 @@ namespace ApophisTests {
 		{
 			ExampleSet examples(4, 5);
 
-			Assert::AreEqual(4, examples.InputSize);
-			Assert::AreEqual(5, examples.OutputSize);
+			Assert::AreEqual(4, (int)examples.InputSize);
+			Assert::AreEqual(5, (int)examples.OutputSize);
 		}
 
 		TEST_METHOD(ExampleSet_AddExample)
@@ -130,10 +131,11 @@ namespace ApophisTests {
 			examples.AddExample({ 1.f, 2.f, 3.f }, { 4.f, 5.f });
 			examples.AddExample({ 6.f, 7.f, 8.f }, { 9.f, 0.f });
 
-			auto json = examples.Export();
+			auto writer = Utils::IExportWriter::CreateJsonExportWriter();
+			examples.Export(*writer);
 			Assert::AreEqual(
 				TEST_EXAMPLESET,
-				json.c_str()
+				writer->GetData().c_str()
 			);
 		}
 
@@ -142,8 +144,8 @@ namespace ApophisTests {
 			ExampleSet examples;
 			examples.Import(TEST_EXAMPLESET);
 
-			Assert::AreEqual(3, examples.InputSize);
-			Assert::AreEqual(2, examples.OutputSize);
+			Assert::AreEqual(3, (int)examples.InputSize);
+			Assert::AreEqual(2, (int)examples.OutputSize);
 			Assert::AreEqual(1.f, examples[0].Input[0]);
 			Assert::AreEqual(2.f, examples[0].Input[1]);
 			Assert::AreEqual(3.f, examples[0].Input[2]);

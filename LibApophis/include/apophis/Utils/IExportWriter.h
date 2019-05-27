@@ -25,6 +25,10 @@ namespace Apophis { namespace Utils {
 		virtual std::unique_ptr<IExportWriter> PushBackObject() = 0;
 
 		virtual std::string GetData() = 0;
+
+		// Handy data type overloads
+		void Set(const char* key, int value) { Set(key, (long long)value); }
+		void Set(const char* key, size_t value) { Set(key, (long long)value); }
 	};
 
 }}

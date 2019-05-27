@@ -22,6 +22,7 @@ namespace Apophis {
 	}
 	namespace Utils {
 		class ExportTarget;
+		class IExportWriter;
 	}
 	namespace TransferFunction {
 		class ITransferFunction;
