@@ -27,6 +27,17 @@ std::string Load(const char * path)
 	return buffer;
 }
 
+void Export(const Apophis::Component::Network& network)
+{
+	auto json = network.Export();
+	FILE* f = nullptr;
+	auto err = fopen_s(&f, "iris.net.json", "wb");
+	assert(err == 0);
+
+	fwrite(json.c_str(), 1, json.size(), f);
+	fclose(f);
+}
+
 const char* Clasify(ConstVectorRef scores)
 {
 	auto maxIndex = 0u;
@@ -86,6 +97,8 @@ void Run()
 			auto& output = network.Calculate(testSet[i].Input);
 			printf("%02u: %s\n", i, Clasify(output));
 		}
+
+		Export(network);
 	}
 }
 

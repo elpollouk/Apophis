@@ -33,6 +33,9 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{a1131eaf-b4dc-4dec-a7df-761a97376b64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{05d38c18-dbfd-4eba-aedf-5a3cb6c2c3aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\stdafx.h">
@@ -98,6 +101,12 @@
     <ClInclude Include="src\Utils\ImportExport.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\Utils\IExportWriter.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\JsonExportWriter.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -138,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="src\ApophisException.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\JsonExportWriter.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
