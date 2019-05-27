@@ -7,6 +7,7 @@ namespace Apophis { namespace Utils {
 	constexpr const char* FIELD_INPUTSIZE = "input_size";
 	constexpr const char* FIELD_OUTPUTSIZE = "output_size";
 	constexpr const char* FIELD_TRANSFER = "transfer";
+	constexpr const char* FIELD_LAYERS = "layers";
 	constexpr const char* FIELD_NODES = "nodes";
 	constexpr const char* FIELD_WEIGHTS = "weights";
 

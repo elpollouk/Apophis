@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClCompile Include="ApophisExceptionTests.cpp" />
     <ClCompile Include="Component\LayerTests.cpp" />
+    <ClCompile Include="Component\NetworkTests.cpp" />
     <ClCompile Include="Component\NodeTests.cpp" />
     <ClCompile Include="Data\MetricsTests.cpp" />
     <ClCompile Include="ExampleSetTests.cpp" />

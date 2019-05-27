@@ -67,5 +67,8 @@
     <ClCompile Include="TransferFunction\ITransferFunctionTests.cpp">
       <Filter>Tests\TransferFunction</Filter>
     </ClCompile>
+    <ClCompile Include="Component\NetworkTests.cpp">
+      <Filter>Tests\Component</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
