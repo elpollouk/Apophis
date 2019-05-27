@@ -11,6 +11,7 @@ namespace Apophis { namespace Utils {
 	constexpr const char* FIELD_NODES = "nodes";
 	constexpr const char* FIELD_WEIGHTS = "weights";
 
+	constexpr const char* COMPONENTTYPE_NETWORK = "network";
 	constexpr const char* COMPONENTTYPE_LAYER = "layer";
 	constexpr const char* COMPONENTTYPE_NODE = "node";
 

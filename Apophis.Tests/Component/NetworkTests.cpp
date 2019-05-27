@@ -64,6 +64,7 @@ namespace ApophisTests { namespace Component
 
 			network.Export(outputObject);
 
+			Assert::AreEqual("network", outputObject.Target["type"].GetString());
 			Assert::AreEqual(3, outputObject.Target["input_size"].GetInt());
 			Assert::AreEqual(1, outputObject.Target["output_size"].GetInt());
 			Assert::IsTrue(outputObject.Target.HasMember("layers"));

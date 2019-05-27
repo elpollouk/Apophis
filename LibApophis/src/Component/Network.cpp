@@ -43,6 +43,7 @@ std::unique_ptr<Node> Network::CreateNode(size_t numInputs, const TransferFuncti
 
 void Network::Export(Utils::ExportTarget& output) const
 {
+	output.AddMember(FIELD_TYPE, COMPONENTTYPE_NETWORK);
 	output.AddMember(FIELD_INPUTSIZE, GetInputSize());
 	output.AddMember(FIELD_OUTPUTSIZE, GetOutputSize());
 	auto layers = output.Create(rapidjson::kArrayType);
