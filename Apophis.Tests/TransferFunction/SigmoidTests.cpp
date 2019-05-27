@@ -11,6 +11,12 @@ namespace ApophisTests {
 		{
 		public:
 
+			TEST_METHOD(Construct)
+			{
+				auto function = ::Apophis::TransferFunction::Sigmoid();
+				Assert::AreEqual("sigmoid", function.GetName());
+			}
+
 			TEST_METHOD(Transfer)
 			{
 				auto function = ::Apophis::TransferFunction::Sigmoid();

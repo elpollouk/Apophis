@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "apophis/ExampleSet.h"
 #include "apophis/ApophisException.h"
+#include "apophis/Utils/IExportWriter.h"
 #include "Random.h"
+
+using namespace Apophis::Utils;
 
 namespace Apophis {
 
@@ -69,49 +72,31 @@ void ExampleSet::Import(const std::string& data)
 
 }
 
-void ExportVector(rapidjson::Value& outputArray, ConstVectorRef vector, rapidjson::MemoryPoolAllocator<>& allocator)
+void ExportVector(IExportWriter& outputArray, ConstVectorRef vector)
 {
-	outputArray.Reserve((rapidjson::SizeType)vector.size(), allocator);
 	for (auto value : vector)
-		outputArray.PushBack(value, allocator);
+		outputArray.PushBack(value);
 }
 
-void ExportExample(rapidjson::Value& outputArray, const Example& example, rapidjson::MemoryPoolAllocator<>& allocator)
+void ExportExample(IExportWriter& outputArray, const Example& example)
 {
-	rapidjson::Value jsonExample(rapidjson::kObjectType);
+	auto outputExample = outputArray.PushBackObject();
 
-	rapidjson::Value input(rapidjson::kArrayType);
-	ExportVector(input, example.Input, allocator);
-	jsonExample.AddMember("input", input, allocator);
+	auto input = outputExample->SetArray("input", example.Input.size());
+	ExportVector(*input, example.Input);
 
-	rapidjson::Value output(rapidjson::kArrayType);
-	ExportVector(output, example.Output, allocator);
-	jsonExample.AddMember("output", output, allocator);
-
-	outputArray.PushBack(jsonExample, allocator);
+	auto output = outputExample->SetArray("output", example.Output.size());
+	ExportVector(*output, example.Output);
 }
 
-std::string ExampleSet::Export()
+void ExampleSet::Export(IExportWriter& output)
 {
-	rapidjson::Document json;
-	auto& allocator = json.GetAllocator();
-	json.SetObject();
+	output.Set("input_size", InputSize);
+	output.Set("output_size", OutputSize);
 
-	json.AddMember("input_size", InputSize, allocator);
-	json.AddMember("output_size", OutputSize, allocator);
-
-	rapidjson::Value examples(rapidjson::kArrayType);
+	auto examples = output.SetArray("examples", m_Examples.size());
 	for (const auto& example : m_Examples)
-		ExportExample(examples, example, allocator);
-
-	json.AddMember("examples", examples, allocator);
-
-
-	rapidjson::StringBuffer buffer;
-	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-	json.Accept(writer);
-
-	return std::string(buffer.GetString(), buffer.GetSize());
+		ExportExample(*examples, example);
 }
 
 }

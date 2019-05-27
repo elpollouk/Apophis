@@ -17,6 +17,7 @@ namespace Apophis { namespace Component {
 		size_t GetNumOutputs() const { return m_NumOutputs; }
 		ConstVectorRef GetOutput() const { return m_Output; }
 		real GetOutput(size_t index) const { return m_Output[index]; }
+		void Export(Utils::IExportWriter& writer);
 
 		ConstVectorRef Calculate(ConstVectorRef inputs);
 

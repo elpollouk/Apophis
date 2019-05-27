@@ -10,6 +10,12 @@ namespace ApophisTests { namespace TransferFunction
 	{
 	public:
 
+		TEST_METHOD(Construct)
+		{
+			auto function = ::Apophis::TransferFunction::Relu();
+			Assert::AreEqual("relu", function.GetName());
+		}
+
 		TEST_METHOD(Transfer_Positive_ZeroLeak)
 		{
 			auto function = ::Apophis::TransferFunction::Relu(0.f);

@@ -24,6 +24,9 @@
     <Filter Include="Tests\Training\Algorithms">
       <UniqueIdentifier>{bb40e97e-592f-4112-bb37-3c301091dff2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests\Utils">
+      <UniqueIdentifier>{1cb029ff-3140-4de6-a706-a13ef1d24c93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -63,6 +66,15 @@
     </ClCompile>
     <ClCompile Include="ApophisExceptionTests.cpp">
       <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TransferFunction\ITransferFunctionTests.cpp">
+      <Filter>Tests\TransferFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\NetworkTests.cpp">
+      <Filter>Tests\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\JsonExportWriterTests.cpp">
+      <Filter>Tests\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

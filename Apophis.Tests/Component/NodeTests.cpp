@@ -2,6 +2,7 @@
 #include "apophis/Component/Node.h"
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
+#include "Utils/JsonExportWriter.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -74,6 +75,26 @@ namespace ApophisTests { namespace Component
 			Vector input = { 1.f, 2.f, 3.f };
 
 			AssertAreClose(0.167982f, node.Calculate(input));
+		}
+
+		TEST_METHOD(Export)
+		{
+			auto outputObject = Utils::JsonExportWriter();
+
+			auto node = Node(2, m_Relu);
+			node.Weights[0] = 3.f;
+			node.Weights[1] = 5.f;
+			node.Weights[2] = 7.f;
+
+			node.Export(outputObject);
+
+			Assert::AreEqual("node", outputObject.GetValue()["type"].GetString());
+			Assert::IsTrue(outputObject.GetValue().HasMember("weights"));
+			auto& weights = outputObject.GetValue()["weights"].GetArray();
+			Assert::AreEqual(3, (int)weights.Size());
+			Assert::AreEqual(3.f, weights[0].GetFloat());
+			Assert::AreEqual(5.f, weights[1].GetFloat());
+			Assert::AreEqual(7.f, weights[2].GetFloat());
 		}
 	};
 }}

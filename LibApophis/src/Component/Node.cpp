@@ -2,9 +2,12 @@
 #include "apophis/Component/Node.h"
 #include "apophis/TransferFunction/ITransferFunction.h"
 #include "apophis/Random.h"
+#include "apophis/Utils/IExportWriter.h"
+#include "Utils/ImportExport.h"
 
 using namespace Apophis;
 using namespace Apophis::Component;
+using namespace Apophis::Utils;
 
 Node::Node(size_t numInputs, const TransferFunction::ITransferFunction& transfer) :
 	m_NumInputs(numInputs),
@@ -30,4 +33,13 @@ real Node::Calculate(ConstVectorRef input)
 
 	assert(!isnan(Activation) && !isinf(Activation));
 	return m_Transfer(Activation);
+}
+
+void Node::Export(Utils::IExportWriter& writer) const
+{
+	writer.Set(FIELD_TYPE, COMPONENTTYPE_NODE);
+
+	auto outWeights = writer.SetArray(FIELD_WEIGHTS, Weights.size());
+	for (auto weight : Weights)
+		outWeights->PushBack(weight);
 }

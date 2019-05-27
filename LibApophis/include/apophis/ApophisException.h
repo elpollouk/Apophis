@@ -14,7 +14,7 @@ namespace Apophis {
 		ApophisException(ApophisException&& rhs) noexcept;
 		ApophisException& operator=(const ApophisException& rhs) noexcept;
 
-		char const* what() const { return m_WhatMessage.c_str(); }
+		virtual char const* what() const override { return m_WhatMessage.c_str(); }
 
 	private:
 		std::string m_WhatMessage;

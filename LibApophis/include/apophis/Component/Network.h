@@ -14,6 +14,7 @@ namespace Apophis { namespace Component {
 
 		size_t GetInputSize() const { return m_InputSize; }
 		size_t GetOutputSize() const { return m_OutputSize; }
+		const std::vector<std::unique_ptr<Layer>>& GetLayers() const { return m_Layers; }
 
 		template<class TransferFunction>
 		void AddLayer(size_t numNodes)
@@ -23,6 +24,8 @@ namespace Apophis { namespace Component {
 
 		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
 		ConstVectorRef Calculate(ConstVectorRef input);
+
+		void Export(Utils::IExportWriter& writer) const;
 
 	protected:
 		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);

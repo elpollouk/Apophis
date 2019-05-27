@@ -14,6 +14,9 @@
 #include <functional>
 #include <stdio.h>
 
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/document.h>
+
 
 template<typename T> static void AssertAreClose(const T& expected, const T& actual, const T& range = 0.00001f, const wchar_t* message = NULL, const Microsoft::VisualStudio::CppUnitTestFramework::__LineInfo* pLineInfo = NULL)
 {

@@ -35,15 +35,15 @@ namespace Apophis {
 
 		const Example& Sample() const;
 		void Import(const std::string& data);
-		std::string Export();
+		void Export(Utils::IExportWriter& output);
 
 		std::vector<Example>::const_iterator begin() const { return m_Examples.begin(); }
 		std::vector<Example>::const_iterator end() const { return m_Examples.end(); }
 		size_t size() const { return m_Examples.size(); }
 		Example& operator[](size_t index) { return m_Examples[index]; }
 
-		int InputSize;
-		int OutputSize;
+		size_t InputSize;
+		size_t OutputSize;
 
 	private:
 		std::uniform_int_distribution<size_t> m_Distribution;
