@@ -177,11 +177,13 @@
     <ClInclude Include="include\apophis\TransferFunction\Relu.h" />
     <ClInclude Include="include\apophis\TransferFunction\Sigmoid.h" />
     <ClInclude Include="include\apophis\Utils\IExportWriter.h" />
+    <ClInclude Include="include\apophis\Utils\IImportReader.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\targetver.h" />
     <ClInclude Include="src\Utils\ImportExport.h" />
     <ClInclude Include="src\Utils\JsonExportWriter.h" />
+    <ClInclude Include="src\Utils\JsonImportReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ApophisException.cpp" />
@@ -203,6 +205,7 @@
     <ClCompile Include="src\Training\Trainer.cpp" />
     <ClCompile Include="src\TransferFunction\DefaultFunctions.cpp" />
     <ClCompile Include="src\Utils\JsonExportWriter.cpp" />
+    <ClCompile Include="src\Utils\JsonImportReader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

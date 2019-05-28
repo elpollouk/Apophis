@@ -2,6 +2,8 @@
 #include "apophis/ExampleSet.h"
 #include "apophis/ApophisException.h"
 #include "apophis/Utils/IExportWriter.h"
+#include "apophis/Utils/IImportReader.h"
+#include "Utils/ImportExport.h"
 #include "Random.h"
 
 using namespace Apophis::Utils;
@@ -33,40 +35,29 @@ const Example& ExampleSet::Sample() const
 	return m_Examples[m_Distribution(GetRandomGenerator())];
 }
 
-void ImportVector(VectorRef outputVector, const rapidjson::Value& jsonVector, size_t expectedSize)
+void ImportVector(VectorRef outputVector, IImportReader& dataVector, size_t expectedSize)
 {
-	if (jsonVector.GetType() != rapidjson::kArrayType) throw ApophisException("Vector specified as non-array type");
-	if (jsonVector.GetArray().Size() != expectedSize) throw ApophisException("Vector has wrong number of elements, expected %d but contained %d", (int)expectedSize, (int)jsonVector.GetArray().Size());
+	if (dataVector.Size() != expectedSize) throw ApophisException("Vector has wrong number of elements, expected %d but contained %d", (int)expectedSize, (int)dataVector.Size());
 
-	outputVector.resize(jsonVector.Size());
-	for (auto i = 0u; i < jsonVector.Size(); i++)
-		outputVector[i] = (real)jsonVector[i].GetDouble();
+	outputVector.resize(dataVector.Size());
+	for (auto i = 0; i < (int)dataVector.Size(); i++)
+		outputVector[i] = dataVector.GetReal(i);
 }
 
-void ExampleSet::Import(const std::string& data)
+void ExampleSet::Import(IImportReader& data)
 {
 	m_Examples.clear();
 
-	rapidjson::Document json;
-	if (json.Parse(data.c_str()).HasParseError()) throw ApophisException("Failed to parse JSON");
+	InputSize = data.GetInt32(FIELD_INPUTSIZE);
+	OutputSize = data.GetInt32(FIELD_OUTPUTSIZE);
 
-	if (!json.HasMember("input_size")) throw ApophisException("\"input_size\" not specified");
-	InputSize = json["input_size"].GetInt();
-	if (!json.HasMember("output_size")) throw ApophisException("\"output_size\" not specified");
-	OutputSize = json["output_size"].GetInt();
-
-	if (!json.HasMember("examples")) throw ApophisException("\"examples\" not specified");
-	auto& examples = json["examples"];
-	if (examples.GetType() != rapidjson::kArrayType) throw ApophisException("\"examples\" is not an array type");
-	for (auto i = 0u; i < examples.Size(); i++)
+	auto examples = data.GetArray(FIELD_EXAMPLES);
+	for (auto i = 0; i < (int)examples->Size(); i++)
 	{
 		Example example;
-		const auto& jExample = examples[i];
-		if (jExample.GetType() != rapidjson::kObjectType) throw ApophisException("Non-object type specified in \"examples\" array");
-		if (!jExample.HasMember("input")) throw ApophisException("\"input\" not specified for example");
-		if (!jExample.HasMember("output")) throw ApophisException("\"output\" not specified for example");
-		ImportVector(example.Input, jExample["input"], InputSize);
-		ImportVector(example.Output, jExample["output"], OutputSize);
+		auto jExample = examples->GetObject(i);
+		ImportVector(example.Input, *jExample->GetArray(FIELD_INPUT), InputSize);
+		ImportVector(example.Output, *jExample->GetArray(FIELD_OUTPUT), OutputSize);
 		AddExample(std::move(example));
 	}
 
@@ -82,19 +73,19 @@ void ExportExample(IExportWriter& outputArray, const Example& example)
 {
 	auto outputExample = outputArray.PushBackObject();
 
-	auto input = outputExample->SetArray("input", example.Input.size());
+	auto input = outputExample->SetArray(FIELD_INPUT, example.Input.size());
 	ExportVector(*input, example.Input);
 
-	auto output = outputExample->SetArray("output", example.Output.size());
+	auto output = outputExample->SetArray(FIELD_OUTPUT, example.Output.size());
 	ExportVector(*output, example.Output);
 }
 
 void ExampleSet::Export(IExportWriter& output)
 {
-	output.Set("input_size", InputSize);
-	output.Set("output_size", OutputSize);
+	output.Set(FIELD_INPUTSIZE, InputSize);
+	output.Set(FIELD_OUTPUTSIZE, OutputSize);
 
-	auto examples = output.SetArray("examples", m_Examples.size());
+	auto examples = output.SetArray(FIELD_EXAMPLES, m_Examples.size());
 	for (const auto& example : m_Examples)
 		ExportExample(*examples, example);
 }

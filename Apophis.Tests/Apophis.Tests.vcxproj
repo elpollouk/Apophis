@@ -182,6 +182,7 @@
     <ClCompile Include="TransferFunction\ReluTests.cpp" />
     <ClCompile Include="TransferFunction\SigmoidTests.cpp" />
     <ClCompile Include="Utils\JsonExportWriterTests.cpp" />
+    <ClCompile Include="Utils\JsonImportReaderTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibApophis\LibApophis.vcxproj">
