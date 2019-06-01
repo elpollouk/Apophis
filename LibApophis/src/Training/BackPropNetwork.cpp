@@ -13,7 +13,7 @@ static void CalculateOutputBackPropError(ConstVectorRef targets, BackPropLayer* 
 	for (auto i = 0u; i < layer->GetNumOutputs(); i++)
 	{
 		auto node = layer->GetBackPropNode(i);
-		node->BackPropError = (targets[i] - layer->GetOutput(i)) * node->GetTransferFunction().Derivative(node->Activation);
+		node->BackPropError = (targets[i] - layer->GetOutput(i)) * layer->GetTransferFunction().Derivative(node->Activation);
 		assert(!isnan(node->BackPropError) && !isinf(node->BackPropError));
 	}
 }
@@ -29,7 +29,7 @@ static void CalculateHiddenBackPropError(BackPropLayer* targetLayer, BackPropLay
 		for (auto j = 0u; j < forwardLayer->GetNumOutputs(); j++)
 			targetNode->BackPropError += forwardLayer->GetBackPropNode(j)->BackPropError * forwardLayer->Nodes[j]->Weights[i];
 
-		targetNode->BackPropError *= targetNode->GetTransferFunction().Derivative(targetLayer->Nodes[i]->Activation);
+		targetNode->BackPropError *= targetLayer->GetTransferFunction().Derivative(targetLayer->Nodes[i]->Activation);
 	}
 }
 
@@ -56,6 +56,13 @@ static void UpdateWeights(BackPropLayer* targetLayer, ConstVectorRef priorLayerO
 	}
 }
 
+BackPropNetwork::BackPropNetwork(Utils::IImportReader& reader, real learningRate, real momentum) :
+	Network(reader),
+	m_LearningRate(learningRate),
+	m_Momentum(momentum)
+{
+
+}
 
 BackPropNetwork::BackPropNetwork(size_t inputSize, real learningRate, real momentum) :
 	Network(inputSize),
@@ -105,13 +112,13 @@ std::unique_ptr<Layer> BackPropNetwork::CreateLayer(size_t numNodes, const Trans
 	return std::make_unique<BackPropLayer>(GetOutputSize(), numNodes, transfer, *this);
 }
 
-std::unique_ptr<Node> BackPropNetwork::CreateNode(size_t numInputs, const TransferFunction::ITransferFunction& transfer)
+std::unique_ptr<Node> BackPropNetwork::CreateNode(size_t numInputs)
 {
-	return std::make_unique<BackPropNode>(numInputs, transfer);
+	return std::make_unique<BackPropNode>(numInputs);
 }
 
-BackPropNode::BackPropNode(size_t numInputs, const TransferFunction::ITransferFunction& transfer) :
-	Component::Node(numInputs, transfer),
+BackPropNode::BackPropNode(size_t numInputs) :
+	Component::Node(numInputs),
 	BackPropError(0)
 {
 	PreviousWeightChanges.resize(Weights.size(), 0.f);

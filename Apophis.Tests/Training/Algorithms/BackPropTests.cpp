@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "apophis/apophis.h"
+#include "apophis/Utils/IImportReader.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -41,6 +42,16 @@ namespace ApophisTests { namespace Training { namespace Algorithms {
 			Assert::IsTrue(network.Calculate(trainingSet[1].Input)[0] >= 0.99f);
 			Assert::IsTrue(network.Calculate(trainingSet[2].Input)[0] >= 0.99f);
 			Assert::IsTrue(network.Calculate(trainingSet[3].Input)[0] <= 0.01f);
+		}
+
+		TEST_METHOD(Import_Xor)
+		{
+			BackPropNetwork network(*LoadJson("../../../Data/Xor/network.json"), 0.f, 0.f);
+
+			Assert::IsTrue(network.Calculate({ 0.f, 0.f })[0] <= 0.01f);
+			Assert::IsTrue(network.Calculate({ 1.f, 0.f })[0] >= 0.99f);
+			Assert::IsTrue(network.Calculate({ 0.f, 1.f })[0] >= 0.99f);
+			Assert::IsTrue(network.Calculate({ 1.f, 1.f })[0] <= 0.01f);
 		}
 	};
 

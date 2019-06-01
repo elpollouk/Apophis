@@ -10,8 +10,9 @@ using namespace Apophis::Utils;
 
 namespace Apophis {
 
-ExampleSet::ExampleSet() : ExampleSet(0, 0)
+ExampleSet::ExampleSet(Utils::IImportReader& data)
 {
+	Import(data);
 }
 
 ExampleSet::ExampleSet(int inputSize, int outputSize) :
@@ -82,6 +83,7 @@ void ExportExample(IExportWriter& outputArray, const Example& example)
 
 void ExampleSet::Export(IExportWriter& output)
 {
+	output.Set(FIELD_TYPE, COMPONENTTYPE_EXAMPLESET);
 	output.Set(FIELD_INPUTSIZE, InputSize);
 	output.Set(FIELD_OUTPUTSIZE, OutputSize);
 

@@ -2,7 +2,10 @@
 #include "apophis/Component/Layer.h"
 #include "apophis/Component/Network.h"
 #include "apophis/TransferFunction/Relu.h"
+#include "apophis/TransferFunction/Sigmoid.h"
 #include "Utils/JsonExportWriter.h"
+#include "apophis/Utils/IImportReader.h"
+#include "apophis/ApophisException.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -89,6 +92,60 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual(6.f, weights1[1].GetFloat());
 			Assert::AreEqual(7.f, weights1[2].GetFloat());
 			Assert::AreEqual(8.f, weights1[3].GetFloat());
+		}
+
+		TEST_METHOD(Import)
+		{
+			auto json = "{\"input_size\":2,\"output_size\":2,\"transfer\":\"relu\",\"nodes\":[{\"weights\":[1,2,3]},{\"weights\":[4,5,6]}]}";
+			auto reader = Utils::IImportReader::CreateJsonImportReader(json);
+			auto network = Network(2);
+			auto layer = Layer(2, 2, TransferFunction::Sigmoid::Default(), network);
+
+			layer.Import(*reader);
+
+			Assert::AreEqual("relu", layer.GetTransferFunction().GetName());
+			Assert::AreEqual(1.f, layer.Nodes[0]->Weights[0]);
+			Assert::AreEqual(2.f, layer.Nodes[0]->Weights[1]);
+			Assert::AreEqual(3.f, layer.Nodes[0]->Weights[2]);
+			Assert::AreEqual(4.f, layer.Nodes[1]->Weights[0]);
+			Assert::AreEqual(5.f, layer.Nodes[1]->Weights[1]);
+			Assert::AreEqual(6.f, layer.Nodes[1]->Weights[2]);
+		}
+
+		TEST_METHOD(Import_WrongInputSize)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto json = "{\"input_size\":3,\"output_size\":2,\"transfer\":\"relu\",\"nodes\":[{\"weights\":[1,2,3]},{\"weights\":[4,5,6]}]}";
+				auto reader = Utils::IImportReader::CreateJsonImportReader(json);
+				auto network = Network(2);
+				auto layer = Layer(2, 2, TransferFunction::Sigmoid::Default(), network);
+
+				layer.Import(*reader);
+			});
+		}
+
+		TEST_METHOD(Import_WrongOutputSize)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto json = "{\"input_size\":2,\"output_size\":1,\"transfer\":\"relu\",\"nodes\":[{\"weights\":[1,2,3]},{\"weights\":[4,5,6]}]}";
+				auto reader = Utils::IImportReader::CreateJsonImportReader(json);
+				auto network = Network(2);
+				auto layer = Layer(2, 2, TransferFunction::Sigmoid::Default(), network);
+
+				layer.Import(*reader);
+			});
+		}
+
+		TEST_METHOD(Import_WrongNumberOfNodes)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto json = "{\"input_size\":2,\"output_size\":2,\"transfer\":\"relu\",\"nodes\":[{\"weights\":[1,2,3]}]}";
+				auto reader = Utils::IImportReader::CreateJsonImportReader(json);
+				auto network = Network(2);
+				auto layer = Layer(2, 2, TransferFunction::Sigmoid::Default(), network);
+
+				layer.Import(*reader);
+			});
 		}
 	};
 }}

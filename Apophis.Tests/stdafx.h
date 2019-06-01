@@ -17,6 +17,10 @@
 #include <rapidjson/rapidjson.h>
 #include <rapidjson/document.h>
 
+// Handy utils
+#include "apophis/apophistypes.h"
+std::unique_ptr<Apophis::Utils::IImportReader> LoadJson(const char * path);
+int ArgMax(Apophis::ConstVectorRef vector);
 
 template<typename T> static void AssertAreClose(const T& expected, const T& actual, const T& range = 0.00001f, const wchar_t* message = NULL, const Microsoft::VisualStudio::CppUnitTestFramework::__LineInfo* pLineInfo = NULL)
 {

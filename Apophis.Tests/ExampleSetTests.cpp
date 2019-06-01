@@ -9,7 +9,7 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
 
-constexpr const char* TEST_EXAMPLESET = "{\"input_size\":3,\"output_size\":2,\"examples\":[{\"input\":[1.0,2.0,3.0],\"output\":[4.0,5.0]},{\"input\":[6.0,7.0,8.0],\"output\":[9.0,0.0]}]}";
+constexpr const char* TEST_EXAMPLESET = "{\"type\":\"example_set\",\"input_size\":3,\"output_size\":2,\"examples\":[{\"input\":[1.0,2.0,3.0],\"output\":[4.0,5.0]},{\"input\":[6.0,7.0,8.0],\"output\":[9.0,0.0]}]}";
 
 namespace ApophisTests {
 
@@ -142,8 +142,7 @@ namespace ApophisTests {
 
 		TEST_METHOD(Import)
 		{
-			ExampleSet examples;
-			examples.Import(*Utils::IImportReader::CreateJsonImportReader(TEST_EXAMPLESET));
+			ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader(TEST_EXAMPLESET));
 
 			Assert::AreEqual(3, (int)examples.InputSize);
 			Assert::AreEqual(2, (int)examples.OutputSize);
@@ -162,88 +161,77 @@ namespace ApophisTests {
 		TEST_METHOD(Import_NotJSON)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("BAD"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("BAD"));
 			});
 		}
 
 		TEST_METHOD(Import_MissingInputSize)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"output_size\":0,\"examples\":[]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"output_size\":0,\"examples\":[]}"));
 			});
 		}
 
 		TEST_METHOD(Import_MissingOuputSize)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":0,\"examples\":[]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":0,\"examples\":[]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExamplesNotArray)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":0,\"output_size\":0,\"examples\":0}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":0,\"output_size\":0,\"examples\":0}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleNotObject)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[0]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[0]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleNoInput)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"output\":[1]}]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"output\":[1]}]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleNoOutput)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1]}]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1]}]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleInputSizeMismatch)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1,2], \"output\":[1]}]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1,2], \"output\":[1]}]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleOutputSizeMismatch)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":[]}]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":[]}]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleInputNotArray)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":{}, \"output\":[1]}]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":{}, \"output\":[1]}]}"));
 			});
 		}
 
 		TEST_METHOD(Import_ExampleOutputNotArray)
 		{
 			AssertThrows<ApophisException>([]() {
-				ExampleSet examples;
-				examples.Import(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":0}]}"));
+				ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader("{\"input_size\":1,\"output_size\":1,\"examples\":[{\"input\":[1], \"output\":0}]}"));
 			});
 		}
 	};
