@@ -24,7 +24,7 @@ namespace Apophis {
 	class ExampleSet
 	{
 	public:
-		ExampleSet();
+		ExampleSet(Utils::IImportReader& data);
 		ExampleSet(int inputSize, int outputSize);
 
 		void AddExample(Example&& example);

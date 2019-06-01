@@ -10,8 +10,9 @@ using namespace Apophis::Utils;
 
 namespace Apophis {
 
-ExampleSet::ExampleSet() : ExampleSet(0, 0)
+ExampleSet::ExampleSet(Utils::IImportReader& data)
 {
+	Import(data);
 }
 
 ExampleSet::ExampleSet(int inputSize, int outputSize) :

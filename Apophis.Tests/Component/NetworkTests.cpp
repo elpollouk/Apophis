@@ -5,6 +5,7 @@
 #include "apophis/Utils/IImportReader.h"
 #include "Utils/JsonExportWriter.h"
 #include "Utils/ImportExport.h"
+#include "apophis/ExampleSet.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -134,6 +135,59 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual(9.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[0]);
 			Assert::AreEqual(10.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[1]);
 			Assert::AreEqual(11.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[2]);
+		}
+
+		static std::unique_ptr<Utils::IImportReader> Load(const char * path)
+		{
+			FILE* f = nullptr;
+			auto err = fopen_s(&f, path, "rb");
+			Assert::AreEqual(0, err, L"Failed to open input file");
+
+			fseek(f, 0, SEEK_END);
+			auto size = ftell(f);
+			fseek(f, 0, SEEK_SET);
+
+			std::string buffer((size_t)size, (char)0);
+			fread_s(&buffer[0], size, 1, size, f);
+			fclose(f);
+
+			return Utils::IImportReader::CreateJsonImportReader(buffer);
+		}
+
+		static int ArgMax(ConstVectorRef vector)
+		{
+			auto maxIndex = 0;
+			for (auto i = 1; i < vector.size(); i++)
+				if (vector[maxIndex] < vector[i])
+					maxIndex = i;
+
+			return maxIndex;
+		}
+
+		TEST_METHOD(IrisClassifier)
+		{
+			Network network(*Load("../../../Data/Iris/network.json"));
+			ExampleSet data(*Load("../../../Data/Iris/test.json"));
+
+			Assert::AreEqual(4, (int)network.GetInputSize(), L"Incorrect network input size");
+			Assert::AreEqual(3, (int)network.GetOutputSize(), L"Incorrect network output size");
+			Assert::AreEqual(15, (int)data.size(), L"Incorrect number of examples in test set");
+
+			Assert::AreEqual(0, ArgMax(network.Calculate(data[0].Input)), L"Example 0 classified incorrectly");
+			Assert::AreEqual(0, ArgMax(network.Calculate(data[1].Input)), L"Example 1 classified incorrectly");
+			Assert::AreEqual(0, ArgMax(network.Calculate(data[2].Input)), L"Example 2 classified incorrectly");
+			Assert::AreEqual(0, ArgMax(network.Calculate(data[3].Input)), L"Example 3 classified incorrectly");
+			Assert::AreEqual(0, ArgMax(network.Calculate(data[4].Input)), L"Example 4 classified incorrectly");
+			Assert::AreEqual(1, ArgMax(network.Calculate(data[5].Input)), L"Example 5 classified incorrectly");
+			Assert::AreEqual(1, ArgMax(network.Calculate(data[6].Input)), L"Example 6 classified incorrectly");
+			Assert::AreEqual(1, ArgMax(network.Calculate(data[7].Input)), L"Example 7 classified incorrectly");
+			Assert::AreEqual(1, ArgMax(network.Calculate(data[8].Input)), L"Example 8 classified incorrectly");
+			Assert::AreEqual(1, ArgMax(network.Calculate(data[9].Input)), L"Example 9 classified incorrectly");
+			Assert::AreEqual(2, ArgMax(network.Calculate(data[10].Input)), L"Example 10 classified incorrectly");
+			Assert::AreEqual(2, ArgMax(network.Calculate(data[11].Input)), L"Example 11 classified incorrectly");
+			Assert::AreEqual(2, ArgMax(network.Calculate(data[12].Input)), L"Example 12 classified incorrectly");
+			Assert::AreEqual(2, ArgMax(network.Calculate(data[13].Input)), L"Example 13 classified incorrectly");
+			Assert::AreEqual(2, ArgMax(network.Calculate(data[14].Input)), L"Example 14 classified incorrectly");
 		}
 	};
 }}
