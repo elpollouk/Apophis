@@ -14,6 +14,7 @@ namespace Apophis { namespace Utils {
 	constexpr const char* FIELD_INPUT = "input";
 	constexpr const char* FIELD_OUTPUT = "output";
 
+	constexpr const char* COMPONENTTYPE_EXAMPLESET = "example_set";
 	constexpr const char* COMPONENTTYPE_NETWORK = "network";
 	constexpr const char* COMPONENTTYPE_LAYER = "layer";
 	constexpr const char* COMPONENTTYPE_NODE = "node";

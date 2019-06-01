@@ -29,7 +29,7 @@ namespace Apophis { namespace Component {
 
 	protected:
 		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
-		virtual std::unique_ptr<Node> CreateNode(size_t numInputs, const TransferFunction::ITransferFunction& transfer);
+		virtual std::unique_ptr<Node> CreateNode(size_t numInputs);
 
 		size_t m_InputSize;
 		size_t m_OutputSize;

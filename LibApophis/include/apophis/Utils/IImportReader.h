@@ -1,6 +1,5 @@
 #pragma once
 
-#pragma once
 #include "apophis/apophistypes.h"
 #include <memory>
 

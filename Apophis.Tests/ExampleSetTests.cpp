@@ -9,7 +9,7 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
 
-constexpr const char* TEST_EXAMPLESET = "{\"input_size\":3,\"output_size\":2,\"examples\":[{\"input\":[1.0,2.0,3.0],\"output\":[4.0,5.0]},{\"input\":[6.0,7.0,8.0],\"output\":[9.0,0.0]}]}";
+constexpr const char* TEST_EXAMPLESET = "{\"type\":\"example_set\",\"input_size\":3,\"output_size\":2,\"examples\":[{\"input\":[1.0,2.0,3.0],\"output\":[4.0,5.0]},{\"input\":[6.0,7.0,8.0],\"output\":[9.0,0.0]}]}";
 
 namespace ApophisTests {
 

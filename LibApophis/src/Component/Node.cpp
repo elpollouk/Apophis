@@ -9,10 +9,9 @@ using namespace Apophis;
 using namespace Apophis::Component;
 using namespace Apophis::Utils;
 
-Node::Node(size_t numInputs, const TransferFunction::ITransferFunction& transfer) :
+Node::Node(size_t numInputs) :
 	m_NumInputs(numInputs),
-	Activation(0),
-	m_Transfer(transfer)
+	Activation(0)
 {
 	// Add one for the bias
 	numInputs++;
@@ -32,7 +31,7 @@ real Node::Calculate(ConstVectorRef input)
 		Activation += input[i] * Weights[i];
 
 	assert(!isnan(Activation) && !isinf(Activation));
-	return m_Transfer(Activation);
+	return Activation;
 }
 
 void Node::Import(Utils::IImportReader& data)

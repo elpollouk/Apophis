@@ -37,9 +37,9 @@ std::unique_ptr<Layer> Network::CreateLayer(size_t numNodes, const TransferFunct
 	return std::make_unique<Layer>(GetOutputSize(), numNodes, transfer, *this);
 }
 
-std::unique_ptr<Node> Network::CreateNode(size_t numInputs, const TransferFunction::ITransferFunction& transfer)
+std::unique_ptr<Node> Network::CreateNode(size_t numInputs)
 {
-	return std::make_unique<Node>(numInputs, transfer);
+	return std::make_unique<Node>(numInputs);
 }
 
 void Network::Export(Utils::IExportWriter& writer) const
