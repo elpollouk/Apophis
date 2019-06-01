@@ -137,37 +137,10 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual(11.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[2]);
 		}
 
-		static std::unique_ptr<Utils::IImportReader> Load(const char * path)
-		{
-			FILE* f = nullptr;
-			auto err = fopen_s(&f, path, "rb");
-			Assert::AreEqual(0, err, L"Failed to open input file");
-
-			fseek(f, 0, SEEK_END);
-			auto size = ftell(f);
-			fseek(f, 0, SEEK_SET);
-
-			std::string buffer((size_t)size, (char)0);
-			fread_s(&buffer[0], size, 1, size, f);
-			fclose(f);
-
-			return Utils::IImportReader::CreateJsonImportReader(buffer);
-		}
-
-		static int ArgMax(ConstVectorRef vector)
-		{
-			auto maxIndex = 0;
-			for (auto i = 1; i < vector.size(); i++)
-				if (vector[maxIndex] < vector[i])
-					maxIndex = i;
-
-			return maxIndex;
-		}
-
 		TEST_METHOD(IrisClassifier)
 		{
-			Network network(*Load("../../../Data/Iris/network.json"));
-			ExampleSet data(*Load("../../../Data/Iris/test.json"));
+			Network network(*LoadJson("../../../Data/Iris/network.json"));
+			ExampleSet data(*LoadJson("../../../Data/Iris/test.json"));
 
 			Assert::AreEqual(4, (int)network.GetInputSize(), L"Incorrect network input size");
 			Assert::AreEqual(3, (int)network.GetOutputSize(), L"Incorrect network output size");
