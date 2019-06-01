@@ -3,6 +3,8 @@
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
 #include "Utils/JsonExportWriter.h"
+#include "apophis/Utils/IImportReader.h"
+#include "apophis/ApophisException.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Apophis;
@@ -95,6 +97,29 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual(3.f, weights[0].GetFloat());
 			Assert::AreEqual(5.f, weights[1].GetFloat());
 			Assert::AreEqual(7.f, weights[2].GetFloat());
+		}
+
+		TEST_METHOD(Import)
+		{
+			auto reader = Utils::IImportReader::CreateJsonImportReader("{\"weights\":[7,11,13,17]}");
+			auto node = Node(3, m_Relu);
+
+			node.Import(*reader);
+
+			Assert::AreEqual(7.f, node.Weights[0]);
+			Assert::AreEqual(11.f, node.Weights[1]);
+			Assert::AreEqual(13.f, node.Weights[2]);
+			Assert::AreEqual(17.f, node.Weights[3]);
+		}
+
+		TEST_METHOD(Import_WrongNumberOfWeights)
+		{
+			AssertThrows<ApophisException>([]() {
+				auto reader = Utils::IImportReader::CreateJsonImportReader("{\"weights\":[7,11,13,17]}");
+				auto node = Node(4, TransferFunction::Relu::Default());
+				node.Import(*reader);
+			});
+
 		}
 	};
 }}

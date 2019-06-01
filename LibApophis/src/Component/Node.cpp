@@ -35,6 +35,15 @@ real Node::Calculate(ConstVectorRef input)
 	return m_Transfer(Activation);
 }
 
+void Node::Import(Utils::IImportReader& data)
+{
+	auto weights = data.GetArray(FIELD_WEIGHTS);
+	if (weights->Size() != Weights.size()) throw ApophisException("Wrong number of weights for node, expected %d, received %d", (int)Weights.size(), (int)weights->Size());
+
+	for (auto i = 0; i < weights->Size(); i++)
+		Weights[i] = weights->GetReal(i);
+}
+
 void Node::Export(Utils::IExportWriter& writer) const
 {
 	writer.Set(FIELD_TYPE, COMPONENTTYPE_NODE);
