@@ -38,7 +38,7 @@ template<typename T> static void AssertAreClose(const T& expected, const T& actu
 	}
 }
 
-template<typename T> static T AssertThrows(std::function<void()> test)
+template<typename T> static T AssertThrows(std::function<void()> test, const char* expectedWhat = nullptr)
 {
 	try
 	{
@@ -48,6 +48,8 @@ template<typename T> static T AssertThrows(std::function<void()> test)
 	}
 	catch (T& ex)
 	{
+		if (expectedWhat)
+			Assert::AreEqual(expectedWhat, ex.what(), L"What message did not match");
 		return ex;
 	}
 	catch (...)

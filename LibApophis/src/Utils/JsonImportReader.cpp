@@ -36,7 +36,7 @@ JsonImportReader::~JsonImportReader()
 
 const rapidjson::Value& JsonImportReader::EnsureMember(const char* key)
 {
-	if (!HasMember(key)) throw ApophisException("JSON object does not have member \"%\"", key);
+	if (!HasMember(key)) throw ApophisException("JSON object does not have member \"%s\"", key);
 	return (*m_pValue)[key];
 }
 

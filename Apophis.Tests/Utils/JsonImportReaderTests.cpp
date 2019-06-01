@@ -15,7 +15,7 @@ namespace ApophisTests { namespace Utils {
 		{
 			AssertThrows<ApophisException>([]() {
 				JsonImportReader("BAD");
-			});
+			}, "Failed to parse JSON");
 		}
 
 		TEST_METHOD(HasMember)
@@ -36,7 +36,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{}");
 				reader.GetInt64("foo");
-			});
+			}, "JSON object does not have member \"foo\"");
 		}
 
 		TEST_METHOD(GetReal)
@@ -50,7 +50,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{}");
 				reader.GetReal("foo");
-			});
+			}, "JSON object does not have member \"foo\"");
 		}
 
 		TEST_METHOD(GetString)
@@ -64,7 +64,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{}");
 				reader.GetString("foo");
-			});
+			}, "JSON object does not have member \"foo\"");
 		}
 
 		TEST_METHOD(GetArray)
@@ -83,7 +83,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{}");
 				reader.GetArray("foo");
-			});
+			}, "JSON object does not have member \"foo\"");
 		}
 
 		TEST_METHOD(GetArray_WrongType)
@@ -91,7 +91,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{\"foo\":5}");
 				reader.GetArray("foo");
-			});
+			}, "JSON object member \"foo\" has wrong type");
 		}
 
 		TEST_METHOD(GetArray_InvalidIndex_Over)
@@ -100,7 +100,7 @@ namespace ApophisTests { namespace Utils {
 				auto reader = JsonImportReader("{\"foo\":[2]}");
 				auto arr = reader.GetArray("foo");
 				arr->GetInt64(2);
-			});
+			}, "JSON array index 2 is out of bounds");
 		}
 
 		TEST_METHOD(GetArray_InvalidIndex_Under)
@@ -109,7 +109,7 @@ namespace ApophisTests { namespace Utils {
 				auto reader = JsonImportReader("{\"foo\":[2]}");
 				auto arr = reader.GetArray("foo");
 				arr->GetInt64(-1);
-			});
+			}, "JSON array index -1 is out of bounds");
 		}
 
 		TEST_METHOD(GetObject)
@@ -126,7 +126,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{}");
 				reader.GetObject("foo");
-			});
+			}, "JSON object does not have member \"foo\"");
 		}
 
 		TEST_METHOD(GetObject_WrongType)
@@ -134,7 +134,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{\"foo\":[]}");
 				reader.GetObject("foo");
-			});
+			}, "JSON object member \"foo\" has wrong type");
 		}
 
 		TEST_METHOD(GetObjectFromArray)
@@ -150,7 +150,7 @@ namespace ApophisTests { namespace Utils {
 				auto reader = JsonImportReader("{\"foo\":[0]}");
 				auto arr = reader.GetArray("foo");
 				arr->GetObject(0);
-			});
+			}, "JSON array element 0 has wrong type");
 		}
 
 		TEST_METHOD(GetArrayFromArray)
@@ -166,7 +166,7 @@ namespace ApophisTests { namespace Utils {
 				auto reader = JsonImportReader("{\"foo\":[0]}");
 				auto arr = reader.GetArray("foo");
 				arr->GetArray(0);
-			});
+			}, "JSON array element 0 has wrong type");
 		}
 	};
 
