@@ -27,6 +27,7 @@ namespace Apophis {	namespace Training {
 	class BackPropNetwork : public Component::Network, public ITrainable
 	{
 	public:
+		BackPropNetwork(Utils::IImportReader& reader, real learningRate, real momentum);
 		BackPropNetwork(size_t inputSize, real learningRate, real momentum);
 
 		virtual void Train(const Example& example) override;

@@ -56,6 +56,13 @@ static void UpdateWeights(BackPropLayer* targetLayer, ConstVectorRef priorLayerO
 	}
 }
 
+BackPropNetwork::BackPropNetwork(Utils::IImportReader& reader, real learningRate, real momentum) :
+	Network(reader),
+	m_LearningRate(learningRate),
+	m_Momentum(momentum)
+{
+
+}
 
 BackPropNetwork::BackPropNetwork(size_t inputSize, real learningRate, real momentum) :
 	Network(inputSize),

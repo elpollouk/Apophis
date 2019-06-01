@@ -2,6 +2,7 @@
 #include "apophis/Component/Network.h"
 #include "apophis/TransferFunction/Relu.h"
 #include "apophis/TransferFunction/Sigmoid.h"
+#include "apophis/Utils/IImportReader.h"
 #include "Utils/JsonExportWriter.h"
 #include "Utils/ImportExport.h"
 
@@ -92,6 +93,47 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual( 9.f, GetWeight(layers, 1, 0, 0));
 			Assert::AreEqual(10.f, GetWeight(layers, 1, 0, 1));
 			Assert::AreEqual(11.f, GetWeight(layers, 1, 0, 2));
+		}
+
+		TEST_METHOD(Import)
+		{
+			auto outputObject = Utils::JsonExportWriter();
+
+			Network network(3);
+			network.AddLayer<Relu>(2);
+			network.AddLayer<Sigmoid>(1);
+			InitWeights(network);
+
+			network.Export(outputObject);
+
+			auto json = outputObject.GetData();
+			auto reader = IImportReader::CreateJsonImportReader(json);
+
+			Network importedNetwork(*reader);
+
+			Assert::AreEqual(3, (int)importedNetwork.GetInputSize());
+			Assert::AreEqual(1, (int)importedNetwork.GetOutputSize());
+			Assert::AreEqual(2, (int)importedNetwork.GetLayers().size());
+			Assert::AreEqual(3, (int)importedNetwork.GetLayers()[0]->GetNumInputs());
+			Assert::AreEqual(2, (int)importedNetwork.GetLayers()[0]->GetNumOutputs());
+			Assert::AreEqual(2, (int)importedNetwork.GetLayers()[0]->Nodes.size());
+			Assert::AreEqual(2, (int)importedNetwork.GetLayers()[1]->GetNumInputs());
+			Assert::AreEqual(1, (int)importedNetwork.GetLayers()[1]->GetNumOutputs());
+			Assert::AreEqual(1, (int)importedNetwork.GetLayers()[1]->Nodes.size());
+
+			Assert::AreEqual(1.f, importedNetwork.GetLayers()[0]->Nodes[0]->Weights[0]);
+			Assert::AreEqual(2.f, importedNetwork.GetLayers()[0]->Nodes[0]->Weights[1]);
+			Assert::AreEqual(3.f, importedNetwork.GetLayers()[0]->Nodes[0]->Weights[2]);
+			Assert::AreEqual(4.f, importedNetwork.GetLayers()[0]->Nodes[0]->Weights[3]);
+
+			Assert::AreEqual(5.f, importedNetwork.GetLayers()[0]->Nodes[1]->Weights[0]);
+			Assert::AreEqual(6.f, importedNetwork.GetLayers()[0]->Nodes[1]->Weights[1]);
+			Assert::AreEqual(7.f, importedNetwork.GetLayers()[0]->Nodes[1]->Weights[2]);
+			Assert::AreEqual(8.f, importedNetwork.GetLayers()[0]->Nodes[1]->Weights[3]);
+
+			Assert::AreEqual(9.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[0]);
+			Assert::AreEqual(10.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[1]);
+			Assert::AreEqual(11.f, importedNetwork.GetLayers()[1]->Nodes[0]->Weights[2]);
 		}
 	};
 }}

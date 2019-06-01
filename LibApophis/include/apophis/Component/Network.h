@@ -10,6 +10,7 @@ namespace Apophis { namespace Component {
 	friend class Layer;
 	public:
 		Network(size_t inputSize);
+		Network(Utils::IImportReader& reader);
 		virtual ~Network() {}
 
 		size_t GetInputSize() const { return m_InputSize; }
@@ -25,7 +26,7 @@ namespace Apophis { namespace Component {
 		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
 		ConstVectorRef Calculate(ConstVectorRef input);
 
-		void Export(Utils::IExportWriter& writer) const;
+		virtual void Export(Utils::IExportWriter& writer) const;
 
 	protected:
 		virtual std::unique_ptr<Layer> CreateLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
