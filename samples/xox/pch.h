@@ -9,6 +9,13 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include <assert.h>
+#include <iostream>
+#include <map>
+#include <set>
+#include <random>
+#include <string>
+
 #include "apophis/apophis.h"
 
 #include "io.h"

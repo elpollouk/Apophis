@@ -17,6 +17,13 @@ namespace Apophis {
 
 		}
 
+		Example(ConstVectorRef input, ConstVectorRef output) :
+			Input(input),
+			Output(output)
+		{
+
+		}
+
 		Vector Input;
 		Vector Output;
 	};
@@ -33,9 +40,14 @@ namespace Apophis {
 			AddExample(Example(input, output));
 		}
 
+		void AddExample(ConstVectorRef input, ConstVectorRef output)
+		{
+			AddExample(Example(input, output));
+		}
+
 		const Example& Sample() const;
 		void Import(Utils::IImportReader& data);
-		void Export(Utils::IExportWriter& output);
+		void Export(Utils::IExportWriter& output) const;
 
 		std::vector<Example>::const_iterator begin() const { return m_Examples.begin(); }
 		std::vector<Example>::const_iterator end() const { return m_Examples.end(); }

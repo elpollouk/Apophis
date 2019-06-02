@@ -81,7 +81,7 @@ void ExportExample(IExportWriter& outputArray, const Example& example)
 	ExportVector(*output, example.Output);
 }
 
-void ExampleSet::Export(IExportWriter& output)
+void ExampleSet::Export(IExportWriter& output) const
 {
 	output.Set(FIELD_TYPE, COMPONENTTYPE_EXAMPLESET);
 	output.Set(FIELD_INPUTSIZE, InputSize);

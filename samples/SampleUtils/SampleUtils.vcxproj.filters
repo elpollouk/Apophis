@@ -27,6 +27,9 @@
     <ClInclude Include="include\Bootstrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\vectorutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Bootstrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vectorutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
