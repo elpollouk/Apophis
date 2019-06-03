@@ -155,7 +155,7 @@ void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int 
 
 void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::ExampleSet& testExamples)
 {
-	Training::BackPropNetwork network(testExamples.InputSize, 0.0001f, 0.01f);
+	Training::BackPropNetwork network(testExamples.InputSize, 0.0001f, 0.5f);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(3);
