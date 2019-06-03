@@ -113,6 +113,12 @@
     <ClInclude Include="src\Utils\JsonImportReader.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\Utils\Timer.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\apophis\MultiExampleSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -159,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="src\Utils\JsonImportReader.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MultiExampleSet.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,6 +9,8 @@ std::uniform_int_distribution<unsigned int> distribution(0, 997);
 using namespace Apophis;
 using namespace SampleUtils;
 
+Apophis::Vector FeaturizeState(const std::string& state);
+
 char State(const GameBoard& board, unsigned int position)
 {
 	return board.GetStateChar(position, '1' + position);
@@ -29,9 +31,20 @@ void ShowBoard(const GameBoard& board)
 	std::cout << "   |   |   \n\n";
 }
 
+void EvaluateState(Apophis::Component::Network& network, const GameBoard& board)
+{
+	auto input = FeaturizeState(board.Save());
+	auto output = network.Calculate(input);
+
+	std::cout << "X Win = " << output[0] << "\n";
+	std::cout << "O Win = " << output[1] << "\n";
+	std::cout << "Draw  = " << output[2] << "\n";
+}
+
 bool HumanGame()
 {
 	GameBoard board;
+	Apophis::Component::Network network(*IO::LoadJson("Data/network.json"));
 	std::cout << "\nNew Game!\n";
 
 	while (true)
@@ -54,16 +67,16 @@ bool HumanGame()
 		switch (result)
 		{
 		case GameBoard::DRAW:
-			std::cout << GameBoard::PositionStateToChar(result) << "Draw\n";
 			ShowBoard(board);
-			std::cout << board.Save() << "\n";
+			std::cout << "Draw\n";
+			EvaluateState(network, board);
 			return true;
 
 		case GameBoard::O:
 		case GameBoard::X:
-			std::cout << GameBoard::PositionStateToChar(result) << " wins!\n";
 			ShowBoard(board);
-			std::cout << board.Save() << "\n";
+			std::cout << GameBoard::PositionStateToChar(result) << " wins!\n";
+			EvaluateState(network, board);
 			return true;
 
 		case GameBoard::EMPTY:
@@ -105,11 +118,9 @@ void RandomGame(std::set<GameBoard::GameState>& gamesX, std::set<GameBoard::Game
 	}
 }
 
-void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int classification)
+Apophis::Vector FeaturizeState(const std::string& state)
 {
 	Apophis::Vector input(18);
-	Apophis::Vector output = SampleUtils::Vector::OneHot(3, classification);
-
 	for (auto i = 0; i < GameBoard::BOARD_SIZE; i++)
 	{
 		auto j = i * 2;
@@ -131,32 +142,41 @@ void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int 
 			break;
 		}
 	}
+	return input;
+}
+
+void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int classification)
+{
+	Apophis::Vector input = FeaturizeState(state);
+	Apophis::Vector output = SampleUtils::Vector::OneHot(3, classification);
 
 	exampleSet.AddExample(input, output);
 }
 
-void Train(const Apophis::ExampleSet& examples)
+void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::ExampleSet& testExamples)
 {
-	Training::BackPropNetwork network(examples.InputSize, 0.0001f, 0.1f);
-	network.AddLayer<TransferFunction::Relu>(64);
-	network.AddLayer<TransferFunction::Relu>(32);
+	Training::BackPropNetwork network(testExamples.InputSize, 0.0001f, 0.01f);
+	network.AddLayer<TransferFunction::Relu>(16);
+	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(3);
 
-	Training::Evaluator evaluator(network, Training::Loss::SquaredError, examples);
+	Training::Evaluator evaluator(network, Training::Loss::SquaredError, testExamples);
 	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
 	//stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
-	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(1000000);
+	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(20000000);
 
 	Training::Trainer trainer(network, evaluator);
 
 	std::cout << "Training...\n";
-	trainer.Run(examples, stoppingConditions);
+	trainer.Run(trainingExamples, stoppingConditions);
 
 	std::cout << "Training Count = " << trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS) << "\n";
 	std::cout << "Error = " << trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_LOSS) << "\n";
+
+	IO::SaveNetwork(network, "Data/network.json");
 }
 
-int SampleMain(int argc, const char** argv)
+void GenerateExamplesAndTrain()
 {
 	std::cout << "XOX Sample\n\n";
 
@@ -171,18 +191,38 @@ int SampleMain(int argc, const char** argv)
 		RandomGame(gamesX, gamesO, gamesDraw, gamesIncomplete);
 	}
 
-	Apophis::ExampleSet examples(18, 3);
+	Apophis::ExampleSet examplesX(18, 3);
+	Apophis::ExampleSet examplesO(18, 3);
+	Apophis::ExampleSet examplesDraw(18, 3);
+	Apophis::ExampleSet examplesAll(18, 3);
 
 	for (const auto& state : gamesX)
-		SaveExample(examples, state, 0);
+	{
+		SaveExample(examplesX, state, 0);
+		SaveExample(examplesAll, state, 0);
+	}
+
 	for (const auto& state : gamesO)
-		SaveExample(examples, state, 1);
+	{
+		SaveExample(examplesO, state, 1);
+		SaveExample(examplesAll, state, 1);
+	}
+
 	for (const auto& state : gamesDraw)
-		SaveExample(examples, state, 2);
+	{
+		SaveExample(examplesDraw, state, 2);
+		SaveExample(examplesAll, state, 1);
+	}
 
-	IO::SaveExamples(examples, "Data/endstates.json");
+	//IO::SaveExamples(examples, "Data/endstates.json");
 
-	Train(examples);
+	Apophis::MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw });
+	Train(examples, examplesAll);
+}
 
+int SampleMain(int argc, const char** argv)
+{
+	while (HumanGame()) {}
+	//GenerateExamplesAndTrain();
 	return 0;
 }

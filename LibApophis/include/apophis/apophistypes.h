@@ -23,10 +23,13 @@ namespace Apophis {
 	namespace Utils {
 		class IExportWriter;
 		class IImportReader;
+		class Timer;
 	}
 	namespace TransferFunction {
 		class ITransferFunction;
 	}
 	class ApophisException;
+	class IExampleProvider;
 	class ExampleSet;
+	class MultiExampleSet;
 }

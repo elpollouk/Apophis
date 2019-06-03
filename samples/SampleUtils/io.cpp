@@ -41,5 +41,11 @@ void SaveExamples(const Apophis::ExampleSet& examples, const char* filename)
 	SaveJson(*writer, filename);
 }
 
+void SaveNetwork(const Apophis::Component::Network& network, const char* filename)
+{
+	auto writer = Utils::IExportWriter::CreateJsonExportWriter();
+	network.Export(*writer);
+	SaveJson(*writer, filename);
+}
 
 }}

@@ -2,7 +2,6 @@
 
 #include "apophis/apophistypes.h"
 #include <random>
-#include <string>
 
 namespace Apophis {
 
@@ -28,7 +27,14 @@ namespace Apophis {
 		Vector Output;
 	};
 
-	class ExampleSet
+	class IExampleProvider
+	{
+	public:
+		~IExampleProvider() {}
+		virtual const Example& Sample() const = 0;
+	};
+
+	class ExampleSet : public IExampleProvider
 	{
 	public:
 		ExampleSet(Utils::IImportReader& data);
@@ -45,7 +51,7 @@ namespace Apophis {
 			AddExample(Example(input, output));
 		}
 
-		const Example& Sample() const;
+		virtual const Example& Sample() const override;
 		void Import(Utils::IImportReader& data);
 		void Export(Utils::IExportWriter& output) const;
 

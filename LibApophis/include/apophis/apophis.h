@@ -3,10 +3,12 @@
 #include "apophis/apophistypes.h"
 #include "apophis/ApophisException.h"
 #include "apophis/ExampleSet.h"
+#include "apophis/MultiExampleSet.h"
 #include "apophis/Random.h"
 #include "apophis/Data/Metrics.h"
 #include "apophis/Utils/IExportWriter.h"
 #include "apophis/Utils/IImportReader.h"
+#include "apophis/Utils/Timer.h"
 
 #include "apophis/Component/Node.h"
 #include "apophis/Component/Layer.h"
