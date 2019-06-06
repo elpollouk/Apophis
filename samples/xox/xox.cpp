@@ -153,17 +153,17 @@ void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int 
 	exampleSet.AddExample(input, output);
 }
 
-void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::ExampleSet& testExamples)
+void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IExampleProvider& testExamples)
 {
 	Training::BackPropNetwork network(testExamples.GetInputSize(), 0.0001f, 0.5f);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(3);
 
-	Training::Evaluator evaluator(network, Training::Loss::SquaredError, testExamples);
+	Training::SampledEvaluator evaluator(network, Training::Loss::SquaredError, testExamples, 1000);
 	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
 	//stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
-	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(20000000);
+	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(10000000);
 
 	Training::Trainer trainer(network, evaluator);
 
@@ -194,30 +194,20 @@ void GenerateExamplesAndTrain()
 	Apophis::ExampleSet examplesX(18, 3);
 	Apophis::ExampleSet examplesO(18, 3);
 	Apophis::ExampleSet examplesDraw(18, 3);
-	Apophis::ExampleSet examplesAll(18, 3);
 
 	for (const auto& state : gamesX)
-	{
 		SaveExample(examplesX, state, 0);
-		SaveExample(examplesAll, state, 0);
-	}
 
 	for (const auto& state : gamesO)
-	{
 		SaveExample(examplesO, state, 1);
-		SaveExample(examplesAll, state, 1);
-	}
 
 	for (const auto& state : gamesDraw)
-	{
 		SaveExample(examplesDraw, state, 2);
-		SaveExample(examplesAll, state, 1);
-	}
 
 	//IO::SaveExamples(examples, "Data/endstates.json");
 
 	Apophis::MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw });
-	Train(examples, examplesAll);
+	Train(examples, examples);
 }
 
 int SampleMain(int argc, const char** argv)

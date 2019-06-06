@@ -9,7 +9,7 @@
 using namespace Apophis;
 using namespace Apophis::Training;
 
-Trainer::Trainer(ITrainable& trainable, Evaluator& evaluator) :
+Trainer::Trainer(ITrainable& trainable, IEvaluator& evaluator) :
 	m_Trainable(trainable),
 	m_Evaluator(evaluator)
 {

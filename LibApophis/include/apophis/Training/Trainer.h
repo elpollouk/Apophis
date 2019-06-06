@@ -16,7 +16,7 @@ namespace Apophis { namespace Training {
 	class Trainer
 	{
 	public:
-		Trainer(ITrainable& trainable, Evaluator& evaluator);
+		Trainer(ITrainable& trainable, IEvaluator& evaluator);
 
 		Data::Metrics& GetMetrics() { return m_Metrics; }
 
@@ -24,7 +24,7 @@ namespace Apophis { namespace Training {
 
 	private:
 		ITrainable& m_Trainable;
-		Evaluator& m_Evaluator;
+		IEvaluator& m_Evaluator;
 		Data::Metrics m_Metrics;
 	};
 

@@ -16,8 +16,10 @@ namespace Apophis {
 	namespace Training {
 		typedef real(*LossFunction)(ConstVectorRef target, ConstVectorRef actual);
 		class Evaluator;
+		class IEvaluator;
 		class IStoppingCondition;
 		class ITrainable;
+		class SampledEvaluator;
 		class Trainer;
 	}
 	namespace Utils {
