@@ -70,16 +70,14 @@ void Run()
 	const auto LEARNING_RATE = 0.001f;
 	const auto MOMENTUM = 0.5f;
 
-	ExampleSet trainingSet(4, 3);
-	trainingSet.Import(*Load("Data/Iris/training.json"));
-	ExampleSet testSet(4, 3);
-	testSet.Import(*Load("Data/Iris/test.json"));
+	ExampleSet trainingSet(*Load("Data/Iris/training.json"));
+	ExampleSet testSet(*Load("Data/Iris/test.json"));
 
 	for (auto i = 0; i < 10; i++)
 	{
 		printf("\nRun %d:\n", i + 1);
 
-		BackPropNetwork network(trainingSet.InputSize, LEARNING_RATE, MOMENTUM);
+		BackPropNetwork network(trainingSet.GetInputSize(), LEARNING_RATE, MOMENTUM);
 		network.AddLayer<Relu>(4);
 		network.AddLayer<Relu>(3);
 

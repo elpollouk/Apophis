@@ -16,8 +16,8 @@ ExampleSet::ExampleSet(Utils::IImportReader& data)
 }
 
 ExampleSet::ExampleSet(int inputSize, int outputSize) :
-	InputSize(inputSize),
-	OutputSize(outputSize)
+	m_InputSize(inputSize),
+	m_OutputSize(outputSize)
 {
 
 }
@@ -49,16 +49,16 @@ void ExampleSet::Import(IImportReader& data)
 {
 	m_Examples.clear();
 
-	InputSize = data.GetInt32(FIELD_INPUTSIZE);
-	OutputSize = data.GetInt32(FIELD_OUTPUTSIZE);
+	m_InputSize = data.GetInt32(FIELD_INPUTSIZE);
+	m_OutputSize = data.GetInt32(FIELD_OUTPUTSIZE);
 
 	auto examples = data.GetArray(FIELD_EXAMPLES);
 	for (auto i = 0; i < (int)examples->Size(); i++)
 	{
 		Example example;
 		auto jExample = examples->GetObject(i);
-		ImportVector(example.Input, *jExample->GetArray(FIELD_INPUT), InputSize);
-		ImportVector(example.Output, *jExample->GetArray(FIELD_OUTPUT), OutputSize);
+		ImportVector(example.Input, *jExample->GetArray(FIELD_INPUT), m_InputSize);
+		ImportVector(example.Output, *jExample->GetArray(FIELD_OUTPUT), m_OutputSize);
 		AddExample(std::move(example));
 	}
 
@@ -84,8 +84,8 @@ void ExportExample(IExportWriter& outputArray, const Example& example)
 void ExampleSet::Export(IExportWriter& output) const
 {
 	output.Set(FIELD_TYPE, COMPONENTTYPE_EXAMPLESET);
-	output.Set(FIELD_INPUTSIZE, InputSize);
-	output.Set(FIELD_OUTPUTSIZE, OutputSize);
+	output.Set(FIELD_INPUTSIZE, m_InputSize);
+	output.Set(FIELD_OUTPUTSIZE, m_OutputSize);
 
 	auto examples = output.SetArray(FIELD_EXAMPLES, m_Examples.size());
 	for (const auto& example : m_Examples)

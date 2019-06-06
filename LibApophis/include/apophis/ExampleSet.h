@@ -31,6 +31,8 @@ namespace Apophis {
 	{
 	public:
 		~IExampleProvider() {}
+		virtual size_t GetInputSize() const = 0;
+		virtual size_t GetOutputSize() const = 0;
 		virtual const Example& Sample() const = 0;
 	};
 
@@ -51,6 +53,9 @@ namespace Apophis {
 			AddExample(Example(input, output));
 		}
 
+		virtual size_t GetInputSize() const override { return m_InputSize; }
+		virtual size_t GetOutputSize() const override { return m_OutputSize; }
+
 		virtual const Example& Sample() const override;
 		void Import(Utils::IImportReader& data);
 		void Export(Utils::IExportWriter& output) const;
@@ -60,10 +65,10 @@ namespace Apophis {
 		size_t size() const { return m_Examples.size(); }
 		Example& operator[](size_t index) { return m_Examples[index]; }
 
-		size_t InputSize;
-		size_t OutputSize;
-
 	private:
+		size_t m_InputSize;
+		size_t m_OutputSize;
+
 		std::uniform_int_distribution<size_t> m_Distribution;
 		std::vector<Example> m_Examples;
 	};

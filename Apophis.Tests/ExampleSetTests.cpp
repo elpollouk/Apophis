@@ -41,8 +41,8 @@ namespace ApophisTests {
 		{
 			ExampleSet examples(4, 5);
 
-			Assert::AreEqual(4, (int)examples.InputSize);
-			Assert::AreEqual(5, (int)examples.OutputSize);
+			Assert::AreEqual(4, (int)examples.GetInputSize());
+			Assert::AreEqual(5, (int)examples.GetOutputSize());
 		}
 
 		TEST_METHOD(ExampleSet_AddExample)
@@ -144,8 +144,8 @@ namespace ApophisTests {
 		{
 			ExampleSet examples(*Utils::IImportReader::CreateJsonImportReader(TEST_EXAMPLESET));
 
-			Assert::AreEqual(3, (int)examples.InputSize);
-			Assert::AreEqual(2, (int)examples.OutputSize);
+			Assert::AreEqual(3, (int)examples.GetInputSize());
+			Assert::AreEqual(2, (int)examples.GetOutputSize());
 			Assert::AreEqual(1.f, examples[0].Input[0]);
 			Assert::AreEqual(2.f, examples[0].Input[1]);
 			Assert::AreEqual(3.f, examples[0].Input[2]);
