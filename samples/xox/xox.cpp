@@ -16,7 +16,17 @@ char State(const GameBoard& board, unsigned int position)
 	return board.GetStateChar(position, '1' + position);
 }
 
-void ShowBoard(const GameBoard& board)
+void EvaluateState(Apophis::Component::Network& network, const GameBoard& board)
+{
+	auto input = FeaturizeState(board.Save());
+	auto output = network.Calculate(input);
+
+	std::cout << "X Win = " << output[0] << "\n";
+	std::cout << "O Win = " << output[1] << "\n";
+	std::cout << "Draw  = " << output[2] << "\n";
+}
+
+void ShowBoard(Component::Network& network, const GameBoard& board)
 {
 	std::cout << "   |   |   \n";
 	std::cout << " " << State(board, 0) << " | " << State(board, 1) << " | " << State(board, 2) << " \n";
@@ -29,16 +39,8 @@ void ShowBoard(const GameBoard& board)
 	std::cout << "   |   |   \n";
 	std::cout << " " << State(board, 6) << " | " << State(board, 7) << " | " << State(board, 8) << " \n";
 	std::cout << "   |   |   \n\n";
-}
 
-void EvaluateState(Apophis::Component::Network& network, const GameBoard& board)
-{
-	auto input = FeaturizeState(board.Save());
-	auto output = network.Calculate(input);
-
-	std::cout << "X Win = " << output[0] << "\n";
-	std::cout << "O Win = " << output[1] << "\n";
-	std::cout << "Draw  = " << output[2] << "\n";
+	EvaluateState(network, board);
 }
 
 bool HumanGame()
@@ -49,8 +51,8 @@ bool HumanGame()
 
 	while (true)
 	{
-		ShowBoard(board);
-		std::cout << "Position to play (1-9, q)> ";
+		ShowBoard(network,board);
+		std::cout << "\nPosition to play (1-9, q)> ";
 		std::string strPosition;
 		std::cin >> strPosition;
 
@@ -67,16 +69,14 @@ bool HumanGame()
 		switch (result)
 		{
 		case GameBoard::DRAW:
-			ShowBoard(board);
+			ShowBoard(network, board);
 			std::cout << "Draw\n";
-			EvaluateState(network, board);
 			return true;
 
 		case GameBoard::O:
 		case GameBoard::X:
-			ShowBoard(board);
+			ShowBoard(network, board);
 			std::cout << GameBoard::PositionStateToChar(result) << " wins!\n";
-			EvaluateState(network, board);
 			return true;
 
 		case GameBoard::EMPTY:
@@ -115,6 +115,9 @@ void RandomGame(std::set<GameBoard::GameState>& gamesX, std::set<GameBoard::Game
 			Record(board, gamesO);
 			return;
 		}
+
+		if (distribution(generator) % 1000 <= 10)
+			Record(board, gamesIncomplete);
 	}
 }
 
@@ -155,7 +158,7 @@ void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int 
 
 void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IExampleProvider& testExamples)
 {
-	Training::BackPropNetwork network(testExamples.GetInputSize(), 0.0001f, 0.5f);
+	Training::BackPropNetwork network(testExamples.GetInputSize(), 0.0001f, 0.25f);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(3);
@@ -163,7 +166,7 @@ void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IEx
 	Training::SampledEvaluator evaluator(network, Training::Loss::SquaredError, testExamples, 1000);
 	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
 	//stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
-	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(10000000);
+	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(20000000);
 
 	Training::Trainer trainer(network, evaluator);
 
@@ -194,6 +197,7 @@ void GenerateExamplesAndTrain()
 	Apophis::ExampleSet examplesX(18, 3);
 	Apophis::ExampleSet examplesO(18, 3);
 	Apophis::ExampleSet examplesDraw(18, 3);
+	Apophis::ExampleSet examplesIncomplete(18, 3);
 
 	for (const auto& state : gamesX)
 		SaveExample(examplesX, state, 0);
@@ -204,9 +208,12 @@ void GenerateExamplesAndTrain()
 	for (const auto& state : gamesDraw)
 		SaveExample(examplesDraw, state, 2);
 
+	for (const auto& state : gamesIncomplete)
+		SaveExample(examplesIncomplete, state, -1);
+
 	//IO::SaveExamples(examples, "Data/endstates.json");
 
-	Apophis::MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw });
+	Apophis::MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw, &examplesIncomplete });
 	Train(examples, examples);
 }
 
