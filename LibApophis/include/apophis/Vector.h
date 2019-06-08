@@ -47,6 +47,11 @@ namespace Apophis {
 		void resize(size_t newSize) noexcept;
 		void resize(size_t newSize, real newValues) noexcept;
 
+		real max() const;
+		size_t argmax() const;
+
+		static Vector OneHot(size_t size, size_t hotElement);
+
 	private:
 		size_t m_Size;
 		real* m_Data;

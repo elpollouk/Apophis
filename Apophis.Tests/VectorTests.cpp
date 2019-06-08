@@ -119,7 +119,7 @@ namespace ApophisTests {
 			Assert::AreEqual(15.f, t, L"Value sum was wrong");
 		}
 
-		TEST_METHOD(resize_grow)
+		TEST_METHOD(resize_Grow)
 		{
 			auto v = Vector({ 1.f, 2.f });
 			v.resize(3);
@@ -133,7 +133,7 @@ namespace ApophisTests {
 			Assert::AreEqual(3.f, v[2], L"Element 2 has wrong value");
 		}
 
-		TEST_METHOD(resize_shrink)
+		TEST_METHOD(resize_Shrink)
 		{
 			auto v = Vector({ 1.f, 2.f });
 			v.resize(1);
@@ -143,7 +143,7 @@ namespace ApophisTests {
 			Assert::AreEqual(1.f, v[0], L"Element 0 has wrong value");
 		}
 
-		TEST_METHOD(resize_withValue_grow)
+		TEST_METHOD(resize_WithValue_Grow)
 		{
 			auto v = Vector({ 1.f, 2.f });
 			v.resize(3, 4.f);
@@ -154,13 +154,64 @@ namespace ApophisTests {
 			Assert::AreEqual(4.f, v[2], L"Element 2 has wrong value");
 		}
 
-		TEST_METHOD(resize_withValue_shrink)
+		TEST_METHOD(resize_WithValue_Shrink)
 		{
 			auto v = Vector({ 1.f, 2.f });
 			v.resize(1, 4.f);
 
 			Assert::AreEqual(1, (int)v.size(), L"Vector has wrong size");
 			Assert::AreEqual(1.f, v[0], L"Element 0 has wrong value");
+		}
+
+		TEST_METHOD(resize_WithValue_DefaultConstruct)
+		{
+			Vector v;
+			v.resize(3, 4.f);
+
+			Assert::AreEqual(3, (int)v.size(), L"Vector has wrong size");
+			Assert::AreEqual(4.f, v[0], L"Element 0 has wrong value");
+			Assert::AreEqual(4.f, v[1], L"Element 1 has wrong value");
+			Assert::AreEqual(4.f, v[2], L"Element 2 has wrong value");
+		}
+
+		TEST_METHOD(max)
+		{
+			Vector v({ 5.f, 10.f, 15.f, 7.f });
+			Assert::AreEqual(15.f, v.max(), L"Incorrect max value returned");
+		}
+
+		TEST_METHOD(argmax)
+		{
+			Vector v({ 5.f, 11.f, 7.f, 7.f });
+			Assert::AreEqual(1, (int)v.argmax(), L"Incorrect max index returned");
+		}
+
+		TEST_METHOD(argmax_multimax)
+		{
+			Vector v({ 5.f, 1.f, 7.f, 7.f });
+			Assert::AreEqual(2, (int)v.argmax(), L"Incorrect max index returned");
+		}
+
+		TEST_METHOD(OneHot)
+		{
+			auto v = Vector::OneHot(4, 2);
+
+			Assert::AreEqual(4, (int)v.size(), L"Vector was constructed with wrong size");
+			Assert::AreEqual(0.f, v[0], L"Element 0 has wrong value");
+			Assert::AreEqual(0.f, v[1], L"Element 1 has wrong value");
+			Assert::AreEqual(1.f, v[2], L"Element 2 has wrong value");
+			Assert::AreEqual(0.f, v[3], L"Element 3 has wrong value");
+		}
+
+		TEST_METHOD(OneHot_NegativeValue)
+		{
+			auto v = Vector::OneHot(4, (size_t)-1);
+
+			Assert::AreEqual(4, (int)v.size(), L"Vector was constructed with wrong size");
+			Assert::AreEqual(0.f, v[0], L"Element 0 has wrong value");
+			Assert::AreEqual(0.f, v[1], L"Element 1 has wrong value");
+			Assert::AreEqual(0.f, v[2], L"Element 2 has wrong value");
+			Assert::AreEqual(0.f, v[3], L"Element 3 has wrong value");
 		}
 	};
 

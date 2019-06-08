@@ -1,7 +1,13 @@
 #include "stdafx.h"
 #include "apophis/Vector.h"
+#include <memory.h>
 
 using namespace Apophis;
+
+real* AllocArray(size_t size)
+{
+	return (real*)malloc(sizeof(real) * size);
+}
 
 Vector::Vector() noexcept :
 	m_Size(0),
@@ -12,7 +18,7 @@ Vector::Vector() noexcept :
 
 Vector::Vector(std::initializer_list<real> data) noexcept :
 	m_Size(data.size()),
-	m_Data(new real[m_Size])
+	m_Data(AllocArray(m_Size))
 {
 	size_t i = 0;
 	for (auto v : data)
@@ -21,7 +27,7 @@ Vector::Vector(std::initializer_list<real> data) noexcept :
 
 Vector::Vector(size_t size, const real* data) noexcept :
 	m_Size(size),
-	m_Data(new real[m_Size])
+	m_Data(AllocArray(m_Size))
 {
 	for (size_t i = 0; i < m_Size; i++)
 		m_Data[i] = data[i];
@@ -29,7 +35,7 @@ Vector::Vector(size_t size, const real* data) noexcept :
 
 Vector::Vector(size_t size) noexcept :
 	m_Size(size),
-	m_Data(new real[m_Size])
+	m_Data(AllocArray(m_Size))
 {
 }
 
@@ -47,16 +53,15 @@ Vector::Vector(Vector&& rhs) noexcept :
 
 Vector::~Vector()
 {
-	if (m_Data) delete[] m_Data;
+	if (m_Data) free(m_Data);
 }
 
 Vector& Vector::operator=(const Vector& rhs) noexcept
 {
-	if (m_Size != rhs.size())
+	if (m_Size < rhs.size())
 	{
-		delete[] m_Data;
 		m_Size = rhs.size();
-		m_Data = new real[m_Size];
+		m_Data = (real*)realloc(m_Data, sizeof(real) * m_Size);
 	}
 
 	for (size_t i = 0; i < m_Size; i++)
@@ -67,15 +72,8 @@ Vector& Vector::operator=(const Vector& rhs) noexcept
 
 void Vector::resize(size_t newSize) noexcept
 {
-	auto newData = new real[newSize];
-
-	auto copySize = newSize < m_Size ? newSize : m_Size;
-	for (size_t i = 0; i < copySize; i++)
-		newData[i] = m_Data[i];
-
-	delete[] m_Data;
+	m_Data = (real*)realloc(m_Data, sizeof(real) * newSize);
 	m_Size = newSize;
-	m_Data = newData;
 }
 
 void Vector::resize(size_t newSize, real newValue) noexcept
@@ -86,4 +84,30 @@ void Vector::resize(size_t newSize, real newValue) noexcept
 	if (originalSize < newSize)
 		for (size_t i = originalSize; i < newSize; i++)
 			m_Data[i] = newValue;
+}
+
+real Vector::max() const
+{
+	return m_Data[argmax()];
+}
+
+size_t Vector::argmax() const
+{
+	if (size() <= 0) throw ApophisException("Vector has no elements");
+
+	size_t max = 0;
+	for (size_t i = 1; i < size(); i++)
+		if (m_Data[max] < m_Data[i])
+			max = i;
+	return max;
+}
+
+Vector Vector::OneHot(size_t size, size_t hotElement)
+{
+	Vector v(size);
+
+	for (size_t i = 0; i < v.size(); i++)
+		v[i] = i == hotElement ? 1.f : 0.f;
+
+	return v;
 }
