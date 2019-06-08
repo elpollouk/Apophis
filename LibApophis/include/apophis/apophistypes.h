@@ -1,12 +1,8 @@
 #pragma once
 #include <vector>
+#include "apophis/Vector.h"
 
 namespace Apophis {
-
-	typedef float real;
-	typedef std::vector<real> Vector;
-	typedef Vector& VectorRef;
-	typedef const Vector& ConstVectorRef;
 
 	namespace Component {
 		class Layer;
@@ -16,17 +12,22 @@ namespace Apophis {
 	namespace Training {
 		typedef real(*LossFunction)(ConstVectorRef target, ConstVectorRef actual);
 		class Evaluator;
+		class IEvaluator;
 		class IStoppingCondition;
 		class ITrainable;
+		class SampledEvaluator;
 		class Trainer;
 	}
 	namespace Utils {
 		class IExportWriter;
 		class IImportReader;
+		class Timer;
 	}
 	namespace TransferFunction {
 		class ITransferFunction;
 	}
 	class ApophisException;
+	class IExampleProvider;
 	class ExampleSet;
+	class MultiExampleSet;
 }

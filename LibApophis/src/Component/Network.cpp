@@ -22,7 +22,7 @@ Network::Network(Utils::IImportReader& reader)
 	m_OutputSize = m_InputSize;
 
 	auto layers = reader.GetArray(FIELD_LAYERS);
-	for (auto i = 0; i < layers->Size(); i++)
+	for (size_t i = 0; i < layers->Size(); i++)
 	{
 		auto layer = layers->GetObject(i);
 		auto layerSize = layer->GetSize_t(FIELD_OUTPUTSIZE);

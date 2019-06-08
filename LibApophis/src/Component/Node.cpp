@@ -39,7 +39,7 @@ void Node::Import(Utils::IImportReader& data)
 	auto weights = data.GetArray(FIELD_WEIGHTS);
 	if (weights->Size() != Weights.size()) throw ApophisException("Wrong number of weights for node, expected %d, received %d", (int)Weights.size(), (int)weights->Size());
 
-	for (auto i = 0; i < weights->Size(); i++)
+	for (size_t i = 0; i < weights->Size(); i++)
 		Weights[i] = weights->GetReal(i);
 }
 

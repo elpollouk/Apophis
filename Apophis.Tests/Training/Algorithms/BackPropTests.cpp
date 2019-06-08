@@ -26,7 +26,7 @@ namespace ApophisTests { namespace Training { namespace Algorithms {
 			trainingSet.AddExample({ 0.f, 1.f }, { 1.f });
 			trainingSet.AddExample({ 1.f, 1.f }, { 0.f });
 
-			BackPropNetwork network(trainingSet.InputSize, LEARNING_RATE, MOMENTUM);
+			BackPropNetwork network(trainingSet.GetInputSize(), LEARNING_RATE, MOMENTUM);
 			network.AddLayer<Relu>(3);
 			network.AddLayer<Relu>(1);
 

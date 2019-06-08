@@ -24,7 +24,7 @@ namespace Apophis { namespace Component {
 		}
 
 		void AddLayer(size_t numNodes, const TransferFunction::ITransferFunction& transfer);
-		ConstVectorRef Calculate(ConstVectorRef input);
+		virtual ConstVectorRef Calculate(ConstVectorRef input);
 
 		virtual void Export(Utils::IExportWriter& writer) const;
 

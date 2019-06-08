@@ -16,15 +16,15 @@ namespace Apophis { namespace Training {
 	class Trainer
 	{
 	public:
-		Trainer(ITrainable& trainable, Evaluator& evaluator);
+		Trainer(ITrainable& trainable, IEvaluator& evaluator);
 
 		Data::Metrics& GetMetrics() { return m_Metrics; }
 
-		void Run(const ExampleSet& trainingSet, const IStoppingCondition& stoppingCondition);
+		void Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition);
 
 	private:
 		ITrainable& m_Trainable;
-		Evaluator& m_Evaluator;
+		IEvaluator& m_Evaluator;
 		Data::Metrics m_Metrics;
 	};
 

@@ -12,11 +12,11 @@ Evaluator::Evaluator(Component::Network& network, LossFunction loss, const Examp
 	m_Examples(examples)
 {
 	assert(loss != nullptr);
-	assert(network.GetInputSize() == examples.InputSize);
-	assert(network.GetOutputSize() == examples.OutputSize);
+	assert(network.GetInputSize() == examples.GetInputSize());
+	assert(network.GetOutputSize() == examples.GetOutputSize());
 }
 
-real Evaluator::operator()()
+real Evaluator::Evaluate()
 {
 	auto error = 0.f;
 
@@ -24,6 +24,32 @@ real Evaluator::operator()()
 		error += m_Loss(example.Output, m_Network.Calculate(example.Input));
 
 	error /= m_Examples.size();
+
+	return error;
+}
+
+SampledEvaluator::SampledEvaluator(Component::Network& network, LossFunction loss, const IExampleProvider& examples, size_t numSamples) :
+	m_Network(network),
+	m_Loss(loss),
+	m_Examples(examples),
+	m_NumSumples(numSamples)
+{
+	assert(loss != nullptr);
+	assert(network.GetInputSize() == examples.GetInputSize());
+	assert(network.GetOutputSize() == examples.GetOutputSize());
+}
+
+real SampledEvaluator::Evaluate()
+{
+	auto error = 0.f;
+
+	for (auto i = (size_t)0; i < m_NumSumples; i++)
+	{
+		auto& example = m_Examples.Sample();
+		error += m_Loss(example.Output, m_Network.Calculate(example.Input));
+	}
+
+	error /= (real)m_NumSumples;
 
 	return error;
 }

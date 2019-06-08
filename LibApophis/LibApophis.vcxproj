@@ -162,11 +162,13 @@
     <ClInclude Include="include\apophis\apophis.h" />
     <ClInclude Include="include\apophis\ApophisException.h" />
     <ClInclude Include="include\apophis\apophistypes.h" />
+    <ClInclude Include="include\apophis\Classifier.h" />
     <ClInclude Include="include\apophis\Component\Layer.h" />
     <ClInclude Include="include\apophis\Component\Network.h" />
     <ClInclude Include="include\apophis\Component\Node.h" />
     <ClInclude Include="include\apophis\Data\Metrics.h" />
     <ClInclude Include="include\apophis\ExampleSet.h" />
+    <ClInclude Include="include\apophis\MultiExampleSet.h" />
     <ClInclude Include="include\apophis\Random.h" />
     <ClInclude Include="include\apophis\Training\BackPropNetwork.h" />
     <ClInclude Include="include\apophis\Training\Evaluator.h" />
@@ -178,6 +180,8 @@
     <ClInclude Include="include\apophis\TransferFunction\Sigmoid.h" />
     <ClInclude Include="include\apophis\Utils\IExportWriter.h" />
     <ClInclude Include="include\apophis\Utils\IImportReader.h" />
+    <ClInclude Include="include\apophis\Utils\Timer.h" />
+    <ClInclude Include="include\apophis\Vector.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\targetver.h" />
@@ -191,6 +195,7 @@
     <ClCompile Include="src\Component\Network.cpp" />
     <ClCompile Include="src\Component\Node.cpp" />
     <ClCompile Include="src\ExampleSet.cpp" />
+    <ClCompile Include="src\MultiExampleSet.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -206,6 +211,7 @@
     <ClCompile Include="src\TransferFunction\DefaultFunctions.cpp" />
     <ClCompile Include="src\Utils\JsonExportWriter.cpp" />
     <ClCompile Include="src\Utils\JsonImportReader.cpp" />
+    <ClCompile Include="src\Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

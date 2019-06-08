@@ -40,29 +40,6 @@ void Export(const Apophis::Component::Network& network)
 	fclose(f);
 }
 
-const char* Clasify(ConstVectorRef scores)
-{
-	auto maxIndex = 0u;
-	for (auto i = 1u; i < scores.size(); i++)
-		if (scores[maxIndex] < scores[i])
-			maxIndex = i;
-
-	switch (maxIndex)
-	{
-	case 0:
-		return "I.setosa";
-
-	case 1:
-		return "I.versicolor";
-
-	case 2:
-		return "I.virginica";
-
-	default:
-		return "UNKNOWN";
-	}
-}
-
 void Run()
 {
 	const auto TRAINING_ITERATIONS = 10000000;
@@ -70,16 +47,14 @@ void Run()
 	const auto LEARNING_RATE = 0.001f;
 	const auto MOMENTUM = 0.5f;
 
-	ExampleSet trainingSet(4, 3);
-	trainingSet.Import(*Load("Data/Iris/training.json"));
-	ExampleSet testSet(4, 3);
-	testSet.Import(*Load("Data/Iris/test.json"));
+	ExampleSet trainingSet(*Load("Data/Iris/training.json"));
+	ExampleSet testSet(*Load("Data/Iris/test.json"));
 
 	for (auto i = 0; i < 10; i++)
 	{
 		printf("\nRun %d:\n", i + 1);
 
-		BackPropNetwork network(trainingSet.InputSize, LEARNING_RATE, MOMENTUM);
+		BackPropNetwork network(trainingSet.GetInputSize(), LEARNING_RATE, MOMENTUM);
 		network.AddLayer<Relu>(4);
 		network.AddLayer<Relu>(3);
 
@@ -94,11 +69,9 @@ void Run()
 		printf("Training Count = %d\n", trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS));
 		printf("Error = %f\n", trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_LOSS));
 
+		auto classify = Classifier<const char*>(network, { "I.setosa", "I.versicolor", "I.virginica" }, 0.7f, "UNKNOWN");
 		for (auto i = 0u; i < testSet.size(); i++)
-		{
-			auto& output = network.Calculate(testSet[i].Input);
-			printf("%02u: %s\n", i, Clasify(output));
-		}
+			printf("%02u: %s\n", i, classify(testSet[i].Input));
 
 		//Export(network);
 	}

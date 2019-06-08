@@ -47,14 +47,14 @@ const rapidjson::Value& JsonImportReader::EnsureMember(const char* key, rapidjso
 	return v;
 }
 
-const rapidjson::Value& JsonImportReader::EnsureIndex(int index)
+const rapidjson::Value& JsonImportReader::EnsureIndex(size_t index)
 {
 	assert(m_pValue->GetType() == rapidjson::kArrayType);
-	if (index < 0 || (int)m_pValue->Size() <= index) throw ApophisException("JSON array index %d is out of bounds", index);
-	return m_pValue->GetArray()[index];
+	if (index < 0 || m_pValue->Size() <= index) throw ApophisException("JSON array index %d is out of bounds", index);
+	return m_pValue->GetArray()[(rapidjson::SizeType)index];
 }
 
-const rapidjson::Value& JsonImportReader::EnsureIndex(int index, rapidjson::Type type)
+const rapidjson::Value& JsonImportReader::EnsureIndex(size_t index, rapidjson::Type type)
 {
 	auto& v = EnsureIndex(index);
 	if (v.GetType() != type) throw ApophisException("JSON array element %d has wrong type", index);
@@ -100,28 +100,28 @@ size_t JsonImportReader::Size()
 	return m_pValue->Size();
 }
 
-long long JsonImportReader::GetInt64(int index)
+long long JsonImportReader::GetInt64(size_t index)
 {
 	return EnsureIndex(index).GetInt64();
 }
 
-real JsonImportReader::GetReal(int index)
+real JsonImportReader::GetReal(size_t index)
 {
 	return EnsureIndex(index).GetFloat();
 }
 
-const char* JsonImportReader::GetString(int index)
+const char* JsonImportReader::GetString(size_t index)
 {
 	return EnsureIndex(index).GetString();
 }
 
-std::unique_ptr<IImportReader> JsonImportReader::GetObject(int index)
+std::unique_ptr<IImportReader> JsonImportReader::GetObject(size_t index)
 {
 	auto& value = EnsureIndex(index, rapidjson::kObjectType);
 	return std::make_unique<JsonImportReader>(&value);
 }
 
-std::unique_ptr<IImportReader> JsonImportReader::GetArray(int index)
+std::unique_ptr<IImportReader> JsonImportReader::GetArray(size_t index)
 {
 	auto& value = EnsureIndex(index, rapidjson::kArrayType);
 	return std::make_unique<JsonImportReader>(&value);
