@@ -20,19 +20,19 @@ namespace Apophis { namespace Utils {
 
 
 		virtual size_t Size() override;
-		virtual long long GetInt64(int index) override;
-		virtual real GetReal(int index) override;
-		virtual const char* GetString(int index) override;
-		virtual std::unique_ptr<IImportReader> GetObject(int index) override;
-		virtual std::unique_ptr<IImportReader> GetArray(int index) override;
+		virtual long long GetInt64(size_t index) override;
+		virtual real GetReal(size_t index) override;
+		virtual const char* GetString(size_t index) override;
+		virtual std::unique_ptr<IImportReader> GetObject(size_t index) override;
+		virtual std::unique_ptr<IImportReader> GetArray(size_t index) override;
 
 		const rapidjson::Value& GetValue() const { return *m_pValue; }
 
 	private:
 		const rapidjson::Value& EnsureMember(const char* key);
 		const rapidjson::Value& EnsureMember(const char* key, rapidjson::Type type);
-		const rapidjson::Value& EnsureIndex(int index);
-		const rapidjson::Value& EnsureIndex(int index, rapidjson::Type type);
+		const rapidjson::Value& EnsureIndex(size_t index);
+		const rapidjson::Value& EnsureIndex(size_t index, rapidjson::Type type);
 
 		bool m_Owner;
 		const rapidjson::Value* m_pValue;

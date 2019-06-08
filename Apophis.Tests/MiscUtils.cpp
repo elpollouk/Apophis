@@ -21,10 +21,10 @@ std::unique_ptr<Utils::IImportReader> LoadJson(const char * path)
 	return Utils::IImportReader::CreateJsonImportReader(buffer);
 }
 
-int ArgMax(ConstVectorRef vector)
+size_t ArgMax(ConstVectorRef vector)
 {
-	auto maxIndex = 0;
-	for (auto i = 1; i < vector.size(); i++)
+	size_t maxIndex = 0;
+	for (size_t i = 1; i < vector.size(); i++)
 		if (vector[maxIndex] < vector[i])
 			maxIndex = i;
 

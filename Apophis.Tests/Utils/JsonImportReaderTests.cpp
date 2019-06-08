@@ -73,7 +73,7 @@ namespace ApophisTests { namespace Utils {
 			auto arr = reader.GetArray("foo");
 			Assert::IsNotNull(arr.get());
 			Assert::AreEqual(3, (int)arr->Size());
-			Assert::AreEqual(5, arr->GetInt32(0));
+			Assert::AreEqual(5, arr->GetInt32((size_t)0));
 			Assert::AreEqual(7.f, arr->GetReal(1));
 			Assert::AreEqual("11", arr->GetString(2));
 		}
@@ -140,7 +140,7 @@ namespace ApophisTests { namespace Utils {
 		TEST_METHOD(GetObjectFromArray)
 		{
 			auto reader = JsonImportReader("{\"foo\":[{\"bar\":\"baz\"}]}");
-			auto obj = reader.GetArray("foo")->GetObject(0);
+			auto obj = reader.GetArray("foo")->GetObject((size_t)0);
 			Assert::AreEqual("baz", obj->GetString("bar"));
 		}
 
@@ -149,15 +149,15 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{\"foo\":[0]}");
 				auto arr = reader.GetArray("foo");
-				arr->GetObject(0);
+				arr->GetObject((size_t)0);
 			}, "JSON array element 0 has wrong type");
 		}
 
 		TEST_METHOD(GetArrayFromArray)
 		{
 			auto reader = JsonImportReader("{\"foo\":[[\"bar\"]]}");
-			auto arr = reader.GetArray("foo")->GetArray(0);
-			Assert::AreEqual("bar", arr->GetString(0));
+			auto arr = reader.GetArray("foo")->GetArray((size_t)0);
+			Assert::AreEqual("bar", arr->GetString((size_t)0));
 		}
 
 		TEST_METHOD(GetArrayFromArray_WrongType)
@@ -165,7 +165,7 @@ namespace ApophisTests { namespace Utils {
 			AssertThrows<ApophisException>([]() {
 				auto reader = JsonImportReader("{\"foo\":[0]}");
 				auto arr = reader.GetArray("foo");
-				arr->GetArray(0);
+				arr->GetArray((size_t)0);
 			}, "JSON array element 0 has wrong type");
 		}
 	};
