@@ -18,8 +18,12 @@ char State(const GameBoard& board, unsigned int position)
 
 void EvaluateState(Apophis::Component::Network& network, const GameBoard& board)
 {
-	auto classify = Classifier<const char*>(network, { "X Wins", "O Wins", "Draw" }, 0.75f, "No Winner");
+	auto classify = Classifier<const char*>(network, { "X Wins", "O Wins", "Draw" }, 0.7f, "No Winner");
 	auto input = FeaturizeState(board.Save());
+	/*auto& result = network.Calculate(input);
+	std::cout << "X = " << result[0] << "\n";
+	std::cout << "O = " << result[1] << "\n";
+	std::cout << "D = " << result[2] << "\n";*/
 	std::cout << classify(input) << "\n";
 }
 
@@ -157,7 +161,7 @@ void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IEx
 
 	Training::SampledEvaluator evaluator(network, Training::Loss::SquaredError, testExamples, 1000);
 	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
-	stoppingConditions.Add<Training::StoppingCondition::LossLessThan>(0.025f);
+	stoppingConditions.Add<Training::StoppingCondition::LossLessThan>(0.015f);
 	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(25000000);
 
 	Training::Trainer trainer(network, evaluator);
