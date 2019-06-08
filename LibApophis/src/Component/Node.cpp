@@ -11,14 +11,11 @@ using namespace Apophis::Utils;
 
 Node::Node(size_t numInputs) :
 	m_NumInputs(numInputs),
-	Activation(0)
+	Activation(0),
+	Weights(numInputs+1) // Add one for the bias
 {
-	// Add one for the bias
-	numInputs++;
-
-	Weights.resize(numInputs);
-	for (auto i = 0u; i < numInputs; i++)
-		Weights[i] = RandomWeight();
+	for (auto& w : Weights)
+		w = RandomWeight();
 }
 
 real Node::Calculate(ConstVectorRef input)

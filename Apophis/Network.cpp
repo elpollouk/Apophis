@@ -68,6 +68,7 @@ void Run()
 
 		printf("Training Count = %d\n", trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS));
 		printf("Error = %f\n", trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_LOSS));
+		printf("Time = %f\n", trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_TIME));
 
 		auto classify = Classifier<const char*>(network, { "I.setosa", "I.versicolor", "I.virginica" }, 0.7f, "UNKNOWN");
 		for (auto i = 0u; i < testSet.size(); i++)
