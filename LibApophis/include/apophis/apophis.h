@@ -5,6 +5,7 @@
 #include "apophis/ExampleSet.h"
 #include "apophis/MultiExampleSet.h"
 #include "apophis/Random.h"
+#include "apophis/Classifier.h"
 #include "apophis/Data/Metrics.h"
 #include "apophis/Utils/IExportWriter.h"
 #include "apophis/Utils/IImportReader.h"

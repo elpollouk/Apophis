@@ -162,6 +162,7 @@
     <ClInclude Include="include\apophis\apophis.h" />
     <ClInclude Include="include\apophis\ApophisException.h" />
     <ClInclude Include="include\apophis\apophistypes.h" />
+    <ClInclude Include="include\apophis\Classifier.h" />
     <ClInclude Include="include\apophis\Component\Layer.h" />
     <ClInclude Include="include\apophis\Component\Network.h" />
     <ClInclude Include="include\apophis\Component\Node.h" />

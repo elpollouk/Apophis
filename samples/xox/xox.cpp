@@ -18,12 +18,9 @@ char State(const GameBoard& board, unsigned int position)
 
 void EvaluateState(Apophis::Component::Network& network, const GameBoard& board)
 {
+	auto classify = Classifier<const char*>(network, { "X Wins", "O Wins", "Draw" }, 0.75f, "No Winner");
 	auto input = FeaturizeState(board.Save());
-	auto output = network.Calculate(input);
-
-	std::cout << "X Win = " << output[0] << "\n";
-	std::cout << "O Win = " << output[1] << "\n";
-	std::cout << "Draw  = " << output[2] << "\n";
+	std::cout << classify(input) << "\n";
 }
 
 void ShowBoard(Component::Network& network, const GameBoard& board)
@@ -69,14 +66,9 @@ bool HumanGame()
 		switch (result)
 		{
 		case GameBoard::DRAW:
-			ShowBoard(network, board);
-			std::cout << "Draw\n";
-			return true;
-
 		case GameBoard::O:
 		case GameBoard::X:
 			ShowBoard(network, board);
-			std::cout << GameBoard::PositionStateToChar(result) << " wins!\n";
 			return true;
 
 		case GameBoard::EMPTY:
@@ -165,8 +157,8 @@ void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IEx
 
 	Training::SampledEvaluator evaluator(network, Training::Loss::SquaredError, testExamples, 1000);
 	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
-	//stoppingConditions.Add<LossLessThan>(TRAINING_ERROR);
-	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(20000000);
+	stoppingConditions.Add<Training::StoppingCondition::LossLessThan>(0.02f);
+	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(25000000);
 
 	Training::Trainer trainer(network, evaluator);
 

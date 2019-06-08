@@ -119,6 +119,9 @@
     <ClInclude Include="include\apophis\MultiExampleSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\Classifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
