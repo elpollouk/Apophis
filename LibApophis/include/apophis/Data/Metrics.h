@@ -24,7 +24,7 @@ namespace Apophis { namespace Data {
 		template<class DType>
 		DType Add(const std::string key, DType value) { static_assert(false, "Unsupported metric data type"); }
 		template<class DType>
-		DType Get(const std::string key) { static_assert(false, "Unsupported metric data type"); }
+		DType Get(const std::string key) const { static_assert(false, "Unsupported metric data type"); }
 
 		//---------------------------------------------------------------------------------------------//
 		// Double
@@ -42,7 +42,7 @@ namespace Apophis { namespace Data {
 		}
 
 		template<>
-		double Get<double>(const std::string key)
+		double Get<double>(const std::string key) const
 		{
 			return Get(key).dValue;
 		}
@@ -63,7 +63,7 @@ namespace Apophis { namespace Data {
 		}
 
 		template<>
-		float Get<float>(const std::string key)
+		float Get<float>(const std::string key) const
 		{
 			return (float)Get(key).dValue;
 		}
@@ -84,7 +84,7 @@ namespace Apophis { namespace Data {
 		}
 
 		template<>
-		long long Get<long long>(const std::string key)
+		long long Get<long long>(const std::string key) const
 		{
 			return Get(key).iValue;
 		}
@@ -105,7 +105,7 @@ namespace Apophis { namespace Data {
 		}
 
 		template<>
-		int Get<int>(const std::string key)
+		int Get<int>(const std::string key) const
 		{
 			return (int)Get(key).iValue;
 		}
@@ -119,6 +119,15 @@ namespace Apophis { namespace Data {
 				m_Values.emplace(std::make_pair(key, Value({})));
 				return m_Values[key];
 			}
+			return it->second;
+		}
+
+		const Value Get(const std::string& key) const
+		{
+			auto it = m_Values.find(key);
+			if (it == m_Values.end())
+				return Value({});
+
 			return it->second;
 		}
 

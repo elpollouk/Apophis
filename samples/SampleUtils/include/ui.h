@@ -2,6 +2,6 @@
 
 namespace SampleUtils { namespace UI {
 
-	void OnProgress(Apophis::Data::Metrics& metrics);
+	void OnProgress(const Apophis::Data::Metrics& metrics);
 
 }}

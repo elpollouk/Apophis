@@ -18,7 +18,7 @@ Trainer::Trainer(ITrainable& trainable, IEvaluator& evaluator) :
 
 }
 
-void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition, std::function<void(Data::Metrics&)> onProgress)
+void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition, std::function<void(const Data::Metrics&)> onProgress)
 {
 	if (onProgress == nullptr) onProgress = NullProgress;
 

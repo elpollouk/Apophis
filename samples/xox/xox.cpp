@@ -157,7 +157,7 @@ void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IEx
 
 	Training::SampledEvaluator evaluator(network, Training::Loss::SquaredError, testExamples, 1000);
 	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
-	stoppingConditions.Add<Training::StoppingCondition::LossLessThan>(0.02f);
+	stoppingConditions.Add<Training::StoppingCondition::LossLessThan>(0.025f);
 	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(25000000);
 
 	Training::Trainer trainer(network, evaluator);

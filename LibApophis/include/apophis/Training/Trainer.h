@@ -21,7 +21,7 @@ namespace Apophis { namespace Training {
 
 		Data::Metrics& GetMetrics() { return m_Metrics; }
 
-		void Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition, std::function<void(Data::Metrics&)> onProgress = nullptr);
+		void Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition, std::function<void(const Data::Metrics&)> onProgress = nullptr);
 
 	private:
 		ITrainable& m_Trainable;
