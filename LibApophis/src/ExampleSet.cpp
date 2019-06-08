@@ -24,8 +24,8 @@ ExampleSet::ExampleSet(int inputSize, int outputSize) :
 
 void ExampleSet::AddExample(Example&& example)
 {
-	assert(example.Input.size() == InputSize);
-	assert(example.Output.size() == OutputSize);
+	assert(example.Input.size() == GetInputSize());
+	assert(example.Output.size() == GetOutputSize());
 
 	m_Examples.emplace_back(std::move(example));
 	m_Distribution = std::uniform_int_distribution<size_t>(0, m_Examples.size() - 1);

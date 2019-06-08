@@ -12,8 +12,8 @@ Evaluator::Evaluator(Component::Network& network, LossFunction loss, const Examp
 	m_Examples(examples)
 {
 	assert(loss != nullptr);
-	assert(network.GetInputSize() == examples.InputSize);
-	assert(network.GetOutputSize() == examples.OutputSize);
+	assert(network.GetInputSize() == examples.GetInputSize());
+	assert(network.GetOutputSize() == examples.GetOutputSize());
 }
 
 real Evaluator::Evaluate()
@@ -35,8 +35,8 @@ SampledEvaluator::SampledEvaluator(Component::Network& network, LossFunction los
 	m_NumSumples(numSamples)
 {
 	assert(loss != nullptr);
-	assert(network.GetInputSize() == examples.InputSize);
-	assert(network.GetOutputSize() == examples.OutputSize);
+	assert(network.GetInputSize() == examples.GetInputSize());
+	assert(network.GetOutputSize() == examples.GetOutputSize());
 }
 
 real SampledEvaluator::Evaluate()

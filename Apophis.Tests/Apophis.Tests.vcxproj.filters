@@ -85,5 +85,8 @@
     <ClCompile Include="ClassifierTests.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="VectorTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

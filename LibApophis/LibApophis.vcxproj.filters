@@ -122,6 +122,9 @@
     <ClInclude Include="include\apophis\Classifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\apophis\Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stdafx.cpp">
@@ -170,6 +173,9 @@
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\MultiExampleSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
