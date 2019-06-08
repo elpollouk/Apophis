@@ -12,12 +12,11 @@ using namespace Apophis::Utils;
 Layer::Layer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction& transfer, Network& network) :
 	m_NumOutputs(numOutputs),
 	m_NumInputs(numInputs),
-	m_pTransfer(&transfer)
+	m_pTransfer(&transfer),
+	m_Output(numOutputs, 0.f)
 {
 	for (auto i = 0u; i < numOutputs; i++)
 		Nodes.emplace_back(network.CreateNode(numInputs));
-
-	m_Output.resize(numOutputs, 0.f);
 }
 
 ConstVectorRef Layer::Calculate(ConstVectorRef inputs)

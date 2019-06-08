@@ -119,9 +119,10 @@ std::unique_ptr<Node> BackPropNetwork::CreateNode(size_t numInputs)
 
 BackPropNode::BackPropNode(size_t numInputs) :
 	Component::Node(numInputs),
-	BackPropError(0)
+	BackPropError(0),
+	PreviousWeightChanges(Weights.size(), 0.f)
 {
-	PreviousWeightChanges.resize(Weights.size(), 0.f);
+
 }
 
 BackPropLayer::BackPropLayer(size_t numInputs, size_t numOutputs, const TransferFunction::ITransferFunction& transfer, Network& network) :
