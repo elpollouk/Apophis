@@ -39,6 +39,12 @@ Vector::Vector(size_t size) noexcept :
 {
 }
 
+Vector::Vector(size_t size, real initialValue) noexcept : Vector(size)
+{
+	for (size_t i = 0; i < m_Size; i++)
+		m_Data[i] = initialValue;
+}
+
 Vector::Vector(const Vector& rhs) noexcept : Vector(rhs.m_Size, rhs.m_Data)
 {
 
@@ -58,7 +64,7 @@ Vector::~Vector()
 
 Vector& Vector::operator=(const Vector& rhs) noexcept
 {
-	if (m_Size < rhs.size())
+	if (m_Size != rhs.size())
 	{
 		m_Size = rhs.size();
 		m_Data = (real*)realloc(m_Data, sizeof(real) * m_Size);
@@ -66,6 +72,15 @@ Vector& Vector::operator=(const Vector& rhs) noexcept
 
 	for (size_t i = 0; i < m_Size; i++)
 		m_Data[i] = rhs[i];
+
+	return *this;
+}
+
+Vector& Vector::operator=(Vector&& rhs) noexcept
+{
+	if (m_Data) free(m_Data);
+	m_Size = std::exchange(rhs.m_Size, 0);
+	m_Data = std::exchange(rhs.m_Data, nullptr);
 
 	return *this;
 }
@@ -104,10 +119,9 @@ size_t Vector::argmax() const
 
 Vector Vector::OneHot(size_t size, size_t hotElement)
 {
-	Vector v(size);
-
-	for (size_t i = 0; i < v.size(); i++)
-		v[i] = i == hotElement ? 1.f : 0.f;
+	Vector v(size, 0.f);
+	if (0 <= hotElement && hotElement < size)
+		v[hotElement] = 1.f;
 
 	return v;
 }

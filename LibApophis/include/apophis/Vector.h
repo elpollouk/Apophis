@@ -14,6 +14,7 @@ namespace Apophis {
 		Vector(std::initializer_list<real> data) noexcept;
 		Vector(size_t size, const real* data) noexcept;
 		Vector(size_t size) noexcept;
+		Vector(size_t size, real initalValue) noexcept;
 
 		Vector(const Vector& rhs) noexcept;
 		Vector(Vector&& rhs) noexcept;
@@ -21,6 +22,7 @@ namespace Apophis {
 		~Vector() noexcept;
 
 		Vector& operator=(const Vector& rhs) noexcept;
+		Vector& operator=(Vector&& rhs) noexcept;
 
 		size_t size() const noexcept { return m_Size; }
 		real& operator[](size_t index)

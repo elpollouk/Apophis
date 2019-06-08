@@ -86,7 +86,7 @@
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="VectorTests.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

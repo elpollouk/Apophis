@@ -13,6 +13,8 @@ namespace ApophisTests {
 			auto v = Vector();
 
 			Assert::AreEqual(0, (int)v.size(), L"Constructed Vector has wrong size");
+			Assert::IsNull(v.begin(), L"Moved Vector's data pointer not nulled");
+
 		}
 
 		TEST_METHOD(Construct_InitializerList)
@@ -56,6 +58,7 @@ namespace ApophisTests {
 			Assert::AreEqual(2.f, v2[0], L"Element 0 has wrong value");
 			Assert::AreEqual(4.f, v2[1], L"Element 1 has wrong value");
 			Assert::AreEqual(0, (int)v1.size(), L"Moved Vector has wrong size");
+			Assert::IsNull(v1.begin(), L"Moved Vector's data pointer not nulled");
 		}
 
 		TEST_METHOD(Construct_Size)
@@ -63,6 +66,15 @@ namespace ApophisTests {
 			auto v = Vector(2);
 
 			Assert::AreEqual(2, (int)v.size(), L"Constructed Vector has wrong size");
+		}
+
+		TEST_METHOD(Construct_SizeInitialValue)
+		{
+			auto v = Vector(2, 0.5f);
+
+			Assert::AreEqual(2, (int)v.size(), L"Constructed Vector has wrong size");
+			Assert::AreEqual(0.5f, v[0], L"Element 0 has wrong value");
+			Assert::AreEqual(0.5f, v[1], L"Element 1 has wrong value");
 		}
 
 		TEST_METHOD(AssignToElement)
@@ -87,6 +99,20 @@ namespace ApophisTests {
 			Assert::AreEqual(1.f, v2[0], L"Element 0 has wrong value");
 			Assert::AreEqual(2.f, v2[1], L"Element 1 has wrong value");
 			Assert::AreEqual(3.f, v2[2], L"Element 2 has wrong value");
+		}
+
+		TEST_METHOD(MoveAssign)
+		{
+			auto v1 = Vector({ 3.f, 2.f, 1.f });
+			auto v2 = Vector(0);
+			v2 = std::move(v1);
+
+			Assert::AreEqual(3, (int)v2.size(), L"Constructed Vector has wrong size");
+			Assert::AreEqual(3.f, v2[0], L"Element 0 has wrong value");
+			Assert::AreEqual(2.f, v2[1], L"Element 1 has wrong value");
+			Assert::AreEqual(1.f, v2[2], L"Element 2 has wrong value");
+			Assert::AreEqual(0, (int)v1.size(), L"Moved Vector has wrong size");
+			Assert::IsNull(v1.begin(), L"Moved Vector's data pointer not nulled");
 		}
 
 		TEST_METHOD(ConstAccess)
