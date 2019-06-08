@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Bootstrap.h"
 #include "GameBoard.h"
-#include "vectorutils.h"
 
 std::default_random_engine generator;
 std::uniform_int_distribution<unsigned int> distribution(0, 997);
@@ -143,7 +142,7 @@ Apophis::Vector FeaturizeState(const std::string& state)
 void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int classification)
 {
 	Apophis::Vector input = FeaturizeState(state);
-	Apophis::Vector output = SampleUtils::Vector::OneHot(3, classification);
+	Apophis::Vector output = Vector::OneHot(3, classification);
 
 	exampleSet.AddExample(input, output);
 }

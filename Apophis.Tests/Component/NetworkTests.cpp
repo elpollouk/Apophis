@@ -146,21 +146,21 @@ namespace ApophisTests { namespace Component
 			Assert::AreEqual(3, (int)network.GetOutputSize(), L"Incorrect network output size");
 			Assert::AreEqual(15, (int)data.size(), L"Incorrect number of examples in test set");
 
-			Assert::AreEqual(0, (int)ArgMax(network.Calculate(data[0].Input)), L"Example 0 classified incorrectly");
-			Assert::AreEqual(0, (int)ArgMax(network.Calculate(data[1].Input)), L"Example 1 classified incorrectly");
-			Assert::AreEqual(0, (int)ArgMax(network.Calculate(data[2].Input)), L"Example 2 classified incorrectly");
-			Assert::AreEqual(0, (int)ArgMax(network.Calculate(data[3].Input)), L"Example 3 classified incorrectly");
-			Assert::AreEqual(0, (int)ArgMax(network.Calculate(data[4].Input)), L"Example 4 classified incorrectly");
-			Assert::AreEqual(1, (int)ArgMax(network.Calculate(data[5].Input)), L"Example 5 classified incorrectly");
-			Assert::AreEqual(1, (int)ArgMax(network.Calculate(data[6].Input)), L"Example 6 classified incorrectly");
-			Assert::AreEqual(1, (int)ArgMax(network.Calculate(data[7].Input)), L"Example 7 classified incorrectly");
-			Assert::AreEqual(1, (int)ArgMax(network.Calculate(data[8].Input)), L"Example 8 classified incorrectly");
-			Assert::AreEqual(1, (int)ArgMax(network.Calculate(data[9].Input)), L"Example 9 classified incorrectly");
-			Assert::AreEqual(2, (int)ArgMax(network.Calculate(data[10].Input)), L"Example 10 classified incorrectly");
-			Assert::AreEqual(2, (int)ArgMax(network.Calculate(data[11].Input)), L"Example 11 classified incorrectly");
-			Assert::AreEqual(2, (int)ArgMax(network.Calculate(data[12].Input)), L"Example 12 classified incorrectly");
-			Assert::AreEqual(2, (int)ArgMax(network.Calculate(data[13].Input)), L"Example 13 classified incorrectly");
-			Assert::AreEqual(2, (int)ArgMax(network.Calculate(data[14].Input)), L"Example 14 classified incorrectly");
+			Assert::AreEqual(0, (int)network.Calculate(data[0].Input).argmax(), L"Example 0 classified incorrectly");
+			Assert::AreEqual(0, (int)network.Calculate(data[1].Input).argmax(), L"Example 1 classified incorrectly");
+			Assert::AreEqual(0, (int)network.Calculate(data[2].Input).argmax(), L"Example 2 classified incorrectly");
+			Assert::AreEqual(0, (int)network.Calculate(data[3].Input).argmax(), L"Example 3 classified incorrectly");
+			Assert::AreEqual(0, (int)network.Calculate(data[4].Input).argmax(), L"Example 4 classified incorrectly");
+			Assert::AreEqual(1, (int)network.Calculate(data[5].Input).argmax(), L"Example 5 classified incorrectly");
+			Assert::AreEqual(1, (int)network.Calculate(data[6].Input).argmax(), L"Example 6 classified incorrectly");
+			Assert::AreEqual(1, (int)network.Calculate(data[7].Input).argmax(), L"Example 7 classified incorrectly");
+			Assert::AreEqual(1, (int)network.Calculate(data[8].Input).argmax(), L"Example 8 classified incorrectly");
+			Assert::AreEqual(1, (int)network.Calculate(data[9].Input).argmax(), L"Example 9 classified incorrectly");
+			Assert::AreEqual(2, (int)network.Calculate(data[10].Input).argmax(), L"Example 10 classified incorrectly");
+			Assert::AreEqual(2, (int)network.Calculate(data[11].Input).argmax(), L"Example 11 classified incorrectly");
+			Assert::AreEqual(2, (int)network.Calculate(data[12].Input).argmax(), L"Example 12 classified incorrectly");
+			Assert::AreEqual(2, (int)network.Calculate(data[13].Input).argmax(), L"Example 13 classified incorrectly");
+			Assert::AreEqual(2, (int)network.Calculate(data[14].Input).argmax(), L"Example 14 classified incorrectly");
 		}
 	};
 }}

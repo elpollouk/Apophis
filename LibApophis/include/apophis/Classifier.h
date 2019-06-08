@@ -20,13 +20,9 @@ namespace Apophis {
 		TClassification Classify(ConstVectorRef input)
 		{
 			auto& result = m_Network.Calculate(input);
+			size_t argmax = result.argmax();
 
-			size_t maxIndex = 0;
-			for (auto i = (size_t)1; i < result.size(); i++)
-				if (result[maxIndex] < result[i])
-					maxIndex = i;
-
-			return result[maxIndex] < m_Threshold ? m_None : m_Classifictions[maxIndex];
+			return result[argmax] < m_Threshold ? m_None : m_Classifictions[argmax];
 		}
 
 		TClassification operator()(ConstVectorRef input) { return Classify(input); }
