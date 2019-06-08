@@ -202,8 +202,6 @@ void GenerateExamplesAndTrain()
 	for (const auto& state : gamesIncomplete)
 		SaveExample(examplesIncomplete, state, -1);
 
-	//IO::SaveExamples(examples, "Data/endstates.json");
-
 	Apophis::MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw, &examplesIncomplete });
 	Train(examples, examples);
 }

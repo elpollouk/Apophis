@@ -18,7 +18,7 @@ Trainer::Trainer(ITrainable& trainable, IEvaluator& evaluator) :
 
 void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition)
 {
-	Utils::Timer timer;
+	//Utils::Timer timer;
 	auto trainingCount = 0ll;
 	do
 	{
@@ -34,10 +34,10 @@ void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition&
 		m_Metrics.Set(Data::METRIC_TRAINING_LOSS, loss);
 		m_Metrics.Set(Data::METRIC_TRAINING_ITERATIONS, trainingCount);
 
-		if (timer.Read() >= 10)
+		/*if (timer.Read() >= 10)
 		{
 			timer.Reset();
 			printf("%lli - Error = %f\n", trainingCount, loss);
-		}
+		}*/
 	} while (!stoppingCondition(m_Metrics));
 }
