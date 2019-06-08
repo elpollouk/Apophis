@@ -7,6 +7,7 @@ namespace Apophis { namespace Data {
 
 	constexpr const char* METRIC_TRAINING_ITERATIONS = "training/num_iterations";
 	constexpr const char* METRIC_TRAINING_LOSS = "training/loss";
+	constexpr const char* METRIC_TRAINING_TIME = "training/time";
 
 	class Metrics
 	{

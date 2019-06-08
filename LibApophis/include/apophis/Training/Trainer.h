@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include "apophis/apophistypes.h"
 #include "apophis/Data/Metrics.h"
 
@@ -20,7 +21,7 @@ namespace Apophis { namespace Training {
 
 		Data::Metrics& GetMetrics() { return m_Metrics; }
 
-		void Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition);
+		void Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition, std::function<void(Data::Metrics&)> onProgress = nullptr);
 
 	private:
 		ITrainable& m_Trainable;

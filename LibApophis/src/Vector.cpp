@@ -4,7 +4,7 @@
 
 using namespace Apophis;
 
-real* AllocArray(size_t size)
+static real* AllocArray(size_t size)
 {
 	return (real*)malloc(sizeof(real) * size);
 }

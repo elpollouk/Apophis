@@ -9,6 +9,8 @@
 using namespace Apophis;
 using namespace Apophis::Training;
 
+static void NullProgress(const Data::Metrics& metrics) {}
+
 Trainer::Trainer(ITrainable& trainable, IEvaluator& evaluator) :
 	m_Trainable(trainable),
 	m_Evaluator(evaluator)
@@ -16,10 +18,16 @@ Trainer::Trainer(ITrainable& trainable, IEvaluator& evaluator) :
 
 }
 
-void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition)
+void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition& stoppingCondition, std::function<void(Data::Metrics&)> onProgress)
 {
-	//Utils::Timer timer;
+	if (onProgress == nullptr) onProgress = NullProgress;
+
+	Utils::Timer timer;
 	auto trainingCount = 0ll;
+	auto loss = INFINITY;
+
+	onProgress(m_Metrics);
+
 	do
 	{
 		for (auto i = 0; i < 10000; i++)
@@ -29,15 +37,17 @@ void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition&
 			trainingCount++;
 		}
 
-		auto loss = m_Evaluator();
+		loss = m_Evaluator();
 
 		m_Metrics.Set(Data::METRIC_TRAINING_LOSS, loss);
 		m_Metrics.Set(Data::METRIC_TRAINING_ITERATIONS, trainingCount);
+		m_Metrics.Set(Data::METRIC_TRAINING_TIME, timer.Total());
 
-		/*if (timer.Read() >= 10)
+		if (timer.Read() >= 10.)
 		{
+			onProgress(m_Metrics);
 			timer.Reset();
-			printf("%lli - Error = %f\n", trainingCount, loss);
-		}*/
+		}
+
 	} while (!stoppingCondition(m_Metrics));
 }

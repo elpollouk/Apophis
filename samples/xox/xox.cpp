@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Bootstrap.h"
 #include "GameBoard.h"
+#include "ui.h"
 
 std::default_random_engine generator;
 std::uniform_int_distribution<unsigned int> distribution(0, 997);
@@ -162,10 +163,9 @@ void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IEx
 	Training::Trainer trainer(network, evaluator);
 
 	std::cout << "Training...\n";
-	trainer.Run(trainingExamples, stoppingConditions);
+	trainer.Run(trainingExamples, stoppingConditions, UI::OnProgress);
 
-	std::cout << "Training Count = " << trainer.GetMetrics().Get<int>(Data::METRIC_TRAINING_ITERATIONS) << "\n";
-	std::cout << "Error = " << trainer.GetMetrics().Get<float>(Data::METRIC_TRAINING_LOSS) << "\n";
+	UI::OnProgress(trainer.GetMetrics());
 
 	IO::SaveNetwork(network, "Data/network.json");
 }

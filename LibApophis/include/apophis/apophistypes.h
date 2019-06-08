@@ -9,6 +9,9 @@ namespace Apophis {
 		class Network;
 		class Node;
 	}
+	namespace Data {
+		class Metrics;
+	}
 	namespace Training {
 		typedef real(*LossFunction)(ConstVectorRef target, ConstVectorRef actual);
 		class Evaluator;
