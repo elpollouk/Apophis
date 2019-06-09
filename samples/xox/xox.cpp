@@ -7,16 +7,17 @@ std::default_random_engine generator;
 std::uniform_int_distribution<unsigned int> distribution(0, 997);
 
 using namespace Apophis;
+using namespace Apophis::Training;
 using namespace SampleUtils;
 
-Apophis::Vector FeaturizeState(const std::string& state);
+Vector FeaturizeState(const std::string& state);
 
 char State(const GameBoard& board, unsigned int position)
 {
 	return board.GetStateChar(position, '1' + position);
 }
 
-void EvaluateState(Apophis::Component::Network& network, const GameBoard& board)
+void EvaluateState(Component::Network& network, const GameBoard& board)
 {
 	auto classify = Classifier<const char*>(network, { "X Wins", "O Wins", "Draw" }, 0.7f, "No Winner");
 	auto input = FeaturizeState(board.Save());
@@ -47,7 +48,7 @@ void ShowBoard(Component::Network& network, const GameBoard& board)
 bool HumanGame()
 {
 	GameBoard board;
-	Apophis::Component::Network network(*IO::LoadJson("Data/network.json"));
+	Component::Network network(*IO::LoadJson("Data/network.json"));
 	std::cout << "\nNew Game!\n";
 
 	while (true)
@@ -117,9 +118,9 @@ void RandomGame(std::set<GameBoard::GameState>& gamesX, std::set<GameBoard::Game
 	}
 }
 
-Apophis::Vector FeaturizeState(const std::string& state)
+Vector FeaturizeState(const std::string& state)
 {
-	Apophis::Vector input(18);
+	Vector input(18);
 	for (auto i = 0; i < GameBoard::BOARD_SIZE; i++)
 	{
 		auto j = i * 2;
@@ -144,32 +145,30 @@ Apophis::Vector FeaturizeState(const std::string& state)
 	return input;
 }
 
-void SaveExample(Apophis::ExampleSet& exampleSet, const std::string& state, int classification)
+void SaveExample(ExampleSet& exampleSet, const std::string& state, int classification)
 {
-	Apophis::Vector input = FeaturizeState(state);
-	Apophis::Vector output = Vector::OneHot(3, classification);
+	Vector input = FeaturizeState(state);
+	Vector output = Vector::OneHot(3, classification);
 
 	exampleSet.AddExample(input, output);
 }
 
-void Train(const Apophis::IExampleProvider& trainingExamples, const Apophis::IExampleProvider& testExamples)
+void Train(const IExampleProvider& trainingExamples, const IExampleProvider& testExamples)
 {
-	Training::BackPropNetwork network(testExamples.GetInputSize(), 0.0001f, 0.25f);
+	BackPropNetwork network(testExamples.GetInputSize(), 0.0001f, 0.25f);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(16);
 	network.AddLayer<TransferFunction::Relu>(3);
 
-	Training::SampledEvaluator evaluator(network, Training::Loss::SquaredError, testExamples, 1000);
-	Training::StoppingCondition::AnyStoppingCondition stoppingConditions;
-	stoppingConditions.Add<Training::StoppingCondition::LossLessThan>(0.015f);
-	stoppingConditions.Add<Training::StoppingCondition::NumTrainingIterations>(25000000);
+	SampledEvaluator evaluator(network, Loss::SquaredError, testExamples, 1000);
+	StoppingCondition::AnyStoppingCondition stoppingConditions;
+	stoppingConditions.Add<StoppingCondition::LossLessThan>(0.015f);
+	stoppingConditions.Add<StoppingCondition::NumTrainingIterations>(25000000);
 
-	Training::Trainer trainer(network, evaluator);
+	Trainer trainer(network, evaluator);
 
 	std::cout << "Training...\n";
 	trainer.Run(trainingExamples, stoppingConditions, UI::OnProgress);
-
-	UI::OnProgress(trainer.GetMetrics());
 
 	IO::SaveNetwork(network, "Data/network.json");
 }
@@ -189,10 +188,10 @@ void GenerateExamplesAndTrain()
 		RandomGame(gamesX, gamesO, gamesDraw, gamesIncomplete);
 	}
 
-	Apophis::ExampleSet examplesX(18, 3);
-	Apophis::ExampleSet examplesO(18, 3);
-	Apophis::ExampleSet examplesDraw(18, 3);
-	Apophis::ExampleSet examplesIncomplete(18, 3);
+	ExampleSet examplesX(18, 3);
+	ExampleSet examplesO(18, 3);
+	ExampleSet examplesDraw(18, 3);
+	ExampleSet examplesIncomplete(18, 3);
 
 	for (const auto& state : gamesX)
 		SaveExample(examplesX, state, 0);
@@ -206,7 +205,7 @@ void GenerateExamplesAndTrain()
 	for (const auto& state : gamesIncomplete)
 		SaveExample(examplesIncomplete, state, -1);
 
-	Apophis::MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw, &examplesIncomplete });
+	MultiExampleSet examples({ &examplesX, &examplesO, &examplesDraw, &examplesIncomplete });
 	Train(examples, examples);
 }
 

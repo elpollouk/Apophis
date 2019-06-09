@@ -24,8 +24,9 @@ void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition&
 
 	Utils::Timer timer;
 	auto trainingCount = 0ll;
-	auto loss = INFINITY;
+	auto loss = m_Evaluator();
 
+	m_Metrics.Set(Data::METRIC_TRAINING_LOSS, loss);
 	onProgress(m_Metrics);
 
 	do
@@ -50,4 +51,6 @@ void Trainer::Run(const IExampleProvider& trainingSet, const IStoppingCondition&
 		}
 
 	} while (!stoppingCondition(m_Metrics));
+
+	onProgress(m_Metrics);
 }
